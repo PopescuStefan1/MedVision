@@ -1,3 +1,37 @@
-<div class="container">
-  <p *ngFor="let medic of medics">{{ medic.name }}</p>
-</div>
+<mat-grid-list cols="3" rowHeight="330px" gutterSize="3rem">
+  <mat-grid-tile *ngFor="let medic of medics">
+    <mat-card class="medic-card">
+      <mat-card-title-group class="mb-2">
+        <mat-card-title>{{ medic.shortTitle }} {{ medic.name }}</mat-card-title>
+        <mat-card-subtitle>{{ medic.specialty }}</mat-card-subtitle>
+        <img
+          mat-card-lg-image
+          [src]="medic.photoUrl !== undefined ? medic.photoUrl : defaultPhotoUrl"
+          [alt]="medic.name"
+          class="medic-img"
+        />
+      </mat-card-title-group>
+      <mat-card-content>
+        <p>{{ medic.name }} - {{ medic.title }} specialized in {{ medic.specialty }}</p>
+        <p>
+          City:
+          <i>{{ medic.city }}</i>
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button>Schedule an appointment</button>
+        <button mat-button [matMenuTriggerFor]="menu">Contact</button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>
+            <mat-icon>email</mat-icon>
+            <span>Send Email</span>
+          </button>
+          <button mat-menu-item>
+            <mat-icon>phone</mat-icon>
+            <span>Phone Call</span>
+          </button>
+        </mat-menu>
+      </mat-card-actions>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>
