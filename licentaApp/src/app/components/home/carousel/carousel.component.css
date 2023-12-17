@@ -27,6 +27,7 @@
 .slide.active {
   opacity: 1;
   transition-delay: 0ms;
+  z-index: 1;
 }
 
 .slide > img {
