@@ -20,9 +20,9 @@
           </p>
         </mat-card-content>
         <mat-card-actions>
-          <button mat-button>Schedule an appointment</button>
-          <button mat-button [matMenuTriggerFor]="menu">Contact</button>
-          <mat-menu #menu="matMenu">
+          <button mat-raised-button color="primary">Schedule an appointment</button>
+          <button mat-button color="accent" [matMenuTriggerFor]="menu">Contact</button>
+          <mat-menu #menu="matMenu" yPosition="above">
             <button mat-menu-item>
               <mat-icon>email</mat-icon>
               <span>Send Email</span>
