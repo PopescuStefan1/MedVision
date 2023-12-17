@@ -7,4 +7,6 @@ export interface Medic {
   city: string;
   patientIds: number[];
   photoUrl?: string;
+  email: string;
+  phoneNumber: string;
 }
