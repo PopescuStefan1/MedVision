@@ -1,4 +1,4 @@
-import { Medic } from "./medic";
+import { Medic } from "../models/medic";
 
 export const medics: Medic[] = [
   {
