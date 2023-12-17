@@ -1,0 +1,103 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.carousel {
+  max-width: 100%;
+  height: 80vh;
+  position: relative;
+}
+
+.carousel > ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: 200ms opacity ease-in-out;
+  transition-delay: 200ms;
+}
+
+.slide.active {
+  opacity: 1;
+  transition-delay: 0ms;
+  z-index: 1;
+}
+
+.slide > div {
+  position: relative;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.slide > div > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.gradient {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-image: linear-gradient(transparent 30%, black);
+  z-index: 2;
+}
+
+.slide > div > h1 {
+  position: absolute;
+  top: 70%;
+  height: 12%;
+  overflow-y: hidden;
+  color: #fff;
+  z-index: 3;
+  padding: 0 10%;
+  text-align: center;
+  display: flex;
+  align-items: end;
+}
+
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  z-index: 4;
+  transform: translateY(-50%);
+}
+
+.carousel-button.prev {
+  left: 1rem;
+}
+
+.carousel-button.next {
+  right: 1rem;
+}
+
+.radio-group {
+  z-index: 4;
+  position: absolute;
+  top: 90%;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  gap: 1.5rem;
+  color: #fff;
+}
+
+:host ::ng-deep .mat-radio-button .mat-radio-outer-circle,
+.mat-radio-outer-circle {
+  border-color: var(--accent) !important;
+}
+
+:host ::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle,
+.mat-radio-outer-circle {
+  border-color: var(--accent) !important;
+}
