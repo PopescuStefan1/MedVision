@@ -22,7 +22,7 @@
   opacity: 0;
 }
 
-.slide[data-active] {
+.slide.active {
   opacity: 1;
 }
 
