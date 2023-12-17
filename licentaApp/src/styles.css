@@ -2,6 +2,14 @@
 @import "~bootstrap/dist/css/bootstrap.css";
 @import "~bootstrap-icons/font/bootstrap-icons.css";
 
+:root {
+  --text: #0f0f0f;
+  --background: #ffffff;
+  --primary: #4051b5;
+  --secondary: #d8e4dd;
+  --accent: #ff4281;
+}
+
 html,
 body {
   height: 100%;
@@ -9,4 +17,6 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  color: var(--text);
+  background: var(--background);
 }
