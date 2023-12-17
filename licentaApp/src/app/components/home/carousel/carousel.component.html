@@ -1,11 +1,15 @@
 <section>
   <div class="carousel">
-    <button mat-fab class="carousel-button prev" (click)="onPrevClick()">
+    <button mat-fab class="carousel-button prev" (click)="switchToPrevImg()">
       <mat-icon>arrow_back</mat-icon>
     </button>
-    <button mat-fab class="carousel-button next" (click)="onNextClick()">
+    <button mat-fab class="carousel-button next" (click)="switchToNextImg()">
       <mat-icon>arrow_forward</mat-icon>
     </button>
+    <mat-radio-group class="radio-group" [(ngModel)]="activeImageIndex" (change)="resetInterval()">
+      <mat-radio-button *ngFor="let section of carouselSections; let i = index" [value]="i" class="carousel-radio">
+      </mat-radio-button>
+    </mat-radio-group>
     <ul>
       <li *ngFor="let section of carouselSections; let i = index" class="slide" [class.active]="i === activeImageIndex">
         <div>
