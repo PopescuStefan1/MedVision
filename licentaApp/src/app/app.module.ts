@@ -10,9 +10,10 @@ import { HomeComponent } from "./components/home/home.component";
 import { LoginComponent } from "./components/login/login.component";
 import { MedicsComponent } from "./components/medics/medics.component";
 import { HttpClientModule } from "@angular/common/http";
+import { CarouselComponent } from './components/home/carousel/carousel.component';
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, HomeComponent, LoginComponent, MedicsComponent],
+  declarations: [AppComponent, NavbarComponent, HomeComponent, LoginComponent, MedicsComponent, CarouselComponent],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, MaterialModule, HttpClientModule],
   providers: [],
   bootstrap: [AppComponent],
