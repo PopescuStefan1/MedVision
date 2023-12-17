@@ -7,8 +7,12 @@
       <mat-icon>arrow_forward</mat-icon>
     </button>
     <ul>
-      <li *ngFor="let imgUrl of carouselImgUrls; let i = index" class="slide" [class.active]="i === activeImageIndex">
-        <img [src]="imgUrl" alt="Medical Image" />
+      <li *ngFor="let section of carouselSections; let i = index" class="slide" [class.active]="i === activeImageIndex">
+        <div>
+          <div class="gradient"></div>
+          <img [src]="section.url" alt="Medical Image" />
+          <h1>{{ section.text }}</h1>
+        </div>
       </li>
     </ul>
   </div>
