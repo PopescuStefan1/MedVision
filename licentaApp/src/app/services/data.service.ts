@@ -1,9 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Medic } from "../models/medic";
 import { Observable, map } from "rxjs";
 import { medics } from "../mock-data/mockMedics";
 
+import { Medic } from "../models/medic";
 @Injectable({
   providedIn: "root",
 })
@@ -14,15 +14,15 @@ export class DataService {
 
   // initializeMedics() {
   //   const url = `${this.baseUrl}/medics.json`;
-  //   medics.forEach((medic) => {
-  //     this.http.post<Medic[]>(url, medic).subscribe();
+  //   medics.forEach((medic: any) => {
+  //     this.http.post(url, medic).subscribe();
   //   });
   // }
 
   getAllMedics(): Observable<Medic[]> {
     const url = `${this.baseUrl}/medics.json`;
     return this.http.get<Medic[]>(url).pipe(
-      map((responseData) => {
+      map((responseData: Medic[]) => {
         const medicsArray: Medic[] = [];
         for (const key in responseData) {
           if (responseData.hasOwnProperty(key)) {
