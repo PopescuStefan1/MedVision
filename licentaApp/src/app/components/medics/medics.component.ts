@@ -16,6 +16,7 @@ export class MedicsComponent implements OnInit {
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
+    // this.dataService.initializeMedics();
     this.dataService.getAllMedics().subscribe({
       next: (medics) => {
         this.medics = medics;

@@ -2,7 +2,8 @@ import { Medic } from "../models/medic";
 
 export const medics: any[] = [
   {
-    name: "Bogdan Marin",
+    firstName: "Bogdan",
+    lastName: "Marin",
     city: "Brasov",
     patientIds: [],
     title: "Professor, Primary Doctor",
@@ -14,7 +15,8 @@ export const medics: any[] = [
       "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
-    name: "Mirel Stanciu",
+    firstName: "Mirel",
+    lastName: "Stanciu",
     city: "Brasov",
     patientIds: [],
     title: "Specialist Doctor",
@@ -26,7 +28,8 @@ export const medics: any[] = [
       "https://images.unsplash.com/photo-1612349316228-5942a9b489c2?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
-    name: "Melania Gheorghe",
+    firstName: "Melania",
+    lastName: "Gheorghe",
     city: "Brasov",
     patientIds: [],
     title: "Associate Professor, Primary Doctor",
@@ -38,7 +41,8 @@ export const medics: any[] = [
       "https://images.unsplash.com/photo-1594824476967-48c8b964273f?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
-    name: "Mihaela Banciu",
+    firstName: "Melania",
+    lastName: "Banciu",
     city: "Bucuresti",
     patientIds: [],
     title: "Primary Doctor",
@@ -48,7 +52,8 @@ export const medics: any[] = [
     phoneNumber: "0781751699",
   },
   {
-    name: "Eugenia Rusu",
+    firstName: "Eugenia",
+    lastName: "Rusu",
     city: "Brasov",
     patientIds: [],
     title: "Resident Medic",
@@ -60,7 +65,8 @@ export const medics: any[] = [
       "https://images.unsplash.com/photo-1623854767648-e7bb8009f0db?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
-    name: "Nigel Young",
+    firstName: "Nigel",
+    lastName: "Young",
     city: "Brasov",
     patientIds: [],
     title: "Specialist Doctor",
@@ -72,7 +78,8 @@ export const medics: any[] = [
       "https://images.unsplash.com/photo-1582895361887-24daa40c8667?q=80&w=2141&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
-    name: "Anastasia Malan",
+    firstName: "Anastasia",
+    lastName: "Balan",
     city: "Cluj-Napoca",
     patientIds: [],
     title: "Professor, Primary Doctor",
@@ -84,7 +91,8 @@ export const medics: any[] = [
       "https://images.unsplash.com/photo-1607990283143-e81e7a2c9349?q=80&w=2041&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
-    name: "Sergiu Cristian",
+    firstName: "Sergiu",
+    lastName: "Cristian",
     city: "Bucuresti",
     patientIds: [],
     title: "Professor, Primary Doctor",
@@ -96,7 +104,8 @@ export const medics: any[] = [
       "https://images.unsplash.com/photo-1550831107-1553da8c8464?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
-    name: "Adrian Fratila",
+    firstName: "Adrian",
+    lastName: "Fratila",
     city: "Brasov",
     patientIds: [],
     title: "Resident Medic",
@@ -106,7 +115,8 @@ export const medics: any[] = [
     phoneNumber: "0730005490",
   },
   {
-    name: "Nicoleta Manolache",
+    firstName: "Nicoleta",
+    lastName: "Manolache",
     city: "Brasov",
     patientIds: [],
     title: "Specialist Doctor",
