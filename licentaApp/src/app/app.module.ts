@@ -15,7 +15,15 @@ import { CarouselComponent } from "./components/home/carousel/carousel.component
 
 @NgModule({
   declarations: [AppComponent, NavbarComponent, HomeComponent, LoginComponent, MedicsComponent, CarouselComponent],
-  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, MaterialModule, HttpClientModule, FormsModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MaterialModule,
+    HttpClientModule,
+    FormsModule,
+    HttpClientModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
