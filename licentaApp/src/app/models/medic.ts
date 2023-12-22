@@ -1,6 +1,7 @@
 export interface Medic {
-  id: number;
-  name: string;
+  id?: string;
+  firstName: string;
+  lastName: string;
   title: string;
   shortTitle: string;
   specialty: string;
