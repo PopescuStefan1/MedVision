@@ -12,9 +12,10 @@ import { HomeComponent } from "./components/home/home.component";
 import { LoginComponent } from "./components/login/login.component";
 import { MedicsComponent } from "./components/medics/medics.component";
 import { CarouselComponent } from "./components/home/carousel/carousel.component";
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, HomeComponent, LoginComponent, MedicsComponent, CarouselComponent],
+  declarations: [AppComponent, NavbarComponent, HomeComponent, LoginComponent, MedicsComponent, CarouselComponent, FooterComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
