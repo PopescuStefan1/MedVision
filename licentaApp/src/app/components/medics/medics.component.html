@@ -1,12 +1,16 @@
 <div class="container p-5">
-  <div *ngIf="!loaded" class="pt-5 mt-5">
+  <div *ngIf="isFetching && !error" class="pt-5 mt-5">
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>
-  <mat-grid-list *ngIf="loaded" cols="3" rowHeight="330px" gutterSize="3rem">
+  <div class="alert alert-danger" *ngIf="error">
+    <h1>An Error Occurred!</h1>
+    <p>{{ error }}</p>
+  </div>
+  <mat-grid-list *ngIf="!isFetching" cols="3" gutterSize="3rem">
     <mat-grid-tile *ngFor="let medic of medics">
       <mat-card class="medic-card">
         <mat-card-title-group class="mb-2">
-          <mat-card-title>{{ medic.shortTitle }} {{ medic.lastName }} {{ medic.firstName }}</mat-card-title>
+          <mat-card-title>{{ medic.shortTitle }} {{ medic.firstName }} {{ medic.lastName }}</mat-card-title>
           <mat-card-subtitle>{{ medic.specialty }}</mat-card-subtitle>
           <img
             mat-card-lg-image
@@ -16,7 +20,7 @@
           />
         </mat-card-title-group>
         <mat-card-content>
-          <p>{{ medic.lastName }} {{ medic.firstName }} - {{ medic.title }} specialized in {{ medic.specialty }}</p>
+          <p>{{ medic.firstName }} {{ medic.lastName }} - {{ medic.title }} specialized in {{ medic.specialty }}</p>
           <p>
             City:
             <i>{{ medic.city }}</i>
