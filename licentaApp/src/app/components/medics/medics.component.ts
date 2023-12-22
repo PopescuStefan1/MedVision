@@ -16,14 +16,18 @@ export class MedicsComponent implements OnInit {
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
-    this.dataService.getMedics().subscribe({
+    // this.dataService.initializeMedics();
+    this.dataService.getAllMedics().subscribe({
       next: (medics) => {
         this.medics = medics;
         this.loaded = true;
       },
       error: (error) => {
-        console.error("Error fetching medics:", error);
+        console.error("Error fetching medics: ", error);
       },
+    });
+    this.dataService.getAllMedics().subscribe((responseData) => {
+      this.medics = responseData;
     });
   }
 }
