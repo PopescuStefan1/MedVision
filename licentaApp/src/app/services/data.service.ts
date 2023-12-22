@@ -12,12 +12,12 @@ export class DataService {
 
   constructor(private http: HttpClient) {}
 
-  initializeMedics() {
-    const url = `${this.baseUrl}/medics.json`;
-    medics.forEach((medic) => {
-      this.http.post<Medic[]>(url, medic).subscribe();
-    });
-  }
+  // initializeMedics() {
+  //   const url = `${this.baseUrl}/medics.json`;
+  //   medics.forEach((medic) => {
+  //     this.http.post<Medic[]>(url, medic).subscribe();
+  //   });
+  // }
 
   getAllMedics(): Observable<Medic[]> {
     const url = `${this.baseUrl}/medics.json`;
