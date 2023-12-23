@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from "@angular/forms";
 import { ErrorStateMatcher } from "@angular/material/core";
+import { Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { AuthResponseData, AuthService } from "src/app/services/auth.service";
 
@@ -24,7 +25,7 @@ export class AuthComponent implements OnInit {
   isLoading: boolean = false;
   error: string = "";
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.authForm = this.fb.group({
       email: ["", [Validators.required, Validators.email]],
       password: ["", [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[a-zA-Z])(?=.*\d).+$/)]],
@@ -53,11 +54,9 @@ export class AuthComponent implements OnInit {
       }
 
       authObs.subscribe({
-        next: (responseData) => {
-          console.log(responseData);
-
+        next: () => {
           this.isLoading = false;
-          this.authForm.reset();
+          this.router.navigate([""]);
         },
         error: (errorMessage) => {
           this.error = errorMessage;
