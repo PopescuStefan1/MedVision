@@ -2,6 +2,16 @@
   flex: 1 1 auto;
 }
 
-a {
+.container > a {
   border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+mat-icon {
+  font-size: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }

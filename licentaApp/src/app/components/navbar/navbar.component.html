@@ -1,12 +1,23 @@
 <mat-toolbar color="primary">
   <div class="container d-flex">
-    <a mat-button routerLink="/" class="fs-4"><i class="bi bi-bandaid-fill"></i> Ditama Clinic</a>
+    <a mat-button routerLink="/" class="fs-4"
+      ><mat-icon class="me-1">monitor_heart</mat-icon> <span>Ditama Clinic</span></a
+    >
     <a mat-button routerLink="medics">Medics</a>
     <a mat-button routerLink="/">Appointments</a>
     <a mat-button routerLink="/">About</a>
     <span class="spacer"></span>
-    <a mat-button routerLink="/">Upload photo <i class="bi bi-cloud-upload-fill ms-1"></i></a>
-    <a mat-button routerLink="/">Contact <i class="bi bi-telephone-fill ms-1"></i></a>
-    <a mat-button routerLink="login">Login <i class="bi bi-person-circle ms-1"></i></a>
+    <a mat-button *ngIf="isAuthenticated" routerLink="/"><span>Upload photo</span> <mat-icon>cloud_upload</mat-icon></a>
+    <a mat-button routerLink="/"><span>Contact</span> <mat-icon>call</mat-icon></a>
+    <a *ngIf="!isAuthenticated" mat-button routerLink="login"><span>Login</span> <mat-icon>login</mat-icon></a>
+    <ng-container *ngIf="isAuthenticated">
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>Profile</button>
+        <button mat-menu-item>Log out</button>
+      </mat-menu>
+    </ng-container>
   </div>
 </mat-toolbar>
