@@ -1,5 +1,11 @@
 <div class="container p-5">
   <div class="row">
+    <div class="col-12 d-flex justify-content-center">
+      <mat-spinner *ngIf="isLoading"></mat-spinner>
+    </div>
+    <div class="alert alert-danger col-12 col-md-6 offset-md-3" *ngIf="error">
+      <p>{{ error }}</p>
+    </div>
     <form
       *ngIf="!isLoading"
       [formGroup]="authForm"
@@ -54,8 +60,5 @@
       </button>
       <a href="" (click)="toggleLoginMode($event)">{{ isLoginMode ? "Create your account" : "Back to log in" }}</a>
     </form>
-    <div class="col-12 d-flex justify-content-center">
-      <mat-spinner *ngIf="isLoading"></mat-spinner>
-    </div>
   </div>
 </div>
