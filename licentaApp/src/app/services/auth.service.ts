@@ -1,14 +1,15 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, catchError, throwError } from "rxjs";
 
-interface AuthResponseData {
+export interface AuthResponseData {
   kind: string;
   idToken: string;
   email: string;
   refreshToken: string;
   expiresIn: string;
   localId: string;
+  registered?: boolean;
 }
 
 @Injectable({
@@ -18,13 +19,50 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   signup(email: string, password: string): Observable<AuthResponseData> {
-    return this.http.post<AuthResponseData>(
-      "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDE8NW8L3l2Rtf0chpZqlUWZVwBPxSm18I",
-      {
-        email: email,
-        password: password,
-        returnSecureToken: true,
-      }
-    );
+    return this.http
+      .post<AuthResponseData>(
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDE8NW8L3l2Rtf0chpZqlUWZVwBPxSm18I",
+        {
+          email: email,
+          password: password,
+          returnSecureToken: true,
+        }
+      )
+      .pipe(catchError(this.handleError));
+  }
+
+  login(email: string, password: string): Observable<AuthResponseData> {
+    return this.http
+      .post<AuthResponseData>(
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDE8NW8L3l2Rtf0chpZqlUWZVwBPxSm18I",
+        {
+          email: email,
+          password: password,
+          returnSecureToken: true,
+        }
+      )
+      .pipe(catchError(this.handleError));
+  }
+
+  private handleError(errorResponse: HttpErrorResponse) {
+    let errorMessage: string = `There was an error, please try again! Error: `;
+    if (!errorResponse.error || !errorResponse.error.error) {
+      const err = new Error(errorMessage);
+      return throwError(() => err);
+    }
+    switch (errorResponse.error.error.message) {
+      case "EMAIL_EXISTS":
+        errorMessage += "The email address is already in use by another account.";
+        break;
+      case "INVALID_LOGIN_CREDENTIALS":
+        errorMessage += "Invalid login credentials";
+        break;
+      default:
+        errorMessage += "Unknown error.";
+        break;
+    }
+
+    const err = new Error(errorMessage);
+    return throwError(() => err);
   }
 }
