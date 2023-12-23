@@ -47,6 +47,11 @@ export class AuthComponent implements OnInit {
     }
   }
 
+  onEnterPressed(event: Event) {
+    event.preventDefault();
+    this.onSubmit();
+  }
+
   signup() {
     if (this.authForm.valid) {
       this.isLoading = true;
