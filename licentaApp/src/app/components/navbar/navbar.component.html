@@ -4,7 +4,7 @@
       ><mat-icon class="me-1">monitor_heart</mat-icon> <span>Ditama Clinic</span></a
     >
     <a mat-button routerLink="medics">Medics</a>
-    <a mat-button routerLink="/">Appointments</a>
+    <a mat-button *ngIf="isAuthenticated" routerLink="/">Appointments</a>
     <a mat-button routerLink="/">About</a>
     <span class="spacer"></span>
     <a mat-button *ngIf="isAuthenticated" routerLink="/"><span>Upload photo</span> <mat-icon>cloud_upload</mat-icon></a>
