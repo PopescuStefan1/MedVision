@@ -5,6 +5,7 @@
       [formGroup]="authForm"
       (ngSubmit)="onSubmit()"
       class="login-container col-12 col-md-6 offset-md-3 p-4 text-center"
+      (keydown.enter)="onEnterPressed($event)"
     >
       <h2>{{ isLoginMode ? "Log In" : "Register a new account" }}</h2>
 
