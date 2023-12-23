@@ -1,0 +1,6 @@
+.login-container {
+  border: 1px solid var(--secondary);
+  display: flex;
+  flex-direction: column;
+  border-radius: 1rem;
+}
