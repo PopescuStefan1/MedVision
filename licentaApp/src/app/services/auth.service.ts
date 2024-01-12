@@ -17,7 +17,7 @@ export interface AuthResponseData {
   providedIn: "root",
 })
 export class AuthService {
-  user = new Subject<User>();
+  user = new Subject<User | null>();
 
   constructor(private http: HttpClient) {}
 
@@ -65,6 +65,10 @@ export class AuthService {
           );
         })
       );
+  }
+
+  logout(): void {
+    this.user.next(null);
   }
 
   private handleAuthentication(email: string, userId: string, token: string, expiresIn: number) {
