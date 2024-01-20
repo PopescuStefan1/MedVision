@@ -13,6 +13,7 @@ import { MedicsComponent } from "./components/medics/medics.component";
 import { CarouselComponent } from "./components/home/carousel/carousel.component";
 import { FooterComponent } from "./components/footer/footer.component";
 import { AuthComponent } from "./components/auth/auth.component";
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { AuthComponent } from "./components/auth/auth.component";
     CarouselComponent,
     FooterComponent,
     AuthComponent,
+    UserProfileComponent,
   ],
   imports: [
     BrowserModule,
