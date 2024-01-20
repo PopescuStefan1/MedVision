@@ -1,5 +1,15 @@
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from "@angular/forms";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormGroupDirective,
+  NgForm,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from "@angular/forms";
 import { ErrorStateMatcher } from "@angular/material/core";
 import { Router } from "@angular/router";
 import { Observable } from "rxjs";
@@ -21,6 +31,7 @@ export class AuthComponent implements OnInit {
   authForm: FormGroup;
   matcher = new MyErrorStateMatcher();
   hidePass: boolean = true;
+  hideRepeatPass: boolean = true;
   isLoginMode: boolean = true;
   isLoading: boolean = false;
   error: string = "";
@@ -29,6 +40,7 @@ export class AuthComponent implements OnInit {
     this.authForm = this.fb.group({
       email: ["", [Validators.required, Validators.email]],
       password: ["", [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[a-zA-Z])(?=.*\d).+$/)]],
+      repeatPass: ["", this.isLoginMode ? [] : [Validators.required, this.matchPasswordValidator()]],
     });
   }
 
@@ -37,6 +49,12 @@ export class AuthComponent implements OnInit {
   toggleLoginMode(event: Event) {
     event.preventDefault();
     this.isLoginMode = !this.isLoginMode;
+
+    this.authForm = this.fb.group({
+      email: ["", [Validators.required, Validators.email]],
+      password: ["", [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[a-zA-Z])(?=.*\d).+$/)]],
+      repeatPass: ["", this.isLoginMode ? [] : [Validators.required, this.matchPasswordValidator()]],
+    });
   }
 
   onSubmit() {
@@ -79,5 +97,26 @@ export class AuthComponent implements OnInit {
   onEnterPressed(event: Event) {
     event.preventDefault();
     this.onSubmit();
+  }
+
+  matchPasswordValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const password = this.authForm.get("password")?.value;
+      const repeatPass = control.value;
+
+      if (!repeatPass) {
+        return null;
+      }
+
+      const isValid = password === repeatPass;
+
+      return isValid ? null : { mismatch: true };
+    };
+  }
+
+  updatePasswordsValidators() {
+    if (!this.isLoginMode) {
+      this.authForm.get("repeatPass")?.updateValueAndValidity();
+    }
   }
 }
