@@ -18,6 +18,7 @@ export interface AuthResponseData {
 })
 export class AuthService {
   private _user = new BehaviorSubject<User | null>(null);
+  private tokenExpirationTimer: any;
 
   get user(): Observable<User | null> {
     return this._user.asObservable();
@@ -25,8 +26,17 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  updateUser(user: User | null): void {
+  updateUser(user: User | null, expirationTime?: number): void {
     this._user.next(user);
+
+    if (user && expirationTime) {
+      this.autoLogout(expirationTime);
+    }
+  }
+
+  isAuthenticated(): boolean {
+    const userData = localStorage.getItem("userData");
+    return !!userData;
   }
 
   signup(email: string, password: string): Observable<AuthResponseData> {
@@ -75,15 +85,43 @@ export class AuthService {
       );
   }
 
+  autoLogin() {
+    const userString = localStorage.getItem("userData");
+    if (!userString) {
+      return;
+    }
+
+    const userData = JSON.parse(userString);
+    const loadedUser = new User(userData.email, userData.id, userData._token, new Date(userData._tokenExpirationDate));
+
+    if (loadedUser.token) {
+      const expirationDuration = loadedUser._tokenExpirationDate.getTime() - new Date().getTime();
+      this.updateUser(loadedUser, expirationDuration);
+    }
+  }
+
   logout(): void {
+    localStorage.removeItem("userData");
     this.updateUser(null);
+
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer);
+    }
+    this.tokenExpirationTimer = null;
+  }
+
+  autoLogout(expirationDuration: number) {
+    this.tokenExpirationTimer = setTimeout(() => {
+      this.logout();
+    }, expirationDuration);
   }
 
   private handleAuthentication(email: string, userId: string, token: string, expiresIn: number) {
     const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
     const user = new User(email, userId, token, expirationDate);
 
-    this.updateUser(user);
+    localStorage.setItem("userData", JSON.stringify(user));
+    this.updateUser(user, expiresIn * 1000);
   }
 
   private handleError(errorResponse: HttpErrorResponse) {
