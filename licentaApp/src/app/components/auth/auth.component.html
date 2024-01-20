@@ -3,7 +3,7 @@
     <div class="col-12 d-flex justify-content-center">
       <mat-spinner *ngIf="isLoading"></mat-spinner>
     </div>
-    <div class="alert alert-danger col-12 col-md-6 offset-md-3" *ngIf="error">
+    <div class="alert alert-danger col-12 col-md-6 offset-md-3" *ngIf="error && !isLoading">
       <p>{{ error }}</p>
     </div>
     <form
@@ -38,6 +38,7 @@
           matInput
           formControlName="password"
           [errorStateMatcher]="matcher"
+          (input)="updatePasswordsValidators()"
         />
         <button mat-icon-button matSuffix (click)="hidePass = !hidePass">
           <mat-icon>{{ hidePass ? "visibility_off" : "visibility" }}</mat-icon>
@@ -53,6 +54,24 @@
           Password must include at least <strong>one letter</strong> and
           <strong>one number</strong>
         </mat-error>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="!isLoginMode" appearance="fill">
+        <mat-label>Repeat Password</mat-label>
+        <input
+          [type]="hideRepeatPass ? 'password' : 'text'"
+          matInput
+          formControlName="repeatPass"
+          [errorStateMatcher]="matcher"
+        />
+        <button mat-icon-button matSuffix (click)="hideRepeatPass = !hideRepeatPass">
+          <mat-icon>{{ hideRepeatPass ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+        <mat-hint *ngIf="authForm.get('repeatPass')?.valid">Passwords match!</mat-hint>
+        <mat-error *ngIf="authForm.get('repeatPass')?.hasError('required')">Please repeat the password</mat-error>
+        <mat-error *ngIf="authForm.get('repeatPass')?.hasError('mismatch')"
+          >The passwords must <strong>match</strong>!</mat-error
+        >
       </mat-form-field>
 
       <button class="mt-3 mb-3" type="submit" mat-raised-button color="primary" [disabled]="authForm.invalid">
