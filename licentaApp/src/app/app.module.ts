@@ -3,6 +3,11 @@ import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
+import { AngularFireModule } from "@angular/fire/compat";
+import { AngularFireDatabaseModule } from "@angular/fire/compat/database";
+import { AngularFirestoreModule } from "@angular/fire/compat/firestore";
+import { AngularFireStorageModule } from "@angular/fire/compat/storage";
+import { environment } from "src/environments/environment";
 
 import { MaterialModule } from "src/material.module";
 import { AppRoutingModule } from "./app-routing.module";
@@ -13,7 +18,8 @@ import { MedicsComponent } from "./components/medics/medics.component";
 import { CarouselComponent } from "./components/home/carousel/carousel.component";
 import { FooterComponent } from "./components/footer/footer.component";
 import { AuthComponent } from "./components/auth/auth.component";
-import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { UserProfileComponent } from "./components/user-profile/user-profile.component";
+import { AngularFireAuthModule } from "@angular/fire/compat/auth";
 
 @NgModule({
   declarations: [
@@ -35,6 +41,11 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireDatabaseModule,
+    AngularFirestoreModule,
+    AngularFireStorageModule,
+    AngularFireAuthModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
