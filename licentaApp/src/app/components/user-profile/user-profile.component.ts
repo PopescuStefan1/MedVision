@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { UserService } from "src/app/services/user.service";
 import { MyErrorStateMatcher } from "../auth/auth.component";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-user-profile",
@@ -19,7 +20,12 @@ export class UserProfileComponent implements OnInit {
   isLoading: boolean = false;
   isFormChanged: boolean = false;
 
-  constructor(private route: ActivatedRoute, private formBuilder: FormBuilder, private userService: UserService) {
+  constructor(
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder,
+    private userService: UserService,
+    private _snackBar: MatSnackBar
+  ) {
     this.userId = this.route.snapshot.paramMap.get("userId") || "";
     this.minDate = new Date(1900, 0, 1);
     this.maxDate = new Date();
@@ -64,16 +70,23 @@ export class UserProfileComponent implements OnInit {
     return JSON.stringify(obj1) === JSON.stringify(obj2);
   }
 
+  openSnackBar(message: string) {
+    this._snackBar.open(message, undefined, {
+      duration: 5000,
+      panelClass: ["mat-toolbar", "mat-primary"],
+    });
+  }
+
   onSubmit() {
     const updatedUserData = this.profileForm.value;
 
-    this.userService.updateUserData(this.userId, updatedUserData).subscribe(
-      () => {
-        console.log("Profile updated successfully!");
+    this.userService.updateUserData(this.userId, updatedUserData).subscribe({
+      next: () => {
+        this.openSnackBar("Successfully updated personal information.");
       },
-      (error) => {
-        console.error("Error updating profile:", error);
-      }
-    );
+      error: (error) => {
+        this.openSnackBar(`An error occured ${error}`);
+      },
+    });
   }
 }
