@@ -19,7 +19,6 @@ import { CarouselComponent } from "./components/home/carousel/carousel.component
 import { FooterComponent } from "./components/footer/footer.component";
 import { AuthComponent } from "./components/auth/auth.component";
 import { UserProfileComponent } from "./components/user-profile/user-profile.component";
-import { AngularFireAuthModule } from "@angular/fire/compat/auth";
 
 @NgModule({
   declarations: [
@@ -41,11 +40,10 @@ import { AngularFireAuthModule } from "@angular/fire/compat/auth";
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AngularFirestoreModule,
     AngularFireStorageModule,
-    AngularFireAuthModule,
+    AngularFireModule.initializeApp(environment.firebase),
   ],
   providers: [],
   bootstrap: [AppComponent],
