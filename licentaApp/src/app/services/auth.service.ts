@@ -72,7 +72,7 @@ export class AuthService {
       );
   }
 
-  addUserToFirestore(userId: string, userData: any) {
+  private addUserToFirestore(userId: string, userData: any) {
     const userDocRef = this.firestore.collection("users").doc(userId);
 
     return from(userDocRef.set(userData)).pipe(
