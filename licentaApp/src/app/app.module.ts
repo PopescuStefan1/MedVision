@@ -19,6 +19,7 @@ import { CarouselComponent } from "./components/home/carousel/carousel.component
 import { FooterComponent } from "./components/footer/footer.component";
 import { AuthComponent } from "./components/auth/auth.component";
 import { UserProfileComponent } from "./components/user-profile/user-profile.component";
+import { MAT_DATE_LOCALE } from "@angular/material/core";
 
 @NgModule({
   declarations: [
@@ -45,7 +46,7 @@ import { UserProfileComponent } from "./components/user-profile/user-profile.com
     AngularFireStorageModule,
     AngularFireModule.initializeApp(environment.firebase),
   ],
-  providers: [],
+  providers: [{ provide: MAT_DATE_LOCALE, useValue: "en-GB" }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -6,10 +6,11 @@ export interface UserProfile {
   sex?: string;
   dateOfBirth?: Date;
   address?: {
-    street: string;
-    city: string;
-    state: string;
-    postalCode: string;
+    street?: string;
+    country?: string;
+    state?: string;
+    city?: string;
+    postalCode?: string;
   };
   nationality?: string;
 }

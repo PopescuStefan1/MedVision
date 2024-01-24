@@ -19,7 +19,6 @@ export class ProfileGuard implements CanActivate {
         if (user) {
           const userId = user.id;
           const requestedUserId = route.paramMap.get("userId");
-          console.log(userId, requestedUserId);
 
           if (!requestedUserId || userId === requestedUserId) {
             return true;
