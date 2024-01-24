@@ -1,7 +1,8 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, catchError, map, tap, throwError } from "rxjs";
+import { BehaviorSubject, Observable, catchError, finalize, from, map, tap, throwError } from "rxjs";
 import { User } from "../models/user.model";
+import { AngularFirestore } from "@angular/fire/compat/firestore";
 
 export interface AuthResponseData {
   kind: string;
@@ -20,11 +21,11 @@ export class AuthService {
   private _user = new BehaviorSubject<User | null>(null);
   private tokenExpirationTimer: any;
 
+  constructor(private http: HttpClient, private firestore: AngularFirestore) {}
+
   get user(): Observable<User | null> {
     return this._user.asObservable();
   }
-
-  constructor(private http: HttpClient) {}
 
   updateUser(user: User | null, expirationTime?: number): void {
     this._user.next(user);
@@ -58,8 +59,31 @@ export class AuthService {
             responseData.idToken,
             +responseData.expiresIn
           );
+
+          const userData = {
+            email: responseData.email,
+            role: "patient",
+          };
+
+          this.addUserToFirestore(responseData.localId, userData).subscribe(() => {
+            console.log("Document written with ID:", responseData.localId);
+          });
         })
       );
+  }
+
+  addUserToFirestore(userId: string, userData: any) {
+    const userDocRef = this.firestore.collection("users").doc(userId);
+
+    return from(userDocRef.set(userData)).pipe(
+      catchError((error) => {
+        console.error("Error adding document:", error);
+        throw error;
+      }),
+      finalize(() => {
+        console.log("Document added successfully!");
+      })
+    );
   }
 
   login(email: string, password: string): Observable<AuthResponseData> {
@@ -97,6 +121,8 @@ export class AuthService {
     if (loadedUser.token) {
       const expirationDuration = loadedUser._tokenExpirationDate.getTime() - new Date().getTime();
       this.updateUser(loadedUser, expirationDuration);
+    } else {
+      localStorage.removeItem("userData");
     }
   }
 
@@ -116,7 +142,7 @@ export class AuthService {
     }, expirationDuration);
   }
 
-  private handleAuthentication(email: string, userId: string, token: string, expiresIn: number) {
+  private async handleAuthentication(email: string, userId: string, token: string, expiresIn: number) {
     const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
     const user = new User(email, userId, token, expirationDate);
 
