@@ -70,7 +70,7 @@
         <mat-hint *ngIf="authForm.get('repeatPass')?.valid">Passwords match!</mat-hint>
         <mat-error *ngIf="authForm.get('repeatPass')?.hasError('required')">Please repeat the password</mat-error>
         <mat-error *ngIf="authForm.get('repeatPass')?.hasError('mismatch')"
-          >The passwords must <strong>match</strong>!</mat-error
+          >The passwords must <strong>match</strong></mat-error
         >
       </mat-form-field>
 

@@ -1,7 +1,9 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, Subject, catchError, tap, throwError } from "rxjs";
+import { BehaviorSubject, Observable, catchError, finalize, from, map, tap, throwError } from "rxjs";
 import { User } from "../models/user.model";
+import { AngularFirestore } from "@angular/fire/compat/firestore";
+import { UserProfile } from "../models/user-profile";
 
 export interface AuthResponseData {
   kind: string;
@@ -17,9 +19,27 @@ export interface AuthResponseData {
   providedIn: "root",
 })
 export class AuthService {
-  user = new Subject<User | null>();
+  private _user = new BehaviorSubject<User | null>(null);
+  private tokenExpirationTimer: any;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private firestore: AngularFirestore) {}
+
+  get user(): Observable<User | null> {
+    return this._user.asObservable();
+  }
+
+  updateUser(user: User | null, expirationTime?: number): void {
+    this._user.next(user);
+
+    if (user && expirationTime) {
+      this.autoLogout(expirationTime);
+    }
+  }
+
+  isAuthenticated(): boolean {
+    const userData = localStorage.getItem("userData");
+    return !!userData;
+  }
 
   signup(email: string, password: string): Observable<AuthResponseData> {
     return this.http
@@ -40,8 +60,29 @@ export class AuthService {
             responseData.idToken,
             +responseData.expiresIn
           );
+
+          const userData: UserProfile = {
+            email: responseData.email,
+            role: "patient",
+          };
+
+          this.addUserToFirestore(responseData.localId, userData).subscribe();
         })
       );
+  }
+
+  private addUserToFirestore(userId: string, userData: any) {
+    const userDocRef = this.firestore.collection("users").doc(userId);
+
+    return from(userDocRef.set(userData)).pipe(
+      catchError((error) => {
+        console.error("Error adding document:", error);
+        throw error;
+      }),
+      finalize(() => {
+        console.log("Document added successfully!");
+      })
+    );
   }
 
   login(email: string, password: string): Observable<AuthResponseData> {
@@ -67,15 +108,45 @@ export class AuthService {
       );
   }
 
-  logout(): void {
-    this.user.next(null);
+  autoLogin() {
+    const userString = localStorage.getItem("userData");
+    if (!userString) {
+      return;
+    }
+
+    const userData = JSON.parse(userString);
+    const loadedUser = new User(userData.email, userData.id, userData._token, new Date(userData._tokenExpirationDate));
+
+    if (loadedUser.token) {
+      const expirationDuration = loadedUser._tokenExpirationDate.getTime() - new Date().getTime();
+      this.updateUser(loadedUser, expirationDuration);
+    } else {
+      localStorage.removeItem("userData");
+    }
   }
 
-  private handleAuthentication(email: string, userId: string, token: string, expiresIn: number) {
+  logout(): void {
+    localStorage.removeItem("userData");
+    this.updateUser(null);
+
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer);
+    }
+    this.tokenExpirationTimer = null;
+  }
+
+  autoLogout(expirationDuration: number) {
+    this.tokenExpirationTimer = setTimeout(() => {
+      this.logout();
+    }, expirationDuration);
+  }
+
+  private async handleAuthentication(email: string, userId: string, token: string, expiresIn: number) {
     const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
     const user = new User(email, userId, token, expirationDate);
 
-    this.user.next(user);
+    localStorage.setItem("userData", JSON.stringify(user));
+    this.updateUser(user, expiresIn * 1000);
   }
 
   private handleError(errorResponse: HttpErrorResponse) {

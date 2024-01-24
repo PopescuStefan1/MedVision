@@ -10,4 +10,5 @@ export interface Medic {
   photoUrl?: string;
   email: string;
   phoneNumber: string;
+  userId: string;
 }
