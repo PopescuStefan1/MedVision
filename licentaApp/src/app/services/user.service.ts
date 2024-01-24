@@ -22,7 +22,9 @@ export class UserService {
   }
 
   private convertTimestampsToDates(data: any): any {
-    data.dateOfBirth = data.dateOfBirth.toDate();
+    if (data.hasOwnProperty("dateOfBirth")) {
+      data.dateOfBirth = data.dateOfBirth.toDate();
+    }
 
     return data;
   }
