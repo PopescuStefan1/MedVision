@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable, catchError, finalize, from, map, tap, throwError } from "rxjs";
 import { User } from "../models/user.model";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
+import { UserProfile } from "../models/user-profile";
 
 export interface AuthResponseData {
   kind: string;
@@ -60,7 +61,7 @@ export class AuthService {
             +responseData.expiresIn
           );
 
-          const userData = {
+          const userData: UserProfile = {
             email: responseData.email,
             role: "patient",
           };
