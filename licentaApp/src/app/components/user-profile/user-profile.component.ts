@@ -12,10 +12,12 @@ import { MyErrorStateMatcher } from "../auth/auth.component";
 export class UserProfileComponent implements OnInit {
   userId: string;
   profileForm!: FormGroup;
+  initialFormValue: any;
   matcher = new MyErrorStateMatcher();
   minDate: Date;
   maxDate: Date;
   isLoading: boolean = false;
+  isFormChanged: boolean = false;
 
   constructor(private route: ActivatedRoute, private formBuilder: FormBuilder, private userService: UserService) {
     this.userId = this.route.snapshot.paramMap.get("userId") || "";
@@ -27,6 +29,7 @@ export class UserProfileComponent implements OnInit {
     this.isLoading = true;
     this.userService.getUserData(this.userId).subscribe((userData) => {
       this.createUserForm(userData);
+      this.subscribeToFormChanges();
       this.isLoading = false;
     });
   }
@@ -47,6 +50,18 @@ export class UserProfileComponent implements OnInit {
         postalCode: [userData?.address?.postalCode || "", [Validators.required, Validators.minLength(6)]],
       }),
     });
+
+    this.initialFormValue = this.profileForm.value;
+  }
+
+  subscribeToFormChanges() {
+    this.profileForm.valueChanges.subscribe((newFormValue) => {
+      this.isFormChanged = !this.isEqual(newFormValue, this.initialFormValue);
+    });
+  }
+
+  isEqual(obj1: any, obj2: any): boolean {
+    return JSON.stringify(obj1) === JSON.stringify(obj2);
   }
 
   onSubmit() {
