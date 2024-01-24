@@ -66,9 +66,7 @@ export class AuthService {
             role: "patient",
           };
 
-          this.addUserToFirestore(responseData.localId, userData).subscribe(() => {
-            console.log("Document written with ID:", responseData.localId);
-          });
+          this.addUserToFirestore(responseData.localId, userData).subscribe();
         })
       );
   }
