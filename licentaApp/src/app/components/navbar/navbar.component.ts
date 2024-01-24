@@ -10,6 +10,7 @@ import { AuthService } from "src/app/services/auth.service";
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   isAuthenticated: boolean = false;
+  userId: string | null = null;
   private userSub: Subscription = new Subscription();
 
   constructor(private authService: AuthService, private router: Router) {}
@@ -17,6 +18,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.userSub = this.authService.user.subscribe((user) => {
       this.isAuthenticated = !!user;
+      this.userId = user ? user.id : null;
     });
   }
 
