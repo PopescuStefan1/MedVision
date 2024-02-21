@@ -1,5 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { FormGroup } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { Observable } from "rxjs";
+import { AppointmentService } from "src/app/services/appointment.service";
 
 @Component({
   selector: "app-make-appointment",
@@ -8,11 +10,26 @@ import { FormGroup } from "@angular/forms";
 })
 export class MakeAppointmentComponent implements OnInit {
   newAppointmentForm!: FormGroup;
+  initialFormValue: any;
   availableSpecialties: string[] = [];
+  cities$: Observable<string[]>;
 
-  constructor() {}
+  constructor(private appointmentService: AppointmentService, private formBuilder: FormBuilder) {
+    this.cities$ = this.appointmentService.getDistinctCities();
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.createAppointmentForm();
+  }
+
+  createAppointmentForm() {
+    this.newAppointmentForm = this.formBuilder.group({
+      city: new FormControl(["", [Validators.required]]),
+      specialty: new FormControl(["", [Validators.required]]),
+    });
+
+    this.initialFormValue = this.newAppointmentForm.value;
+  }
 
   onSubmit() {}
 }

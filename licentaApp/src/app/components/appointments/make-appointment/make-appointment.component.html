@@ -6,10 +6,27 @@
 
   <div class="row">
     <mat-form-field appearance="outline">
+      <mat-label>City</mat-label>
+      <mat-select formControlName="city">
+        <ng-template *ngIf="!(cities$ | async); else loaded">
+          <mat-option disabled>No cities available</mat-option>
+        </ng-template>
+        <ng-template #loaded>
+          <mat-option *ngFor="let city of cities$ | async" [value]="city">{{ city }}</mat-option>
+        </ng-template>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field appearance="outline">
       <mat-label>Specialty</mat-label>
       <mat-select formControlName="specialty">
         <mat-option value="a">a</mat-option>
       </mat-select>
     </mat-form-field>
+  </div>
+
+  <div class="row">
+    <button type="submit" mat-raised-button color="primary" [disabled]="newAppointmentForm.invalid">Submit</button>
   </div>
 </form>
