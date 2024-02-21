@@ -1,0 +1,15 @@
+<form [formGroup]="newAppointmentForm" (ngSubmit)="onSubmit()" class="col-12 col-md-6 offset-md-3 p-4 text-center">
+  <div class="row">
+    <h2 class="form-title">Make a new appointment</h2>
+    <h6 class="form-subtitle">Complete the following form to create your appointment today!</h6>
+  </div>
+
+  <div class="row">
+    <mat-form-field appearance="outline">
+      <mat-label>Specialty</mat-label>
+      <mat-select formControlName="specialty">
+        <mat-option value="a">a</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</form>

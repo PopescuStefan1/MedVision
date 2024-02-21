@@ -20,6 +20,8 @@ import { FooterComponent } from "./components/footer/footer.component";
 import { AuthComponent } from "./components/auth/auth.component";
 import { UserProfileComponent } from "./components/user-profile/user-profile.component";
 import { MAT_DATE_LOCALE } from "@angular/material/core";
+import { AppointmentsComponent } from "./components/appointments/appointments.component";
+import { MakeAppointmentComponent } from "./components/appointments/make-appointment/make-appointment.component";
 
 @NgModule({
   declarations: [
@@ -31,6 +33,8 @@ import { MAT_DATE_LOCALE } from "@angular/material/core";
     FooterComponent,
     AuthComponent,
     UserProfileComponent,
+    AppointmentsComponent,
+    MakeAppointmentComponent,
   ],
   imports: [
     BrowserModule,

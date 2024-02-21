@@ -1,37 +1,25 @@
-import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, map } from "rxjs";
-import { medics } from "../mock-data/mockMedics";
-
 import { Medic } from "../models/medic";
+import { AngularFirestore } from "@angular/fire/compat/firestore";
 @Injectable({
   providedIn: "root",
 })
 export class DataService {
-  private baseUrl = "https://licenta-fb443-default-rtdb.europe-west1.firebasedatabase.app";
-
-  constructor(private http: HttpClient) {}
-
-  // initializeMedics() {
-  //   const url = `${this.baseUrl}/medics.json`;
-  //   medics.forEach((medic: any) => {
-  //     this.http.post(url, medic).subscribe();
-  //   });
-  // }
+  constructor(private firestore: AngularFirestore) {}
 
   getAllMedics(): Observable<Medic[]> {
-    const url = `${this.baseUrl}/medics.json`;
-    return this.http.get<Medic[]>(url).pipe(
-      map((responseData: Medic[]) => {
-        const medicsArray: Medic[] = [];
-        for (const key in responseData) {
-          if (responseData.hasOwnProperty(key)) {
-            medicsArray.push({ ...responseData[key], id: key });
-          }
-        }
-
-        return medicsArray;
-      })
-    );
+    return this.firestore
+      .collection<Medic>("medics")
+      .snapshotChanges()
+      .pipe(
+        map((snaps) => {
+          return snaps.map((snap) => {
+            const data = snap.payload.doc.data() as Medic;
+            const id = snap.payload.doc.id;
+            return { id, ...data };
+          });
+        })
+      );
   }
 }
