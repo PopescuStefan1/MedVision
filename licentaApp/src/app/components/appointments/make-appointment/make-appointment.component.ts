@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { MatSelectChange } from "@angular/material/select";
 import { Observable } from "rxjs";
 import { AppointmentService } from "src/app/services/appointment.service";
 
@@ -11,7 +12,7 @@ import { AppointmentService } from "src/app/services/appointment.service";
 export class MakeAppointmentComponent implements OnInit {
   newAppointmentForm!: FormGroup;
   initialFormValue: any;
-  availableSpecialties: string[] = [];
+  availableSpecialties$: Observable<string[]> = new Observable();
   cities$: Observable<string[]>;
 
   constructor(private appointmentService: AppointmentService, private formBuilder: FormBuilder) {
@@ -29,6 +30,12 @@ export class MakeAppointmentComponent implements OnInit {
     });
 
     this.initialFormValue = this.newAppointmentForm.value;
+  }
+
+  onCityChange(selection: MatSelectChange) {
+    const selectedCity: string = selection.value;
+
+    this.availableSpecialties$ = this.appointmentService.getSpecialtiesForCity(selectedCity);
   }
 
   onSubmit() {}

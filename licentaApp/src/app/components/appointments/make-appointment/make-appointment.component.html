@@ -7,7 +7,7 @@
   <div class="row">
     <mat-form-field appearance="outline">
       <mat-label>City</mat-label>
-      <mat-select formControlName="city">
+      <mat-select formControlName="city" (selectionChange)="onCityChange($event)">
         <ng-template *ngIf="!(cities$ | async); else loaded">
           <mat-option disabled>No cities available</mat-option>
         </ng-template>
@@ -20,8 +20,10 @@
   <div class="row">
     <mat-form-field appearance="outline">
       <mat-label>Specialty</mat-label>
-      <mat-select formControlName="specialty">
-        <mat-option value="a">a</mat-option>
+      <mat-select formControlName="specialty" [disabled]="!(availableSpecialties$ | async)">
+        <mat-option *ngFor="let specialty of availableSpecialties$ | async" [value]="specialty">{{
+          specialty
+        }}</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
