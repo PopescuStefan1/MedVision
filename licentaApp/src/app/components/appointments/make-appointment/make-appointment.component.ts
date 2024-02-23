@@ -38,6 +38,7 @@ export class MakeAppointmentComponent implements OnInit {
       specialty: ["", [Validators.required]],
       firstName: ["", [Validators.required]],
       lastName: ["", [Validators.required]],
+      telephone: ["", [Validators.required, Validators.pattern("^(\\d){10}$")]],
     });
 
     this.initialFormValue = this.appointmentForm.value;
