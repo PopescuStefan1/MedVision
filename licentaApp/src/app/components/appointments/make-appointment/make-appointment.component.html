@@ -23,7 +23,11 @@
   <div class="row">
     <mat-form-field appearance="outline">
       <mat-label>Specialty</mat-label>
-      <mat-select formControlName="specialty" [disabled]="!(availableSpecialties$ | async)">
+      <mat-select
+        formControlName="specialty"
+        [disabled]="!(availableSpecialties$ | async)"
+        (selectionChange)="onSpecialtyChange($event)"
+      >
         <mat-option *ngFor="let specialty of availableSpecialties$ | async" [value]="specialty">{{
           specialty
         }}</mat-option>
@@ -31,6 +35,19 @@
       <mat-error
         *ngIf="appointmentForm.get('specialty')?.hasError('required') && appointmentForm.get('specialty')?.touched"
       >
+        This field is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field appearance="outline">
+      <mat-label>Medic</mat-label>
+      <mat-select formControlName="medic" [disabled]="!(availableMedics$ | async)" (selectionChange)="asdf($event)">
+        <mat-option *ngFor="let medic of availableMedics$ | async" [value]="medic.id"
+          >{{ medic.shortTitle }} {{ medic.lastName }} {{ medic.firstName }}</mat-option
+        >
+      </mat-select>
+      <mat-error *ngIf="appointmentForm.get('medic')?.hasError('required') && appointmentForm.get('medic')?.touched">
         This field is required
       </mat-error>
     </mat-form-field>

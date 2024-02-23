@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { Observable, map } from "rxjs";
+import { Medic } from "../models/medic";
 
 @Injectable({
   providedIn: "root",
@@ -48,5 +49,13 @@ export class AppointmentService {
           return specialties;
         })
       );
+  }
+
+  getMedicsForCityAndSpecialty(selectedCity: string, selectedSpecialty: string) {
+    return this.firestore
+      .collection<Medic>("medics", (ref) =>
+        ref.where("city", "==", selectedCity).where("specialty", "==", selectedSpecialty)
+      )
+      .valueChanges({ idField: "id" });
   }
 }
