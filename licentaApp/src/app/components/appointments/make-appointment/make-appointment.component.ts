@@ -30,15 +30,33 @@ export class MakeAppointmentComponent implements OnInit {
 
   ngOnInit(): void {
     this.createAppointmentForm();
+  }
 
-    this.cities$.subscribe((cities) => {
-      const cityControl = this.appointmentForm.get("city");
-      cityControl?.setValidators([Validators.required, this.optionsValidator(cities)]);
-      cityControl?.updateValueAndValidity();
+  private createAppointmentForm() {
+    this.appointmentForm = this.formBuilder.group({
+      city: ["", [Validators.required]],
+      specialty: ["", [Validators.required]],
+      firstName: ["", [Validators.required]],
+      lastName: ["", [Validators.required]],
+    });
+
+    this.initialFormValue = this.appointmentForm.value;
+  }
+
+  onCityChange(selection: MatSelectChange) {
+    const selectedCity: string = selection.value;
+
+    this.availableSpecialties$ = this.appointmentService.getSpecialtiesForCity(selectedCity);
+
+    // Update validators after changing city
+    this.availableSpecialties$.subscribe((specialties) => {
+      const specialtyControl = this.appointmentForm.get("specialty");
+      specialtyControl?.setValidators([Validators.required, this.optionsValidator(specialties)]);
+      specialtyControl?.updateValueAndValidity();
     });
   }
 
-  optionsValidator(options: any[]): ValidatorFn {
+  private optionsValidator(options: any[]): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       if (Validators.required(control) !== null) {
         // If required validation fails, return null (indicating the required validation error)
@@ -52,27 +70,6 @@ export class MakeAppointmentComponent implements OnInit {
 
       return null;
     };
-  }
-
-  createAppointmentForm() {
-    this.appointmentForm = this.formBuilder.group({
-      city: new FormControl(["", { validators: [], asyncValidators: [Validators.required] }]),
-      specialty: new FormControl(["", [Validators.required]]),
-    });
-
-    this.initialFormValue = this.appointmentForm.value;
-  }
-
-  onCityChange(selection: MatSelectChange) {
-    const selectedCity: string = selection.value;
-
-    this.availableSpecialties$ = this.appointmentService.getSpecialtiesForCity(selectedCity);
-
-    this.availableSpecialties$.subscribe((specialties) => {
-      const specialtyControl = this.appointmentForm.get("specialty");
-      specialtyControl?.setValidators([Validators.required, this.optionsValidator(specialties)]);
-      specialtyControl?.updateValueAndValidity();
-    });
   }
 
   onSubmit() {}
