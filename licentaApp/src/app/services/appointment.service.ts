@@ -31,7 +31,7 @@ export class AppointmentService {
 
   getSpecialtiesForCity(selectedCity: string) {
     return this.firestore
-      .collection("medics")
+      .collection("medics", (ref) => ref.where("city", "==", selectedCity))
       .get()
       .pipe(
         map((querySnapshot) => {
@@ -39,9 +39,8 @@ export class AppointmentService {
 
           querySnapshot.forEach((doc) => {
             const specialty: string = (doc.data() as { specialty: string }).specialty;
-            const city: string = (doc.data() as { city: string }).city;
 
-            if (selectedCity === city && !specialties.includes(specialty)) {
+            if (!specialties.includes(specialty)) {
               specialties.push(specialty);
             }
           });
