@@ -1,12 +1,12 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from "@angular/forms";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { MatSelectChange } from "@angular/material/select";
 import { Observable, map } from "rxjs";
+import { Appointment } from "src/app/models/appointment";
 import { AppointmentTime } from "src/app/models/appointment-time";
 import { Medic } from "src/app/models/medic";
 import { AppointmentService } from "src/app/services/appointment.service";
-import { AuthService } from "src/app/services/auth.service";
 
 @Component({
   selector: "app-make-appointment",
@@ -14,6 +14,7 @@ import { AuthService } from "src/app/services/auth.service";
   styleUrls: ["./make-appointment.component.css"],
 })
 export class MakeAppointmentComponent implements OnInit {
+  @Input() userId: string = "";
   appointmentForm!: FormGroup;
   formLoaded: boolean = false;
   initialFormValue: any;
@@ -22,29 +23,15 @@ export class MakeAppointmentComponent implements OnInit {
   availableMedics$: Observable<Medic[]> = new Observable();
   availableTimes$: Observable<any> = new Observable();
   fromDate: Date | undefined;
-  userId: string = "";
 
-  constructor(
-    private appointmentService: AppointmentService,
-    private formBuilder: FormBuilder,
-    private authService: AuthService
-  ) {
+  constructor(private appointmentService: AppointmentService, private formBuilder: FormBuilder) {
     this.cities$ = this.appointmentService.getDistinctCities();
   }
 
   ngOnInit(): void {
     this.formLoaded = false;
-    this.getUserId();
     this.createAppointmentForm();
     this.formLoaded = true;
-  }
-
-  private getUserId() {
-    this.authService.user.subscribe((user) => {
-      if (user) {
-        this.userId = user.id;
-      }
-    });
   }
 
   private createAppointmentForm() {
@@ -52,7 +39,7 @@ export class MakeAppointmentComponent implements OnInit {
       city: ["", [Validators.required]],
       specialty: ["", [Validators.required]],
       medic: ["", [Validators.required]],
-      dateTime: this.formBuilder.group({
+      datetime: this.formBuilder.group({
         date: ["", [Validators.required]],
         time: ["", [Validators.required]],
       }),
@@ -181,9 +168,10 @@ export class MakeAppointmentComponent implements OnInit {
   onSubmit() {
     if (this.appointmentForm.valid) {
       const appointmentData = this.appointmentForm.value;
-      appointmentData.dateTime = appointmentData.dateTime.time;
+      appointmentData.datetime = appointmentData.datetime.time;
+      const appointment: Appointment = { ...appointmentData };
 
-      this.appointmentService.addApointment(this.userId, appointmentData).subscribe({
+      this.appointmentService.addApointment(this.userId, appointment).subscribe({
         next: () => {
           console.log("success");
         },

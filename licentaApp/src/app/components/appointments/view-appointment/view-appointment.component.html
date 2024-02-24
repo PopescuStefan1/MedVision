@@ -1,0 +1,22 @@
+<div class="col-12 p-1 pt-5">
+  <mat-accordion class="appointmentAccordion">
+    <mat-expansion-panel *ngFor="let appointment of appointments$ | async">
+      <mat-expansion-panel-header>
+        <mat-panel-title> {{ appointment.city }} appointment </mat-panel-title>
+        <mat-panel-description>
+          {{ appointment.datetime | date }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="row text-center">
+        <h4>Appointment Details</h4>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <p>{{ appointment.datetime | date : "HH:mm" }}</p>
+          <p>{{ getMedicForAppointment(appointment) | async }}</p>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <mat-divider></mat-divider>
+</div>

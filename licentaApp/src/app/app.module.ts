@@ -22,6 +22,7 @@ import { UserProfileComponent } from "./components/user-profile/user-profile.com
 import { ErrorStateMatcher, MAT_DATE_LOCALE, ShowOnDirtyErrorStateMatcher } from "@angular/material/core";
 import { AppointmentsComponent } from "./components/appointments/appointments.component";
 import { MakeAppointmentComponent } from "./components/appointments/make-appointment/make-appointment.component";
+import { ViewAppointmentComponent } from "./components/appointments/view-appointment/view-appointment.component";
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { MakeAppointmentComponent } from "./components/appointments/make-appoint
     UserProfileComponent,
     AppointmentsComponent,
     MakeAppointmentComponent,
+    ViewAppointmentComponent,
   ],
   imports: [
     BrowserModule,
