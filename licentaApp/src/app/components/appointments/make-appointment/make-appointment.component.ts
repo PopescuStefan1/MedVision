@@ -116,20 +116,21 @@ export class MakeAppointmentComponent implements OnInit {
       const medicId = this.appointmentForm.get("medic")?.value;
       this.availableTimes$ = this.appointmentService.getMedicAppointmentBookedTimes(medicId, selectedDate).pipe(
         map((bookedTimes) => {
-          console.log(
-            allTimes.forEach((time) => {
-              if (bookedTimes.has(time.time)) {
+          allTimes.forEach((time) => {
+            bookedTimes.forEach((bookedTime) => {
+              if (time.time.toISOString() === bookedTime.toISOString()) {
                 time.disabled = true;
               }
-            })
-          );
-          return allTimes.forEach((time) => {
-            if (bookedTimes.has(time.time)) {
-              time.disabled = true;
-            }
+            });
           });
+
+          return allTimes;
         })
       );
+
+      this.availableTimes$.subscribe((times) => {
+        console.log(times);
+      });
     }
   }
 

@@ -91,6 +91,8 @@ export class AppointmentService {
             const startTimestamp: Timestamp = data.startTimestamp;
 
             const appointmentDate: Date = startTimestamp.toDate();
+            appointmentDate.setSeconds(0);
+            appointmentDate.setMilliseconds(0);
 
             bookedTimes.add(appointmentDate);
           });
