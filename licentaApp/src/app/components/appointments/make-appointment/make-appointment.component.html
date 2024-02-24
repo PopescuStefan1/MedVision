@@ -138,6 +138,12 @@
       </mat-error>
     </mat-form-field>
   </div>
+  <div class="row">
+    <mat-form-field appearance="outline">
+      <mat-label>Short description of your problem</mat-label>
+      <textarea rows="5" matInput formControlName="comment" placeholder="Ex. It hurts when I..."></textarea>
+    </mat-form-field>
+  </div>
 
   <div class="row">
     <button type="submit" mat-raised-button color="primary" [disabled]="appointmentForm.invalid">Submit</button>

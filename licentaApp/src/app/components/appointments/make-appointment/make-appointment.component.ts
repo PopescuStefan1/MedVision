@@ -45,6 +45,7 @@ export class MakeAppointmentComponent implements OnInit {
       lastName: ["", [Validators.required]],
       telephone: ["", [Validators.required, Validators.pattern("^0[23467](\\d){8}$")]],
       email: ["", [Validators.required, Validators.email]],
+      comment: [""],
     });
 
     this.initialFormValue = this.appointmentForm.value;
@@ -79,6 +80,7 @@ export class MakeAppointmentComponent implements OnInit {
       const medicIds = medics.map((medic) => medic.id);
 
       const medicControl = this.appointmentForm.get("medic");
+      console.log(medicControl);
       medicControl?.setValidators([Validators.required, this.optionsValidator(medicIds)]);
       medicControl?.updateValueAndValidity();
     });
@@ -121,8 +123,12 @@ export class MakeAppointmentComponent implements OnInit {
         })
       );
 
-      this.availableTimes$.subscribe((times) => {
-        console.log(times);
+      // Update time validators after changing date
+      this.availableTimes$.subscribe((times: AppointmentTime[]) => {
+        const timeSlots = times.map((time) => time.time);
+        const timeControl = this.appointmentForm.get("dateTime")?.get("time");
+        timeControl?.setValidators([Validators.required, this.optionsValidator(timeSlots)]);
+        timeControl?.updateValueAndValidity();
       });
     }
   }
