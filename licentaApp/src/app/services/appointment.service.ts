@@ -103,15 +103,14 @@ export class AppointmentService {
       );
   }
 
-  addApointment(userId: string, appointmentData: Appointment) {
+  addApointment(appointmentData: Appointment) {
     const firebaseAppointmentData: FirebaseAppointment = {
       ...appointmentData,
       datetime: Timestamp.fromDate(appointmentData.datetime),
     };
-    firebaseAppointmentData.patientUserId = userId;
 
     const collectionRef = this.firestore.collection("appointments");
-    return from(collectionRef.add(appointmentData));
+    return from(collectionRef.add(firebaseAppointmentData));
   }
 
   getAppointmentsByUserId(userId: string) {
