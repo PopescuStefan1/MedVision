@@ -1,11 +1,12 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from "@angular/forms";
-import { MatDatepicker, MatDatepickerInputEvent } from "@angular/material/datepicker";
+import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { MatSelectChange } from "@angular/material/select";
 import { Observable, map } from "rxjs";
 import { AppointmentTime } from "src/app/models/appointment-time";
 import { Medic } from "src/app/models/medic";
 import { AppointmentService } from "src/app/services/appointment.service";
+import { AuthService } from "src/app/services/auth.service";
 
 @Component({
   selector: "app-make-appointment",
@@ -21,15 +22,29 @@ export class MakeAppointmentComponent implements OnInit {
   availableMedics$: Observable<Medic[]> = new Observable();
   availableTimes$: Observable<any> = new Observable();
   fromDate: Date | undefined;
+  userId: string = "";
 
-  constructor(private appointmentService: AppointmentService, private formBuilder: FormBuilder) {
+  constructor(
+    private appointmentService: AppointmentService,
+    private formBuilder: FormBuilder,
+    private authService: AuthService
+  ) {
     this.cities$ = this.appointmentService.getDistinctCities();
   }
 
   ngOnInit(): void {
     this.formLoaded = false;
+    this.getUserId();
     this.createAppointmentForm();
     this.formLoaded = true;
+  }
+
+  private getUserId() {
+    this.authService.user.subscribe((user) => {
+      if (user) {
+        this.userId = user.id;
+      }
+    });
   }
 
   private createAppointmentForm() {
@@ -163,5 +178,19 @@ export class MakeAppointmentComponent implements OnInit {
     };
   }
 
-  onSubmit() {}
+  onSubmit() {
+    if (this.appointmentForm.valid) {
+      const appointmentData = this.appointmentForm.value;
+      appointmentData.dateTime = appointmentData.dateTime.time;
+
+      this.appointmentService.addApointment(this.userId, appointmentData).subscribe({
+        next: () => {
+          console.log("success");
+        },
+        error: (error) => {
+          console.error("error");
+        },
+      });
+    }
+  }
 }
