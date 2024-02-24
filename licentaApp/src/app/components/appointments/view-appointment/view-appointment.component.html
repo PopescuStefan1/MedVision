@@ -45,7 +45,7 @@
               <p><strong>Phone Number:</strong> {{ appointment.telephone }}</p>
             </div>
             <div class="row">
-              <p><strong>Reason:</strong> {{ appointment.comment }}</p>
+              <p><strong>Reason:</strong> {{ appointment.comment ? appointment.comment : "No reason given" }}</p>
             </div>
           </div>
         </div>
