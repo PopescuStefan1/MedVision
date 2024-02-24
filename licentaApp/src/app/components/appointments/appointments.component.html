@@ -1,8 +1,14 @@
 <div class="container p-5">
   <mat-tab-group>
     <mat-tab label="Create an appointment">
-      <app-make-appointment></app-make-appointment>
+      <ng-template matTabContent>
+        <app-make-appointment [userId]="this.userId"></app-make-appointment>
+      </ng-template>
     </mat-tab>
-    <mat-tab label="View your past appointments"></mat-tab>
+    <mat-tab label="View your past appointments">
+      <ng-template matTabContent>
+        <app-view-appointment [userId]="this.userId"></app-view-appointment>
+      </ng-template>
+    </mat-tab>
   </mat-tab-group>
 </div>

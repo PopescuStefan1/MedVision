@@ -4,6 +4,7 @@ import { Timestamp } from "@angular/fire/firestore";
 import { Observable, from, map } from "rxjs";
 import { Medic } from "../models/medic";
 import { Appointment } from "../models/appointment";
+import { FirebaseAppointment } from "../models/firebase-appointment";
 
 @Injectable({
   providedIn: "root",
@@ -102,10 +103,39 @@ export class AppointmentService {
       );
   }
 
-  addApointment(userId: string, appointmentData: any) {
-    appointmentData.userId = userId;
-    const collectionRef = this.firestore.collection("appointments");
+  addApointment(userId: string, appointmentData: Appointment) {
+    const firebaseAppointmentData: FirebaseAppointment = {
+      ...appointmentData,
+      datetime: Timestamp.fromDate(appointmentData.datetime),
+    };
+    firebaseAppointmentData.patientUserId = userId;
 
+    const collectionRef = this.firestore.collection("appointments");
     return from(collectionRef.add(appointmentData));
+  }
+
+  getAppointmentsByUserId(userId: string) {
+    return this.firestore
+      .collection<FirebaseAppointment>("appointments", (ref) => ref.where("userId", "==", userId))
+      .get()
+      .pipe(
+        map((querySnapshot) => {
+          const appointments: Appointment[] = [];
+
+          querySnapshot.forEach((doc) => {
+            const firebaseAppointmentData = doc.data() as FirebaseAppointment;
+
+            // Convert timestamp to Date and FirebaseAppointment to Appointment
+            const appointmentData: Appointment = {
+              ...firebaseAppointmentData,
+              datetime: firebaseAppointmentData.datetime.toDate(),
+            };
+
+            appointments.push(appointmentData);
+          });
+
+          return appointments;
+        })
+      );
   }
 }

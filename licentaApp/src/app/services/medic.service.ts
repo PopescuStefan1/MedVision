@@ -5,7 +5,7 @@ import { AngularFirestore } from "@angular/fire/compat/firestore";
 @Injectable({
   providedIn: "root",
 })
-export class DataService {
+export class MedicService {
   constructor(private firestore: AngularFirestore) {}
 
   getAllMedics(): Observable<Medic[]> {
@@ -21,5 +21,13 @@ export class DataService {
           });
         })
       );
+  }
+
+  getMedicById(id: string): Observable<Medic> {
+    return this.firestore.collection<Medic>("medics").doc(id).valueChanges() as Observable<Medic>;
+  }
+
+  getMedicsById(ids: string[]): Observable<Medic[]> {
+    return this.firestore.collection<Medic>("medics", (ref) => ref.where("id", "in", ids)).valueChanges();
   }
 }
