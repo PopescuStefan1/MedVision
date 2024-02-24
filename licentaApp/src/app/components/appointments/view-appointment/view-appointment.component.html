@@ -3,7 +3,7 @@
     <ng-container *ngIf="appointments$ | async as appointments">
       <mat-expansion-panel *ngFor="let appointment of appointments">
         <mat-expansion-panel-header>
-          <mat-panel-title> {{ appointment.city }} appointment </mat-panel-title>
+          <mat-panel-title> Upcoming appointment </mat-panel-title>
           <mat-panel-description>
             {{ appointment.datetime | date }}
           </mat-panel-description>
