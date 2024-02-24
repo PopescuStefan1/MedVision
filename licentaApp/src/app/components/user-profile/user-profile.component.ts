@@ -78,15 +78,17 @@ export class UserProfileComponent implements OnInit {
   }
 
   onSubmit() {
-    const updatedUserData = this.profileForm.value;
+    if (this.profileForm.valid) {
+      const updatedUserData = this.profileForm.value;
 
-    this.userService.updateUserData(this.userId, updatedUserData).subscribe({
-      next: () => {
-        this.openSnackBar("Successfully updated personal information.");
-      },
-      error: (error) => {
-        this.openSnackBar(`An error occured ${error}`);
-      },
-    });
+      this.userService.updateUserData(this.userId, updatedUserData).subscribe({
+        next: () => {
+          this.openSnackBar("Successfully updated personal information.");
+        },
+        error: (error) => {
+          this.openSnackBar(`An error occured ${error}`);
+        },
+      });
+    }
   }
 }
