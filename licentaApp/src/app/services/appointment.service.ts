@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { Timestamp } from "@angular/fire/firestore";
-import { Observable, map } from "rxjs";
+import { Observable, from, map } from "rxjs";
 import { Medic } from "../models/medic";
 import { Appointment } from "../models/appointment";
 
@@ -100,5 +100,12 @@ export class AppointmentService {
           return bookedTimes;
         })
       );
+  }
+
+  addApointment(userId: string, appointmentData: any) {
+    appointmentData.userId = userId;
+    const collectionRef = this.firestore.collection("appointments");
+
+    return from(collectionRef.add(appointmentData));
   }
 }
