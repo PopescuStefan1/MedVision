@@ -146,6 +146,17 @@
   </div>
 
   <div class="row">
-    <button type="submit" mat-raised-button color="primary" [disabled]="appointmentForm.invalid">Submit</button>
+    <button
+      class="submit-button"
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="appointmentForm.invalid || isLoadingAppointmentAdd"
+    >
+      <ng-container *ngIf="isLoadingAppointmentAdd; else notLoading">
+        <mat-spinner diameter="24" style="margin: auto"></mat-spinner>
+      </ng-container>
+      <ng-template #notLoading><span>Submit</span></ng-template>
+    </button>
   </div>
 </form>

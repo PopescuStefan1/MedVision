@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { Timestamp } from "@angular/fire/firestore";
-import { Observable, from, map } from "rxjs";
+import { Observable, Subject, from, map, tap } from "rxjs";
 import { Medic } from "../models/medic";
 import { Appointment } from "../models/appointment";
 import { FirebaseAppointment } from "../models/firebase-appointment";
@@ -10,6 +10,9 @@ import { FirebaseAppointment } from "../models/firebase-appointment";
   providedIn: "root",
 })
 export class AppointmentService {
+  private addAppointmentSubject = new Subject<void>();
+  public addAppointment$ = this.addAppointmentSubject.asObservable();
+
   constructor(private firestore: AngularFirestore) {}
 
   getDistinctCities(): Observable<string[]> {
@@ -110,7 +113,10 @@ export class AppointmentService {
     };
 
     const collectionRef = this.firestore.collection("appointments");
-    return from(collectionRef.add(firebaseAppointmentData));
+    return from(collectionRef.add(firebaseAppointmentData)).pipe(
+      // Emit a signal when the appointment is added
+      tap(() => this.addAppointmentSubject.next())
+    );
   }
 
   getAppointmentsByUserId(userId: string) {

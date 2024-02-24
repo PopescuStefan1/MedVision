@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { FormControl } from "@angular/forms";
 import { AuthService } from "src/app/services/auth.service";
 
 @Component({
@@ -8,6 +9,7 @@ import { AuthService } from "src/app/services/auth.service";
 })
 export class AppointmentsComponent implements OnInit {
   userId: string = "";
+  selected = new FormControl(0);
 
   constructor(private authService: AuthService) {}
 
