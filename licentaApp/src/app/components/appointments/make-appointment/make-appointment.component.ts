@@ -23,6 +23,7 @@ export class MakeAppointmentComponent implements OnInit {
   availableMedics$: Observable<Medic[]> = new Observable();
   availableTimes$: Observable<any> = new Observable();
   fromDate: Date | undefined;
+  isLoadingAppointmentAdd: boolean = false;
 
   constructor(private appointmentService: AppointmentService, private formBuilder: FormBuilder) {
     this.cities$ = this.appointmentService.getDistinctCities();
@@ -82,7 +83,6 @@ export class MakeAppointmentComponent implements OnInit {
       const medicIds = medics.map((medic) => medic.id);
 
       const medicControl = this.appointmentForm.get("medic");
-      console.log(medicControl);
       medicControl?.setValidators([Validators.required, this.optionsValidator(medicIds)]);
       medicControl?.updateValueAndValidity();
     });
@@ -167,6 +167,7 @@ export class MakeAppointmentComponent implements OnInit {
 
   onSubmit() {
     if (this.appointmentForm.valid) {
+      this.isLoadingAppointmentAdd = true;
       const appointmentData = this.appointmentForm.value;
       const appointment: Appointment = {
         city: appointmentData.city,
@@ -183,9 +184,13 @@ export class MakeAppointmentComponent implements OnInit {
       this.appointmentService.addApointment(appointment).subscribe({
         next: () => {
           console.log("success");
+          this.appointmentForm.reset();
         },
         error: (error) => {
           console.error("error");
+        },
+        complete: () => {
+          this.isLoadingAppointmentAdd = false;
         },
       });
     }

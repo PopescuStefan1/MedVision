@@ -5,3 +5,7 @@
 .form-subtitle {
   color: var(--accent);
 }
+
+.submit-button {
+  height: 40px;
+}
