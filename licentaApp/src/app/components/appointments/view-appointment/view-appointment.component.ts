@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, switchMap } from "rxjs";
 import { Appointment } from "src/app/models/appointment";
 import { Medic } from "src/app/models/medic";
 import { AppointmentService } from "src/app/services/appointment.service";
@@ -13,18 +13,37 @@ import { MedicService } from "src/app/services/medic.service";
 export class ViewAppointmentComponent implements OnInit {
   @Input() userId: string = "";
   appointments$: Observable<Appointment[]> = new Observable();
+  medics: Medic[] = [];
 
   constructor(private appointmentService: AppointmentService, private medicService: MedicService) {}
 
   ngOnInit(): void {
     this.getAppointmentsForUser();
+    this.getMedicsForAppointments();
   }
 
-  getAppointmentsForUser() {
+  getAppointmentsForUser(): void {
     this.appointments$ = this.appointmentService.getAppointmentsByUserId(this.userId);
   }
 
-  getMedicForAppointment(appointment: Appointment): Observable<Medic> {
-    return this.medicService.getMedicById(appointment.medicId);
+  getMedicsForAppointments(): void {
+    this.appointments$
+      .pipe(
+        switchMap((appointments) => {
+          const medicIds: string[] = appointments.map((appointment) => appointment.medicId);
+          console.log(medicIds);
+          return this.medicService.getMedicsById(medicIds);
+        })
+      )
+      .subscribe((medics) => {
+        console.log(medics);
+        this.medics = medics;
+      });
+  }
+
+  getMedicById(medicId: string): Medic | undefined {
+    return this.medics.find((medic) => {
+      medic.id === medicId;
+    });
   }
 }

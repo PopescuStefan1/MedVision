@@ -1,6 +1,6 @@
 export interface Appointment {
   medicId: string;
-  patientUserId: string;
+  userId: string;
   city: string;
   datetime: Date;
   firstName: string;

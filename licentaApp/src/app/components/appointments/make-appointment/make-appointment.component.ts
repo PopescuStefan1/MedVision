@@ -168,10 +168,19 @@ export class MakeAppointmentComponent implements OnInit {
   onSubmit() {
     if (this.appointmentForm.valid) {
       const appointmentData = this.appointmentForm.value;
-      appointmentData.datetime = appointmentData.datetime.time;
-      const appointment: Appointment = { ...appointmentData };
+      const appointment: Appointment = {
+        city: appointmentData.city,
+        datetime: appointmentData.datetime.time,
+        email: appointmentData.email,
+        firstName: appointmentData.firstName,
+        lastName: appointmentData.lastName,
+        telephone: appointmentData.telephone,
+        medicId: appointmentData.medic,
+        userId: this.userId,
+        comment: appointmentData.comment,
+      };
 
-      this.appointmentService.addApointment(this.userId, appointment).subscribe({
+      this.appointmentService.addApointment(appointment).subscribe({
         next: () => {
           console.log("success");
         },
