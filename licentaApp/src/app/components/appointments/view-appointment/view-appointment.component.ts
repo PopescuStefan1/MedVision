@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { Observable, switchMap } from "rxjs";
+import { Observable, map, switchMap } from "rxjs";
 import { Appointment } from "src/app/models/appointment";
 import { Medic } from "src/app/models/medic";
 import { AppointmentService } from "src/app/services/appointment.service";
@@ -31,19 +31,15 @@ export class ViewAppointmentComponent implements OnInit {
       .pipe(
         switchMap((appointments) => {
           const medicIds: string[] = appointments.map((appointment) => appointment.medicId);
-          console.log(medicIds);
           return this.medicService.getMedicsById(medicIds);
         })
       )
       .subscribe((medics) => {
-        console.log(medics);
         this.medics = medics;
       });
   }
 
   getMedicById(medicId: string): Medic | undefined {
-    return this.medics.find((medic) => {
-      medic.id === medicId;
-    });
+    return this.medics.find((medic) => medic.id === medicId);
   }
 }

@@ -115,7 +115,7 @@ export class AppointmentService {
 
   getAppointmentsByUserId(userId: string) {
     return this.firestore
-      .collection<FirebaseAppointment>("appointments", (ref) => ref.where("userId", "==", userId))
+      .collection<FirebaseAppointment>("appointments", (ref) => ref.where("userId", "==", userId).orderBy("datetime"))
       .get()
       .pipe(
         map((querySnapshot) => {
