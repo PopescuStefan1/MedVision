@@ -47,7 +47,11 @@
   <div class="row">
     <mat-form-field appearance="outline">
       <mat-label>Medic</mat-label>
-      <mat-select formControlName="medic" [disabled]="!(availableMedics$ | async)">
+      <mat-select
+        formControlName="medic"
+        [disabled]="!(availableMedics$ | async)"
+        (selectionChange)="onMedicChange($event)"
+      >
         <mat-option *ngFor="let medic of availableMedics$ | async" [value]="medic.id"
           >{{ medic.shortTitle }} {{ medic.lastName }} {{ medic.firstName }}</mat-option
         >
@@ -66,6 +70,7 @@
         [matDatepickerFilter]="freeDaysFilter"
         formControlName="date"
         (dateChange)="onDateChange($event)"
+        [(ngModel)]="fromDate"
       />
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>

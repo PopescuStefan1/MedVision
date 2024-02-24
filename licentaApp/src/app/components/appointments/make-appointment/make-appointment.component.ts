@@ -1,6 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from "@angular/forms";
-import { MatDatepickerInputEvent } from "@angular/material/datepicker";
+import { MatDatepicker, MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { MatSelectChange } from "@angular/material/select";
 import { Observable, map } from "rxjs";
 import { AppointmentTime } from "src/app/models/appointment-time";
@@ -20,20 +20,7 @@ export class MakeAppointmentComponent implements OnInit {
   availableSpecialties$: Observable<string[]> = new Observable();
   availableMedics$: Observable<Medic[]> = new Observable();
   availableTimes$: Observable<any> = new Observable();
-
-  freeDaysFilter = (date: Date | null): boolean => {
-    if (date === null) {
-      return false;
-    }
-
-    const isWeekDay: boolean = date.getDay() !== 0 && date.getDay() !== 6;
-    const isInFuture: boolean =
-      date.getDate() > new Date().getDate() ||
-      date.getMonth() > new Date().getMonth() ||
-      date.getFullYear() > new Date().getFullYear();
-
-    return isWeekDay && isInFuture;
-  };
+  fromDate: Date | undefined;
 
   constructor(private appointmentService: AppointmentService, private formBuilder: FormBuilder) {
     this.cities$ = this.appointmentService.getDistinctCities();
@@ -97,6 +84,12 @@ export class MakeAppointmentComponent implements OnInit {
     });
   }
 
+  onMedicChange(selection: MatSelectChange) {
+    // Reset date and time fields
+    this.fromDate = undefined;
+    this.availableTimes$ = new Observable();
+  }
+
   onDateChange(event: MatDatepickerInputEvent<Date>) {
     const selectedDate: Date | null = event.value;
     if (selectedDate) {
@@ -133,6 +126,20 @@ export class MakeAppointmentComponent implements OnInit {
       });
     }
   }
+
+  freeDaysFilter = (date: Date | null): boolean => {
+    if (date === null) {
+      return false;
+    }
+
+    const isWeekDay: boolean = date.getDay() !== 0 && date.getDay() !== 6;
+    const isInFuture: boolean =
+      date.getDate() > new Date().getDate() ||
+      date.getMonth() > new Date().getMonth() ||
+      date.getFullYear() > new Date().getFullYear();
+
+    return isWeekDay && isInFuture;
+  };
 
   private optionsValidator(options: any[]): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
