@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Observable, map } from "rxjs";
+import { Observable, combineLatest, map } from "rxjs";
 import { Medic } from "../models/medic";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
 @Injectable({
@@ -28,6 +28,22 @@ export class MedicService {
   }
 
   getMedicsById(ids: string[]): Observable<Medic[]> {
-    return this.firestore.collection<Medic>("medics", (ref) => ref.where("id", "in", ids)).valueChanges();
+    // Create an array of observables for each document
+    const observables = ids.map((id) =>
+      this.firestore
+        .collection<Medic>("medics")
+        .doc(id)
+        .snapshotChanges()
+        .pipe(
+          map((doc) => {
+            const data = doc.payload.data() as Medic;
+            const id: string = doc.payload.id;
+            return { id, ...data } as Medic;
+          })
+        )
+    );
+
+    // Combine all observables into one observable
+    return combineLatest(observables);
   }
 }
