@@ -27,7 +27,9 @@
           </p>
         </mat-card-content>
         <mat-card-actions>
-          <button mat-raised-button color="primary">Schedule an appointment</button>
+          <button mat-raised-button color="primary" (click)="onScheduleAppointmentClick(medic)">
+            Schedule an appointment
+          </button>
           <button mat-button color="accent" [matMenuTriggerFor]="menu">Contact</button>
           <mat-menu #menu="matMenu" yPosition="above">
             <button mat-menu-item>

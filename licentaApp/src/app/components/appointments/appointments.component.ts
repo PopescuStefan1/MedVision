@@ -16,8 +16,8 @@ export class AppointmentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUserId();
+
     this.appointmentService.addAppointment$.subscribe(() => {
-      console.log("added");
       this.selected.setValue(1);
     });
   }
