@@ -114,6 +114,7 @@ export class MakeAppointmentComponent implements OnInit {
       this.availableTimes$ = this.appointmentService.getMedicAppointmentBookedTimes(medicId, selectedDate).pipe(
         map((bookedTimes) => {
           allTimes.forEach((time) => {
+            console.log(bookedTimes);
             bookedTimes.forEach((bookedTime) => {
               if (time.time.toISOString() === bookedTime.toISOString()) {
                 time.disabled = true;
@@ -181,6 +182,7 @@ export class MakeAppointmentComponent implements OnInit {
         comment: appointmentData.comment,
       };
 
+      // CHECK WHY TIMESLOTS ARE NOT DISABLED and add snackbar maybe!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       this.appointmentService.addApointment(appointment).subscribe({
         next: () => {
           console.log("success");

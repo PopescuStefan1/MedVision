@@ -79,10 +79,7 @@ export class AppointmentService {
 
     return this.firestore
       .collection("appointments", (ref) =>
-        ref
-          .where("medicId", "==", selectedMedicId)
-          .where("startTimestamp", ">=", startOfDay)
-          .where("startTimestamp", "<", endOfDay)
+        ref.where("medicId", "==", selectedMedicId).where("datetime", ">=", startOfDay).where("datetime", "<", endOfDay)
       )
       .get()
       .pipe(
@@ -91,10 +88,10 @@ export class AppointmentService {
 
           querySnapshot.forEach((doc) => {
             // Explicitly cast the type of doc.data()
-            const data = doc.data() as { startTimestamp: Timestamp };
-            const startTimestamp: Timestamp = data.startTimestamp;
+            const data = doc.data() as { datetime: Timestamp };
+            const datetime: Timestamp = data.datetime;
 
-            const appointmentDate: Date = startTimestamp.toDate();
+            const appointmentDate: Date = datetime.toDate();
             appointmentDate.setSeconds(0);
             appointmentDate.setMilliseconds(0);
 
