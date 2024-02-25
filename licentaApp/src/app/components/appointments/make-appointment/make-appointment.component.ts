@@ -160,7 +160,6 @@ export class MakeAppointmentComponent implements OnInit {
       this.availableTimes$ = this.appointmentService.getMedicAppointmentBookedTimes(medicId, selectedDate).pipe(
         map((bookedTimes) => {
           allTimes.forEach((time) => {
-            console.log(bookedTimes);
             bookedTimes.forEach((bookedTime) => {
               if (time.time.toISOString() === bookedTime.toISOString()) {
                 time.disabled = true;
