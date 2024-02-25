@@ -30,13 +30,12 @@ export class MedicsComponent implements OnInit {
       },
       error: (error) => {
         this.error = error.message;
-        console.log(error);
+        console.error(error);
       },
     });
   }
 
   onScheduleAppointmentClick(selectedMedic: Medic) {
-    console.log(selectedMedic);
     this.router.navigate(["/appointments"], {
       queryParams: { city: selectedMedic.city, specialty: selectedMedic.specialty, medicId: selectedMedic.id },
     });
