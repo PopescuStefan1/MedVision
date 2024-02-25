@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { Observable, map, switchMap } from "rxjs";
+import { Observable, filter, map, switchMap } from "rxjs";
 import { Appointment } from "src/app/models/appointment";
 import { Medic } from "src/app/models/medic";
 import { AppointmentService } from "src/app/services/appointment.service";
@@ -13,6 +13,8 @@ import { MedicService } from "src/app/services/medic.service";
 export class ViewAppointmentComponent implements OnInit {
   @Input() userId: string = "";
   appointments$: Observable<Appointment[]> = new Observable();
+  pastAppointments$: Observable<Appointment[]> = new Observable();
+  futureAppointments$: Observable<Appointment[]> = new Observable();
   medics: Medic[] = [];
 
   constructor(private appointmentService: AppointmentService, private medicService: MedicService) {}
@@ -24,6 +26,13 @@ export class ViewAppointmentComponent implements OnInit {
 
   getAppointmentsForUser(): void {
     this.appointments$ = this.appointmentService.getAppointmentsByUserId(this.userId);
+
+    this.pastAppointments$ = this.appointments$.pipe(
+      map((appointments) => appointments.filter((appointment) => appointment.datetime < new Date()))
+    );
+    this.futureAppointments$ = this.appointments$.pipe(
+      map((appointments) => appointments.filter((appointment) => appointment.datetime >= new Date()))
+    );
   }
 
   getMedicsForAppointments(): void {

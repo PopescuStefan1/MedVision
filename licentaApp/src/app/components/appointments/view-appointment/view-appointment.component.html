@@ -1,56 +1,117 @@
-<div class="col-12 p-1 pt-5">
-  <mat-accordion class="appointmentAccordion" multi>
-    <ng-container *ngIf="appointments$ | async as appointments">
-      <mat-expansion-panel *ngFor="let appointment of appointments">
-        <mat-expansion-panel-header>
-          <mat-panel-title> Upcoming appointment </mat-panel-title>
-          <mat-panel-description>
-            {{ appointment.datetime | date }}
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <div class="row text-center mb-3">
-          <h5>Appointment Details</h5>
-        </div>
-        <div class="row">
-          <div class="col-6">
-            <div class="row">
-              <h6>Appointment Info</h6>
-            </div>
-            <div class="row">
-              <p><strong>City:</strong> {{ appointment.city }}</p>
-            </div>
-            <div class="row">
-              <p><strong>Appointment time:</strong> {{ appointment.datetime | date : "medium" }}</p>
-            </div>
-            <ng-container *ngIf="getMedicById(appointment.medicId) as medic">
+<div class="col-12 p-1 pt-5 overflow-x-hidden">
+  <div class="row">
+    <mat-accordion class="appointmentAccordion" multi>
+      <ng-container *ngIf="futureAppointments$ | async as appointments">
+        <h4 class="upcoming-appointments-header">Upcoming appointments</h4>
+        <mat-expansion-panel *ngFor="let appointment of appointments">
+          <mat-expansion-panel-header>
+            <mat-panel-title> Upcoming appointment </mat-panel-title>
+            <mat-panel-description>
+              {{ appointment.datetime | date }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="row text-center mb-3">
+            <h5>Appointment Details</h5>
+          </div>
+          <div class="row">
+            <div class="col-6">
               <div class="row">
-                <p><strong>Medic:</strong> {{ medic.shortTitle }} {{ medic.firstName }} {{ medic.lastName }}</p>
+                <h6>Appointment Info</h6>
               </div>
               <div class="row">
-                <p><strong>Specialty:</strong> {{ medic.specialty }}</p>
+                <p><strong>City:</strong> {{ appointment.city }}</p>
               </div>
-            </ng-container>
+              <div class="row">
+                <p><strong>Appointment time:</strong> {{ appointment.datetime | date : "medium" }}</p>
+              </div>
+              <ng-container *ngIf="getMedicById(appointment.medicId) as medic">
+                <div class="row">
+                  <p><strong>Medic:</strong> {{ medic.shortTitle }} {{ medic.firstName }} {{ medic.lastName }}</p>
+                </div>
+                <div class="row">
+                  <p><strong>Specialty:</strong> {{ medic.specialty }}</p>
+                </div>
+              </ng-container>
+            </div>
+            <div class="col-6">
+              <div class="row">
+                <h6>Patient Info</h6>
+              </div>
+              <div class="row">
+                <p><strong>Patient Name:</strong> {{ appointment.firstName }} {{ appointment.lastName }}</p>
+              </div>
+              <div class="row">
+                <p><strong>Email:</strong> {{ appointment.email }}</p>
+              </div>
+              <div class="row">
+                <p><strong>Phone Number:</strong> {{ appointment.telephone }}</p>
+              </div>
+              <div class="row">
+                <p><strong>Reason:</strong> {{ appointment.comment ? appointment.comment : "No reason given" }}</p>
+              </div>
+            </div>
           </div>
-          <div class="col-6">
-            <div class="row">
-              <h6>Patient Info</h6>
+        </mat-expansion-panel>
+      </ng-container>
+    </mat-accordion>
+  </div>
+  <div class="row mt-3 mb-3">
+    <mat-divider></mat-divider>
+  </div>
+  <div class="row">
+    <mat-accordion class="appointmentAccordion" multi>
+      <ng-container *ngIf="pastAppointments$ | async as appointments">
+        <h4 class="past-appointments-header">Past appointments</h4>
+        <mat-expansion-panel *ngFor="let appointment of appointments">
+          <mat-expansion-panel-header>
+            <mat-panel-title> Past appointment </mat-panel-title>
+            <mat-panel-description>
+              {{ appointment.datetime | date }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="row text-center mb-3">
+            <h5>Appointment Details</h5>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="row">
+                <h6>Appointment Info</h6>
+              </div>
+              <div class="row">
+                <p><strong>City:</strong> {{ appointment.city }}</p>
+              </div>
+              <div class="row">
+                <p><strong>Appointment time:</strong> {{ appointment.datetime | date : "medium" }}</p>
+              </div>
+              <ng-container *ngIf="getMedicById(appointment.medicId) as medic">
+                <div class="row">
+                  <p><strong>Medic:</strong> {{ medic.shortTitle }} {{ medic.firstName }} {{ medic.lastName }}</p>
+                </div>
+                <div class="row">
+                  <p><strong>Specialty:</strong> {{ medic.specialty }}</p>
+                </div>
+              </ng-container>
             </div>
-            <div class="row">
-              <p><strong>Patient Name:</strong> {{ appointment.firstName }} {{ appointment.lastName }}</p>
-            </div>
-            <div class="row">
-              <p><strong>Email:</strong> {{ appointment.email }}</p>
-            </div>
-            <div class="row">
-              <p><strong>Phone Number:</strong> {{ appointment.telephone }}</p>
-            </div>
-            <div class="row">
-              <p><strong>Reason:</strong> {{ appointment.comment ? appointment.comment : "No reason given" }}</p>
+            <div class="col-6">
+              <div class="row">
+                <h6>Patient Info</h6>
+              </div>
+              <div class="row">
+                <p><strong>Patient Name:</strong> {{ appointment.firstName }} {{ appointment.lastName }}</p>
+              </div>
+              <div class="row">
+                <p><strong>Email:</strong> {{ appointment.email }}</p>
+              </div>
+              <div class="row">
+                <p><strong>Phone Number:</strong> {{ appointment.telephone }}</p>
+              </div>
+              <div class="row">
+                <p><strong>Reason:</strong> {{ appointment.comment ? appointment.comment : "No reason given" }}</p>
+              </div>
             </div>
           </div>
-        </div>
-      </mat-expansion-panel>
-    </ng-container>
-  </mat-accordion>
-  <mat-divider></mat-divider>
+        </mat-expansion-panel>
+      </ng-container>
+    </mat-accordion>
+  </div>
 </div>
