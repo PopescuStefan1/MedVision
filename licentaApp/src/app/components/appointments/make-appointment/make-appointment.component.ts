@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from "@angular/forms";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { MatSelectChange } from "@angular/material/select";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { Observable, map } from "rxjs";
 import { Appointment } from "src/app/models/appointment";
 import { AppointmentTime } from "src/app/models/appointment-time";
@@ -25,7 +26,11 @@ export class MakeAppointmentComponent implements OnInit {
   fromDate: Date | undefined;
   isLoadingAppointmentAdd: boolean = false;
 
-  constructor(private appointmentService: AppointmentService, private formBuilder: FormBuilder) {
+  constructor(
+    private appointmentService: AppointmentService,
+    private formBuilder: FormBuilder,
+    private _snackBar: MatSnackBar
+  ) {
     this.cities$ = this.appointmentService.getDistinctCities();
   }
 
@@ -182,19 +187,27 @@ export class MakeAppointmentComponent implements OnInit {
         comment: appointmentData.comment,
       };
 
-      // CHECK WHY TIMESLOTS ARE NOT DISABLED and add snackbar maybe!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       this.appointmentService.addApointment(appointment).subscribe({
         next: () => {
-          console.log("success");
           this.appointmentForm.reset();
+          this.openSnackBar(
+            "Successfully created an appointment. View your appointments in the 'View your appointments' tab."
+          );
         },
         error: (error) => {
-          console.error("error");
+          this.openSnackBar(`An error occured ${error}`);
         },
         complete: () => {
           this.isLoadingAppointmentAdd = false;
         },
       });
     }
+  }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, undefined, {
+      duration: 10000,
+      panelClass: ["mat-toolbar", "mat-primary"],
+    });
   }
 }
