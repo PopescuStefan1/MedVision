@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormControl } from "@angular/forms";
+import { AppointmentService } from "src/app/services/appointment.service";
 import { AuthService } from "src/app/services/auth.service";
 
 @Component({
@@ -11,10 +12,14 @@ export class AppointmentsComponent implements OnInit {
   userId: string = "";
   selected = new FormControl(0);
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private appointmentService: AppointmentService) {}
 
   ngOnInit(): void {
     this.getUserId();
+    this.appointmentService.addAppointment$.subscribe(() => {
+      console.log("added");
+      this.selected.setValue(1);
+    });
   }
 
   private getUserId() {
