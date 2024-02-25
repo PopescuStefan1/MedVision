@@ -3,7 +3,8 @@ import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { MatSelectChange } from "@angular/material/select";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { Observable, map } from "rxjs";
+import { ActivatedRoute } from "@angular/router";
+import { Observable, map, switchMap } from "rxjs";
 import { Appointment } from "src/app/models/appointment";
 import { AppointmentTime } from "src/app/models/appointment-time";
 import { Medic } from "src/app/models/medic";
@@ -16,10 +17,14 @@ import { AppointmentService } from "src/app/services/appointment.service";
 })
 export class MakeAppointmentComponent implements OnInit {
   @Input() userId: string = "";
+  city?: string;
+  specialty?: string;
+  medicId?: string;
+
   appointmentForm!: FormGroup;
   formLoaded: boolean = false;
   initialFormValue: any;
-  cities$: Observable<string[]>;
+  cities$: Observable<string[]> = new Observable();
   availableSpecialties$: Observable<string[]> = new Observable();
   availableMedics$: Observable<Medic[]> = new Observable();
   availableTimes$: Observable<any> = new Observable();
@@ -29,6 +34,7 @@ export class MakeAppointmentComponent implements OnInit {
   constructor(
     private appointmentService: AppointmentService,
     private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
     private _snackBar: MatSnackBar
   ) {
     this.cities$ = this.appointmentService.getDistinctCities();
@@ -36,8 +42,43 @@ export class MakeAppointmentComponent implements OnInit {
 
   ngOnInit(): void {
     this.formLoaded = false;
+    this.getRouteParams();
     this.createAppointmentForm();
-    this.formLoaded = true;
+
+    if (this.city && this.specialty && this.medicId) {
+      this.autoFillWithRouteParams();
+    } else {
+      this.formLoaded = true;
+    }
+  }
+
+  private getRouteParams() {
+    this.route.queryParams.subscribe((params) => {
+      this.city = params["city"];
+      this.specialty = params["specialty"];
+      this.medicId = params["medicId"];
+    });
+  }
+
+  private autoFillWithRouteParams() {
+    this.cities$
+      .pipe(
+        switchMap(() => {
+          this.availableSpecialties$ = this.appointmentService.getSpecialtiesForCity(this.city!);
+          return this.availableSpecialties$;
+        }),
+        switchMap(() => {
+          this.availableMedics$ = this.appointmentService.getMedicsForCityAndSpecialty(this.city!, this.specialty!);
+          return this.availableMedics$;
+        })
+      )
+      .subscribe(() => {
+        this.appointmentForm.get("city")?.setValue(this.city);
+        this.appointmentForm.get("specialty")?.setValue(this.specialty);
+        this.appointmentForm.get("medic")?.setValue(this.medicId);
+
+        this.formLoaded = true;
+      });
   }
 
   private createAppointmentForm() {

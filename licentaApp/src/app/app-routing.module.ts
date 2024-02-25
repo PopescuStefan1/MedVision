@@ -13,6 +13,11 @@ const routes: Routes = [
   { path: "", component: HomeComponent },
   { path: "authenticate", component: AuthComponent, canActivate: [LoginauthGuard] },
   { path: "medics", component: MedicsComponent },
+  {
+    path: "appointments/:city/:specialty/:medicId",
+    component: AppointmentsComponent,
+    canActivate: [AppointmentsGuard],
+  },
   { path: "appointments", component: AppointmentsComponent, canActivate: [AppointmentsGuard] },
   { path: "profile/:userId", component: UserProfileComponent, canActivate: [ProfileGuard] },
   { path: "**", redirectTo: "" },
