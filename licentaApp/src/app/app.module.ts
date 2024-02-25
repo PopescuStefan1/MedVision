@@ -19,7 +19,10 @@ import { CarouselComponent } from "./components/home/carousel/carousel.component
 import { FooterComponent } from "./components/footer/footer.component";
 import { AuthComponent } from "./components/auth/auth.component";
 import { UserProfileComponent } from "./components/user-profile/user-profile.component";
-import { MAT_DATE_LOCALE } from "@angular/material/core";
+import { ErrorStateMatcher, MAT_DATE_LOCALE, ShowOnDirtyErrorStateMatcher } from "@angular/material/core";
+import { AppointmentsComponent } from "./components/appointments/appointments.component";
+import { MakeAppointmentComponent } from "./components/appointments/make-appointment/make-appointment.component";
+import { ViewAppointmentComponent } from "./components/appointments/view-appointment/view-appointment.component";
 
 @NgModule({
   declarations: [
@@ -31,6 +34,9 @@ import { MAT_DATE_LOCALE } from "@angular/material/core";
     FooterComponent,
     AuthComponent,
     UserProfileComponent,
+    AppointmentsComponent,
+    MakeAppointmentComponent,
+    ViewAppointmentComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,7 +52,10 @@ import { MAT_DATE_LOCALE } from "@angular/material/core";
     AngularFireStorageModule,
     AngularFireModule.initializeApp(environment.firebase),
   ],
-  providers: [{ provide: MAT_DATE_LOCALE, useValue: "en-GB" }],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: "en-GB" },
+    { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

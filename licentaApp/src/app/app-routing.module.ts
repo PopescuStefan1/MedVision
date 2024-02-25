@@ -6,11 +6,14 @@ import { AuthComponent } from "./components/auth/auth.component";
 import { UserProfileComponent } from "./components/user-profile/user-profile.component";
 import { ProfileGuard } from "./guards/profile.guard";
 import { LoginauthGuard } from "./guards/loginauth.guard";
+import { AppointmentsComponent } from "./components/appointments/appointments.component";
+import { AppointmentsGuard } from "./guards/appointments.guard";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
   { path: "authenticate", component: AuthComponent, canActivate: [LoginauthGuard] },
   { path: "medics", component: MedicsComponent },
+  { path: "appointments", component: AppointmentsComponent, canActivate: [AppointmentsGuard] },
   { path: "profile/:userId", component: UserProfileComponent, canActivate: [ProfileGuard] },
   { path: "**", redirectTo: "" },
 ];
