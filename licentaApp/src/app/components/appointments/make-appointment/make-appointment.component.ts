@@ -190,9 +190,7 @@ export class MakeAppointmentComponent implements OnInit {
       this.appointmentService.addApointment(appointment).subscribe({
         next: () => {
           this.appointmentForm.reset();
-          this.openSnackBar(
-            "Successfully created an appointment. View your appointments in the 'View your appointments' tab."
-          );
+          this.openSnackBar("Successfully created your appointment.");
         },
         error: (error) => {
           this.openSnackBar(`An error occured ${error}`);

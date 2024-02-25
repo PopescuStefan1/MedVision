@@ -1,5 +1,9 @@
 <div class="container p-5">
-  <mat-tab-group animationDuration="0ms">
+  <mat-tab-group
+    animationDuration="0ms"
+    [selectedIndex]="selected.value"
+    (selectedIndexChange)="selected.setValue($event)"
+  >
     <mat-tab label="Create an appointment">
       <ng-template matTabContent>
         <app-make-appointment [userId]="this.userId"></app-make-appointment>
