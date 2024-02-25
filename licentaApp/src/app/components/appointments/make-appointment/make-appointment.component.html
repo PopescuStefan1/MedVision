@@ -1,0 +1,162 @@
+<form
+  *ngIf="formLoaded"
+  [formGroup]="appointmentForm"
+  (ngSubmit)="onSubmit()"
+  class="col-12 col-md-6 offset-md-3 p-4 text-center"
+>
+  <div class="row">
+    <h2 class="form-title">Make a new appointment</h2>
+    <h6 class="form-subtitle">Complete the following form to create your appointment today!</h6>
+  </div>
+
+  <div class="row">
+    <mat-form-field appearance="outline">
+      <mat-label>City</mat-label>
+      <mat-select formControlName="city" (selectionChange)="onCityChange($event)">
+        <ng-template *ngIf="!(cities$ | async); else loaded">
+          <mat-option disabled>No cities available</mat-option>
+        </ng-template>
+        <ng-template #loaded>
+          <mat-option *ngFor="let city of cities$ | async" [value]="city">{{ city }}</mat-option>
+        </ng-template>
+      </mat-select>
+      <mat-error *ngIf="appointmentForm.get('city')?.hasError('required') && appointmentForm.get('city')?.touched">
+        This field is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field appearance="outline">
+      <mat-label>Specialty</mat-label>
+      <mat-select
+        formControlName="specialty"
+        [disabled]="!(availableSpecialties$ | async)"
+        (selectionChange)="onSpecialtyChange($event)"
+      >
+        <mat-option *ngFor="let specialty of availableSpecialties$ | async" [value]="specialty">{{
+          specialty
+        }}</mat-option>
+      </mat-select>
+      <mat-error
+        *ngIf="appointmentForm.get('specialty')?.hasError('required') && appointmentForm.get('specialty')?.touched"
+      >
+        This field is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field appearance="outline">
+      <mat-label>Medic</mat-label>
+      <mat-select
+        formControlName="medic"
+        [disabled]="!(availableMedics$ | async)"
+        (selectionChange)="onMedicChange($event)"
+      >
+        <mat-option *ngFor="let medic of availableMedics$ | async" [value]="medic.id"
+          >{{ medic.shortTitle }} {{ medic.lastName }} {{ medic.firstName }}</mat-option
+        >
+      </mat-select>
+      <mat-error *ngIf="appointmentForm.get('medic')?.hasError('required') && appointmentForm.get('medic')?.touched">
+        This field is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div class="row" formGroupName="datetime">
+    <mat-form-field class="col-6" appearance="outline">
+      <mat-label>Date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        [matDatepickerFilter]="freeDaysFilter"
+        formControlName="date"
+        (dateChange)="onDateChange($event)"
+        [(ngModel)]="fromDate"
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field class="col-6" appearance="outline">
+      <mat-label>Time Slot</mat-label>
+      <mat-select formControlName="time" [disabled]="!(availableTimes$ | async)">
+        <mat-option
+          *ngFor="let timeSlot of availableTimes$ | async"
+          [value]="timeSlot.time"
+          [disabled]="timeSlot.disabled"
+        >
+          {{ timeSlot.time | date : "HH:mm" }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field appearance="outline">
+      <mat-label>First Name</mat-label>
+      <input matInput type="text" formControlName="firstName" />
+      <mat-error
+        *ngIf="appointmentForm.get('firstName')?.hasError('required') && appointmentForm.get('firstName')?.touched"
+      >
+        This field is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field appearance="outline">
+      <mat-label>Last Name</mat-label>
+      <input matInput type="text" formControlName="lastName" />
+      <mat-error
+        *ngIf="appointmentForm.get('lastName')?.hasError('required') && appointmentForm.get('lastName')?.touched"
+      >
+        This field is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field appearance="outline">
+      <mat-label>Phone Number</mat-label>
+      <input matInput type="text" formControlName="telephone" placeholder="0720123456" maxlength="10" />
+      <mat-error
+        *ngIf="appointmentForm.get('telephone')?.hasError('required') && appointmentForm.get('telephone')?.touched"
+      >
+        This field is required
+      </mat-error>
+      <mat-error
+        *ngIf="appointmentForm.get('telephone')?.hasError('pattern') && appointmentForm.get('telephone')?.touched"
+      >
+        Please input a valid phone number
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" placeholder="stefanpopescu@gmail.com" />
+      <mat-error *ngIf="appointmentForm.get('email')?.hasError('required') && appointmentForm.get('email')?.touched">
+        This field is required
+      </mat-error>
+      <mat-error *ngIf="appointmentForm.get('email')?.hasError('email') && appointmentForm.get('email')?.touched">
+        Please input a valid email
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field appearance="outline">
+      <mat-label>Short description of your problem</mat-label>
+      <textarea rows="5" matInput formControlName="comment" placeholder="Ex. It hurts when I..."></textarea>
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <button
+      class="submit-button"
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="appointmentForm.invalid || isLoadingAppointmentAdd"
+    >
+      <ng-container *ngIf="isLoadingAppointmentAdd; else notLoading">
+        <mat-spinner diameter="24" style="margin: auto"></mat-spinner>
+      </ng-container>
+      <ng-template #notLoading><span>Submit</span></ng-template>
+    </button>
+  </div>
+</form>

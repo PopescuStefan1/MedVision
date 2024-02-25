@@ -6,7 +6,7 @@ import { AuthService } from "../services/auth.service";
 @Injectable({
   providedIn: "root",
 })
-export class ProfileGuard implements CanActivate {
+export class AppointmentsGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(
@@ -17,14 +17,7 @@ export class ProfileGuard implements CanActivate {
       take(1),
       map((user) => {
         if (user) {
-          const userId = user.id;
-          const requestedUserId = route.paramMap.get("userId");
-
-          if (!requestedUserId || userId === requestedUserId) {
-            return true;
-          } else {
-            return this.router.createUrlTree(["profile", userId]);
-          }
+          return true;
         } else {
           return this.router.createUrlTree(["/authenticate"]);
         }
