@@ -4,7 +4,16 @@
       ><mat-icon class="me-1">monitor_heart</mat-icon> <span>Ditama Clinic</span></a
     >
     <a mat-button routerLink="medics">Medics</a>
-    <a mat-button *ngIf="isAuthenticated" routerLink="appointments">Appointments</a>
+    <ng-container *ngIf="isAuthenticated">
+      <ng-container *ngIf="userData$ | async as userData">
+        <ng-container *ngIf="userData.role === 'medic'; else appointmentButton">
+          <a mat-button routerLink="schedule">Schedule</a>
+        </ng-container>
+        <ng-template #appointmentButton>
+          <a mat-button routerLink="appointments">Appointments</a>
+        </ng-template>
+      </ng-container>
+    </ng-container>
     <a mat-button routerLink="/">About</a>
     <span class="spacer"></span>
     <a mat-button *ngIf="isAuthenticated" routerLink="/"><span>Upload photo</span> <mat-icon>cloud_upload</mat-icon></a>
