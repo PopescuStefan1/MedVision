@@ -23,6 +23,7 @@ import { ErrorStateMatcher, MAT_DATE_LOCALE, ShowOnDirtyErrorStateMatcher } from
 import { AppointmentsComponent } from "./components/appointments/appointments.component";
 import { MakeAppointmentComponent } from "./components/appointments/make-appointment/make-appointment.component";
 import { ViewAppointmentComponent } from "./components/appointments/view-appointment/view-appointment.component";
+import { ScheduleComponent } from './components/schedule/schedule.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { ViewAppointmentComponent } from "./components/appointments/view-appoint
     AppointmentsComponent,
     MakeAppointmentComponent,
     ViewAppointmentComponent,
+    ScheduleComponent,
   ],
   imports: [
     BrowserModule,
