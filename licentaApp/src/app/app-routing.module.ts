@@ -8,6 +8,8 @@ import { ProfileGuard } from "./guards/profile.guard";
 import { LoginauthGuard } from "./guards/loginauth.guard";
 import { AppointmentsComponent } from "./components/appointments/appointments.component";
 import { AppointmentsGuard } from "./guards/appointments.guard";
+import { ScheduleComponent } from "./components/schedule/schedule.component";
+import { ScheduleGuard } from "./guards/schedule.guard";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -19,6 +21,7 @@ const routes: Routes = [
     canActivate: [AppointmentsGuard],
   },
   { path: "appointments", component: AppointmentsComponent, canActivate: [AppointmentsGuard] },
+  { path: "schedule", component: ScheduleComponent, canActivate: [ScheduleGuard] },
   { path: "profile/:userId", component: UserProfileComponent, canActivate: [ProfileGuard] },
   { path: "**", redirectTo: "" },
 ];
