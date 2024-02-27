@@ -1,1 +1,14 @@
-<p>schedule works!</p>
+<div class="container p-5">
+  <div class="row">
+    <input
+      [matDatepicker]="picker"
+      [matDatepickerFilter]="weekendFilter"
+      class="d-none"
+      (dateChange)="onDateChange($event)"
+    />
+    <mat-datepicker #picker></mat-datepicker>
+    <button mat-button color="primary" (click)="picker.open()">
+      {{ this.selectedStartOfWeek | date }} - {{ this.selectedEndOfWeek | date }}
+    </button>
+  </div>
+</div>
