@@ -24,6 +24,7 @@ import { AppointmentsComponent } from "./components/appointments/appointments.co
 import { MakeAppointmentComponent } from "./components/appointments/make-appointment/make-appointment.component";
 import { ViewAppointmentComponent } from "./components/appointments/view-appointment/view-appointment.component";
 import { ScheduleComponent } from './components/schedule/schedule.component';
+import { ScheduleTableComponent } from './components/schedule/schedule-table/schedule-table.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { ScheduleComponent } from './components/schedule/schedule.component';
     MakeAppointmentComponent,
     ViewAppointmentComponent,
     ScheduleComponent,
+    ScheduleTableComponent,
   ],
   imports: [
     BrowserModule,
