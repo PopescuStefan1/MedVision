@@ -16,7 +16,6 @@ export class ScheduleComponent implements OnInit {
   ngOnInit(): void {
     this.selectedStartOfWeek = this.getMonday(new Date());
     this.selectedEndOfWeek = this.getSunday(new Date());
-    this.createWeek(this.selectedStartOfWeek);
   }
 
   private getMonday(date: Date): Date {
@@ -39,7 +38,6 @@ export class ScheduleComponent implements OnInit {
       this.selectedStartOfWeek = this.getMonday(selectedDate);
       this.selectedEndOfWeek = this.getSunday(selectedDate);
     }
-    this.createWeek(this.selectedStartOfWeek);
   }
 
   weekendFilter = (d: Date | null): boolean => {
@@ -47,14 +45,4 @@ export class ScheduleComponent implements OnInit {
     // Prevent Saturday and Sunday from being selected.
     return day !== 0 && day !== 6;
   };
-
-  createWeek(monday: Date) {
-    this.week = [];
-    for (let i = 0; i < 5; i++) {
-      const date = new Date();
-      date.setDate(monday.getDate() + i);
-
-      this.week.push(date);
-    }
-  }
 }

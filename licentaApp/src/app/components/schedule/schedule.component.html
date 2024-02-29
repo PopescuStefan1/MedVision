@@ -14,7 +14,5 @@
       </button>
     </div>
   </div>
-  <div class="row">
-    <div class="col" *ngFor="let day of this.week">{{ day | date }}</div>
-  </div>
+  <app-schedule-table [startDate]="selectedStartOfWeek" [endDate]="selectedEndOfWeek"></app-schedule-table>
 </div>
