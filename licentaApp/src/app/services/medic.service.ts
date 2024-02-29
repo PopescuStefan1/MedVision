@@ -52,13 +52,6 @@ export class MedicService {
       .collection<Medic>("medics", (ref) => ref.where("userId", "==", userId))
       .snapshotChanges()
       .pipe(
-        // map((medics: Medic[]) => {
-        //   if (medics.length > 0) {
-        //     return medics[0];
-        //   } else {
-        //     throw new Error("Medic not found");
-        //   }
-        // })
         map((medicsSnapshot) => {
           if (medicsSnapshot.length > 0) {
             const medic = medicsSnapshot[0].payload.doc.data() as Medic;

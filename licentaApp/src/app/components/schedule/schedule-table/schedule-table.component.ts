@@ -1,13 +1,25 @@
+import { DatePipe } from "@angular/common";
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from "@angular/core";
 import { EMPTY, Observable, Subscription, catchError, switchMap } from "rxjs";
 import { Appointment } from "src/app/models/appointment";
 import { Medic } from "src/app/models/medic";
-import { UserProfile } from "src/app/models/user-profile";
 import { User } from "src/app/models/user.model";
 import { AppointmentService } from "src/app/services/appointment.service";
 import { AuthService } from "src/app/services/auth.service";
 import { MedicService } from "src/app/services/medic.service";
-import { UserService } from "src/app/services/user.service";
+
+export interface AppointmentTableData {
+  hour: number;
+  mon: Appointment[];
+  tue: Appointment[];
+  wed: Appointment[];
+  thu: Appointment[];
+  fri: Appointment[];
+}
+
+const APPOINTMENT_DATA: AppointmentTableData[] = [
+  // {hour: 8, mon:[{city:"Brasov",datetime:}]}
+];
 
 @Component({
   selector: "app-schedule-table",
@@ -22,12 +34,14 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
   hoursArray: number[] = [];
   minutesArray: number[] = [];
   data: any = [];
+  dataLoaded: boolean = false;
   private subscription: Subscription = new Subscription();
 
   constructor(
     private appointmentService: AppointmentService,
     private authService: AuthService,
-    private medicService: MedicService
+    private medicService: MedicService,
+    private datePipe: DatePipe
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -38,6 +52,8 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
         this.subscription.add(
           this.getAppointmentsForWeek(this.startDate, this.endDate).subscribe((apps) => {
             console.log(apps);
+            // this.data = this.createTableData(apps);
+            this.dataLoaded = true;
           })
         );
       }
@@ -45,7 +61,6 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.initWeek();
     this.setUpHoursAndMinutesArray();
   }
 
@@ -62,15 +77,19 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
   private createWeek(monday: Date): void {
     this.week = [];
     this.displayedWeekColumns = [];
+
     for (let i = 0; i < 5; i++) {
-      const date = new Date();
+      const date = new Date(monday);
       date.setDate(monday.getDate() + i);
 
       this.week.push(date);
-
-      const dateString = `${date.getDay()}\n${date.getDate()}`;
-      this.displayedWeekColumns.push(dateString);
     }
+
+    this.displayedWeekColumns = this.formatDates(this.week);
+  }
+
+  private formatDates(dates: Date[]): string[] {
+    return dates.map((date) => this.datePipe.transform(date, "EEE, d") || "");
   }
 
   private setUpHoursAndMinutesArray(): void {
@@ -85,11 +104,10 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
     }
   }
 
+  // Ia schedule pentru un medic (userul curent) pentru saptamana curenta
   private getAppointmentsForWeek(startDate: Date, endDate: Date): Observable<Appointment[]> {
-    // Ia schedule pentru un medic (userul curent)
     return this.authService.user.pipe(
       switchMap((user: User | null) => {
-        console.log("User:", user?.id);
         if (user?.id) {
           return this.medicService.getMedicByUserId(user?.id).pipe(
             catchError((error) => {
@@ -102,7 +120,6 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
         return EMPTY;
       }),
       switchMap((medic: Medic) => {
-        console.log("Medic:", medic);
         if (medic.id && this.startDate && this.endDate) {
           return this.appointmentService.getMedicWeekAppointments(medic.id, startDate, endDate).pipe(
             catchError((error) => {
@@ -115,5 +132,11 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
         return EMPTY;
       })
     );
+  }
+
+  private createTableData(appointments: Appointment[]) {
+    for (let day of this.displayedWeekColumns) {
+      console.log(day.slice(0, 3).toLowerCase());
+    }
   }
 }

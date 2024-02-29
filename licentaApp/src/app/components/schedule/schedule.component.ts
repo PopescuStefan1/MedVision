@@ -14,17 +14,20 @@ export class ScheduleComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.selectedStartOfWeek = this.getMonday(new Date());
-    this.selectedEndOfWeek = this.getSunday(new Date());
+    this.selectedStartOfWeek = this.getStartOfWeek(new Date());
+    this.selectedEndOfWeek = this.getEndOfWeek(new Date());
   }
 
-  private getMonday(date: Date): Date {
-    const day = date.getDay();
-    const diff = date.getDate() - day + (day === 0 ? -6 : 1); // Adjust when Sunday
-    return new Date(date.setDate(diff));
+  private getStartOfWeek(date: Date): Date {
+    const day: number = date.getDay();
+    const resultDate = new Date(date);
+    resultDate.setDate(resultDate.getDate() - day + 1);
+    // Set time to 0 to prevent errors
+    resultDate.setHours(0, 0, 0, 0);
+    return resultDate;
   }
 
-  private getSunday(date: Date): Date {
+  private getEndOfWeek(date: Date): Date {
     const day = date.getDay();
     const diff = date.getDate() + (5 - day);
 
@@ -35,8 +38,8 @@ export class ScheduleComponent implements OnInit {
     const selectedDate: Date | null = event.value;
     if (selectedDate) {
       this.selectedDate = selectedDate;
-      this.selectedStartOfWeek = this.getMonday(selectedDate);
-      this.selectedEndOfWeek = this.getSunday(selectedDate);
+      this.selectedStartOfWeek = this.getStartOfWeek(selectedDate);
+      this.selectedEndOfWeek = this.getEndOfWeek(selectedDate);
     }
   }
 
