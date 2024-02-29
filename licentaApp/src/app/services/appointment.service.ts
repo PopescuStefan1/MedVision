@@ -112,15 +112,40 @@ export class AppointmentService {
       new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() + 1)
     );
 
-    console.log(selectedMedicId, startOfFirstDay.toDate(), endOfLastDay.toDate());
     return this.firestore
-      .collection<Appointment>("appointments", (ref) =>
+      .collection<FirebaseAppointment>("appointments", (ref) =>
         ref
           .where("medicId", "==", selectedMedicId)
           .where("datetime", ">=", startOfFirstDay)
           .where("datetime", "<", endOfLastDay)
       )
-      .valueChanges();
+      .get()
+      .pipe(
+        map((querySnapshot) => {
+          const appointments: Appointment[] = [];
+
+          querySnapshot.forEach((doc) => {
+            const appointmentData: FirebaseAppointment = doc.data();
+
+            // Convert firebase appointment to web app appointment
+            const appointment: Appointment = {
+              city: appointmentData.city,
+              email: appointmentData.email,
+              firstName: appointmentData.firstName,
+              lastName: appointmentData.lastName,
+              medicId: appointmentData.medicId,
+              telephone: appointmentData.telephone,
+              userId: appointmentData.userId,
+              comment: appointmentData.comment,
+              datetime: appointmentData.datetime.toDate(),
+            };
+
+            appointments.push(appointment);
+          });
+
+          return appointments;
+        })
+      );
   }
 
   addApointment(appointmentData: Appointment) {
