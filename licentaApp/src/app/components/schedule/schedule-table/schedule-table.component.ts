@@ -17,10 +17,6 @@ export interface AppointmentTableData {
   fri: Appointment[];
 }
 
-const APPOINTMENT_DATA: AppointmentTableData[] = [
-  // {hour: 8, mon:[{city:"Brasov",datetime:}]}
-];
-
 @Component({
   selector: "app-schedule-table",
   templateUrl: "./schedule-table.component.html",
@@ -33,8 +29,11 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
   displayedWeekColumns: string[] = [];
   hoursArray: number[] = [];
   minutesArray: number[] = [];
-  data: any = [];
+  appointmentTableData: AppointmentTableData[] = [];
   dataLoaded: boolean = false;
+  startHour: number = 8;
+  endHour: number = 17;
+  appointmentTime: number = 20;
   private subscription: Subscription = new Subscription();
 
   constructor(
@@ -46,13 +45,14 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["startDate"] || changes["endDate"]) {
+      this.dataLoaded = false;
       this.initWeek();
 
       if (this.startDate && this.endDate) {
         this.subscription.add(
           this.getAppointmentsForWeek(this.startDate, this.endDate).subscribe((apps) => {
-            console.log(apps);
-            // this.data = this.createTableData(apps);
+            this.createTableData(apps);
+            console.log(this.appointmentTableData);
             this.dataLoaded = true;
           })
         );
@@ -94,12 +94,12 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
 
   private setUpHoursAndMinutesArray(): void {
     this.hoursArray = [];
-    for (let index = 8; index <= 17; index++) {
+    for (let index = this.startHour; index <= this.endHour; index++) {
       this.hoursArray.push(index);
     }
 
     this.minutesArray = [];
-    for (let index = 0; index <= 40; index += 20) {
+    for (let index = 0; index < 60; index += this.appointmentTime) {
       this.minutesArray.push(index);
     }
   }
@@ -134,9 +134,30 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
     );
   }
 
-  private createTableData(appointments: Appointment[]) {
-    for (let day of this.displayedWeekColumns) {
-      console.log(day.slice(0, 3).toLowerCase());
+  private createTableData(appointments: Appointment[]): void {
+    this.resetTableDate();
+
+    for (let appointment of appointments) {
+      const appointmentHour = appointment.datetime.getHours();
+      for (let hour of this.hoursArray) {
+        if (appointmentHour === hour) {
+          this.appointmentTableData[hour - 8].mon.push(appointment);
+          break;
+        }
+      }
     }
+  }
+
+  private resetTableDate(): void {
+    // Reset table data
+    this.appointmentTableData = [];
+    for (let hour of this.hoursArray) {
+      const row: AppointmentTableData = { hour: hour, mon: [], tue: [], wed: [], thu: [], fri: [] };
+      this.appointmentTableData.push(row);
+    }
+  }
+
+  getShortDay(dateString: string): string {
+    return dateString.slice(0, 3).toLowerCase();
   }
 }
