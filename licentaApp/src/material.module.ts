@@ -15,6 +15,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatSelectModule } from "@angular/material/select";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatTableModule } from "@angular/material/table";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatToolbarModule } from "@angular/material/toolbar";
 
@@ -36,6 +37,7 @@ import { MatToolbarModule } from "@angular/material/toolbar";
     MatRadioModule,
     MatSelectModule,
     MatSnackBarModule,
+    MatTableModule,
     MatTabsModule,
     MatToolbarModule,
   ],
