@@ -1,14 +1,20 @@
 <div class="container p-5">
   <div class="row">
-    <input
-      [matDatepicker]="picker"
-      [matDatepickerFilter]="weekendFilter"
-      class="d-none"
-      (dateChange)="onDateChange($event)"
-    />
-    <mat-datepicker #picker></mat-datepicker>
-    <button mat-button color="primary" (click)="picker.open()">
-      {{ this.selectedStartOfWeek | date }} - {{ this.selectedEndOfWeek | date }}
-    </button>
+    <div class="col-2 offset-5 position-relative">
+      <input
+        [matDatepicker]="picker"
+        [matDatepickerFilter]="weekendFilter"
+        class="position-absolute opacity-0"
+        (dateChange)="onDateChange($event)"
+        disabled
+      />
+      <mat-datepicker #picker disabled="false"></mat-datepicker>
+      <button mat-button color="primary" (click)="picker.open()">
+        {{ this.selectedStartOfWeek | date }} - {{ this.selectedEndOfWeek | date }}
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col" *ngFor="let day of this.week">{{ day | date }}</div>
   </div>
 </div>
