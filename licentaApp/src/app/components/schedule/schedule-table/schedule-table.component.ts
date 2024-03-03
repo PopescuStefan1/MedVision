@@ -52,7 +52,6 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
         this.subscription.add(
           this.getAppointmentsForWeek(this.startDate, this.endDate).subscribe((apps) => {
             this.createTableData(apps);
-            console.log(this.appointmentTableData);
             this.dataLoaded = true;
           })
         );
@@ -86,7 +85,6 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     this.displayedWeekColumns = this.formatDates(this.week);
-    console.log(this.displayedWeekColumns);
   }
 
   private formatDates(dates: Date[]): string[] {
@@ -153,7 +151,6 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
           let appointmentFound: boolean = false;
 
           for (let appointment of appointments) {
-            console.log(dayString, hour, minutes, appointment);
             if (Array.isArray(tableDataEntry)) {
               if (this.doesAppointmentMatch(appointment, day, hour, minutes)) {
                 // Add the appointment to the tabledata if it exists at a certain day, hour and minute
