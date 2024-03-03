@@ -1,13 +1,33 @@
-<mat-table [dataSource]="appointmentTableData" *ngIf="dataLoaded">
-  <ng-container matColumnDef="hour">
-    <th mat-header-cell *matHeaderCellDef></th>
+<table mat-table [dataSource]="appointmentTableData" *ngIf="dataLoaded" class="mat-elevation-z8">
+  <ng-container matColumnDef="hour" sticky>
+    <th mat-header-cell *matHeaderCellDef>Hour</th>
     <td mat-cell *matCellDef="let element">{{ element.hour }}</td>
+    <!-- <td mat-footer-cell *matFooterCellDef>Total</td> -->
   </ng-container>
   <ng-container [matColumnDef]="column" *ngFor="let column of displayedWeekColumns">
     <th mat-header-cell *matHeaderCellDef>{{ column }}</th>
-    <td mat-cell *matCellDef="let element">{{ element[getShortDay(column)] }}</td>
+    <td mat-cell *matCellDef="let element" class="appointment-accordion">
+      <mat-accordion>
+        <ng-container *ngFor="let appointment of element[getShortDay(column)]">
+          <mat-expansion-panel *ngIf="isAppointment(appointment)" class="filled-appointment" class="expansion-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title>{{ getAppointmentTimeDisplay(appointment) }}</mat-panel-title>
+              <mat-panel-description>{{ appointment.lastName }} {{ appointment.firstName }}</mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>hayaa</p>
+          </mat-expansion-panel>
+          <mat-expansion-panel *ngIf="!isAppointment(appointment)" disabled class="expansion-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title>{{ getDateDisplay(appointment) }}</mat-panel-title>
+              <mat-panel-description>Free</mat-panel-description>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+        </ng-container>
+      </mat-accordion>
+    </td>
+    <!-- <td mat-footer-cell *matFooterCellDef>asdf</td> -->
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayedWeekColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedWeekColumns"></tr>
-</mat-table>
+  <tr mat-header-row *matHeaderRowDef="['hour'].concat(displayedWeekColumns)"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['hour'].concat(displayedWeekColumns)"></tr>
+</table>
