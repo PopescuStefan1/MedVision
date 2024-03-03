@@ -1,0 +1,30 @@
+table {
+  margin-top: 1rem;
+  display: block;
+  overflow-x: scroll;
+  white-space: nowrap;
+}
+
+.mat-header-cell {
+  text-align: center;
+  font-weight: bold;
+  width: 200px;
+}
+
+.mat-column-hour {
+  border-right: 1px solid lightgray;
+  text-align: center;
+  padding-right: 24px;
+}
+
+.appointment-accordion {
+  padding: 0.4rem;
+}
+
+.expansion-panel {
+  width: 300px;
+}
+
+.filled-appointment {
+  background-color: lightgreen;
+}
