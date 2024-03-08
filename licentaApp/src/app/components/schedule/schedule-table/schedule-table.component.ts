@@ -1,5 +1,5 @@
 import { DatePipe } from "@angular/common";
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from "@angular/core";
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewEncapsulation } from "@angular/core";
 import { EMPTY, Observable, Subscription, catchError, switchMap } from "rxjs";
 import { Appointment } from "src/app/models/appointment";
 import { Medic } from "src/app/models/medic";
@@ -21,6 +21,7 @@ export interface AppointmentTableData {
   selector: "app-schedule-table",
   templateUrl: "./schedule-table.component.html",
   styleUrls: ["./schedule-table.component.css"],
+  encapsulation: ViewEncapsulation.None,
 })
 export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
   @Input() startDate?: Date;
