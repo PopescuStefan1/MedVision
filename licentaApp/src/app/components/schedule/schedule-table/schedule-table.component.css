@@ -2,6 +2,7 @@ table {
   overflow: scroll;
   white-space: nowrap;
   width: 100%;
+  table-layout: fixed;
 }
 
 .mat-column-hour {
@@ -34,11 +35,21 @@ table {
   border: 1px solid #ccc;
 }
 
+.mat-table-sticky {
+  background: #f0f0f0;
+  opacity: 1;
+}
+
 .filled-appointment {
   color: #fff;
   height: 100px;
   cursor: pointer;
   border: 1px solid #ccc;
+  padding: 0.3rem;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .empty-appointment {
@@ -55,4 +66,13 @@ td.mat-footer-cell:last-of-type {
 
 th.mat-header-cell:last-of-type {
   border-right: 2px solid #ccc;
+}
+
+.name-span {
+  font-size: 1.1rem;
+}
+
+.time-span {
+  margin-top: auto;
+  font-size: 0.8rem;
 }
