@@ -68,12 +68,7 @@ th.mat-header-cell:last-of-type {
   border-right: 2px solid #ccc;
 }
 
-.name-span {
+.time-span {
   font-size: 1.1rem;
   font-weight: 600;
-}
-
-.time-span {
-  margin-top: auto;
-  font-size: 0.8rem;
 }
