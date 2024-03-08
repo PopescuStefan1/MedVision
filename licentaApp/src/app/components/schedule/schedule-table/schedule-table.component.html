@@ -17,7 +17,8 @@
           [style.background-color]="getBgColor(i + appointment.datetime.getDay())"
           class="filled-appointment"
           [matTooltip]="getTooltipText(appointment)"
-          matTooltipPosition="after"
+          matTooltipClass="tooltip"
+          matTooltipPosition="right"
         >
           <span class="time-span">{{ getAppointmentTimeDisplay(appointment) }}</span>
           <span
