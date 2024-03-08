@@ -214,7 +214,7 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
     const startTimeString = this.datePipe.transform(appointment.datetime, "HH:mm");
     const endTimeString = this.datePipe.transform(endTime, "HH:mm");
 
-    return `${startTimeString} - ${endTimeString}:`;
+    return `${startTimeString} - ${endTimeString}`;
   }
 
   getDateDisplay(appointment: Date): string {
@@ -224,7 +224,7 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
     const startTimeString = this.datePipe.transform(appointment, "HH:mm");
     const endTimeString = this.datePipe.transform(endTime, "HH:mm");
 
-    return `${startTimeString} - ${endTimeString}:`;
+    return `${startTimeString} - ${endTimeString}`;
   }
 
   getBgColor(index: number): string {
