@@ -19,10 +19,12 @@
           [matTooltip]="getTooltipText(appointment)"
           matTooltipPosition="after"
         >
-          <span class="name-span">{{ appointment.lastName }} {{ appointment.firstName }}</span>
+          <span class="time-span">{{ getAppointmentTimeDisplay(appointment) }}</span>
+          <span
+            ><strong>{{ appointment.lastName }} {{ appointment.firstName }}</strong></span
+          >
           <span><strong>Age:</strong> {{ appointment.age }}</span>
           <span><strong>Sex:</strong> {{ appointment.sex }}</span>
-          <span class="time-span">{{ getAppointmentTimeDisplay(appointment) }}</span>
         </div>
         <div *ngIf="!isAppointment(appointment)" class="empty-appointment"></div>
       </ng-container>
