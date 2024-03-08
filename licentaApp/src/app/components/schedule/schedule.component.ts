@@ -48,4 +48,16 @@ export class ScheduleComponent implements OnInit {
     // Prevent Saturday and Sunday from being selected.
     return day !== 0 && day !== 6;
   };
+
+  onPrevClick(): void {
+    this.selectedDate.setDate(this.selectedDate.getDate() - 7);
+    this.selectedStartOfWeek = this.getStartOfWeek(this.selectedDate);
+    this.selectedEndOfWeek = this.getEndOfWeek(this.selectedDate);
+  }
+
+  onNextClick(): void {
+    this.selectedDate.setDate(this.selectedDate.getDate() + 7);
+    this.selectedStartOfWeek = this.getStartOfWeek(this.selectedDate);
+    this.selectedEndOfWeek = this.getEndOfWeek(this.selectedDate);
+  }
 }
