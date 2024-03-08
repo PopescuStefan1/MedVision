@@ -133,6 +133,8 @@ export class AppointmentService {
               email: appointmentData.email,
               firstName: appointmentData.firstName,
               lastName: appointmentData.lastName,
+              age: appointmentData.age,
+              sex: appointmentData.sex,
               medicId: appointmentData.medicId,
               telephone: appointmentData.telephone,
               userId: appointmentData.userId,
