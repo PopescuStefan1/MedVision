@@ -34,6 +34,7 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
   startHour: number = 8;
   endHour: number = 16;
   appointmentDuration: number = 20;
+  backgroundColors = ["var(--primary)", "#00BDAE", "var(--accent)"];
   private subscription: Subscription = new Subscription();
 
   constructor(
@@ -224,5 +225,9 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
     const endTimeString = this.datePipe.transform(endTime, "HH:mm");
 
     return `${startTimeString} - ${endTimeString}:`;
+  }
+
+  getBgColor(index: number): string {
+    return this.backgroundColors[index % this.backgroundColors.length];
   }
 }

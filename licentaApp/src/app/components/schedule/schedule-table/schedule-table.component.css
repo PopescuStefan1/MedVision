@@ -1,13 +1,7 @@
 table {
-  display: block;
-  overflow-x: scroll;
+  overflow: scroll;
   white-space: nowrap;
-}
-
-.mat-header-cell {
-  text-align: center;
-  font-weight: bold;
-  width: 200px;
+  width: 100%;
 }
 
 .mat-column-hour {
@@ -16,14 +10,49 @@ table {
   padding-right: 24px;
 }
 
-.appointment-accordion {
-  padding: 0.4rem;
+.mat-header-cell {
+  text-align: center;
+  font-weight: bold;
 }
 
-.expansion-panel {
-  width: 300px;
+.mat-cell:not(:first-child),
+.mat-header-cell:not(:first-child) {
+  width: 18%;
+}
+
+.mat-cell:first-child,
+.mat-header-cell:first-child {
+  width: 10%;
+}
+
+.mat-cell,
+.mat-header-cell {
+  box-sizing: border-box;
+}
+
+.mat-cell {
+  border: 1px solid #ccc;
 }
 
 .filled-appointment {
-  background-color: lightgreen;
+  color: #fff;
+  height: 100px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+}
+
+.empty-appointment {
+  height: 100px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+
+th.mat-header-cell:last-of-type,
+td.mat-cell:last-of-type,
+td.mat-footer-cell:last-of-type {
+  padding-right: 0px;
+}
+
+th.mat-header-cell:last-of-type {
+  border-right: 2px solid #ccc;
 }
