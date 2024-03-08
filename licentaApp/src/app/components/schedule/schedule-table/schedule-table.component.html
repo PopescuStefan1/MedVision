@@ -2,32 +2,25 @@
   <mat-progress-bar mode="query"></mat-progress-bar>
 </div>
 
-<table mat-table [dataSource]="appointmentTableData" *ngIf="dataLoaded" class="mat-elevation-z8 mt-3">
+<table mat-table [dataSource]="appointmentTableData" *ngIf="dataLoaded" class="mat-elevation-z8">
   <ng-container matColumnDef="hour" sticky>
     <th mat-header-cell *matHeaderCellDef>Hour</th>
-    <td mat-cell *matCellDef="let element">{{ element.hour }}</td>
+    <td mat-cell *matCellDef="let element">{{ element.hour }}:00</td>
     <!-- <td mat-footer-cell *matFooterCellDef>Total</td> -->
   </ng-container>
   <ng-container [matColumnDef]="column" *ngFor="let column of displayedWeekColumns">
     <th mat-header-cell *matHeaderCellDef>{{ column }}</th>
-    <td mat-cell *matCellDef="let element" class="appointment-accordion">
-      <mat-accordion>
-        <ng-container *ngFor="let appointment of element[getShortDay(column)]">
-          <mat-expansion-panel *ngIf="isAppointment(appointment)" class="filled-appointment" class="expansion-panel">
-            <mat-expansion-panel-header>
-              <mat-panel-title>{{ getAppointmentTimeDisplay(appointment) }}</mat-panel-title>
-              <mat-panel-description>{{ appointment.lastName }} {{ appointment.firstName }}</mat-panel-description>
-            </mat-expansion-panel-header>
-            <p>hayaa</p>
-          </mat-expansion-panel>
-          <mat-expansion-panel *ngIf="!isAppointment(appointment)" disabled class="expansion-panel">
-            <mat-expansion-panel-header>
-              <mat-panel-title>{{ getDateDisplay(appointment) }}</mat-panel-title>
-              <mat-panel-description>Free</mat-panel-description>
-            </mat-expansion-panel-header>
-          </mat-expansion-panel>
-        </ng-container>
-      </mat-accordion>
+    <td mat-cell *matCellDef="let element">
+      <ng-container *ngFor="let appointment of element[getShortDay(column)]; let i = index">
+        <div
+          *ngIf="isAppointment(appointment)"
+          [style.background-color]="getBgColor(i + appointment.datetime.getDay())"
+          class="filled-appointment"
+        >
+          {{ appointment.lastName }}
+        </div>
+        <div *ngIf="!isAppointment(appointment)" class="empty-appointment"></div>
+      </ng-container>
     </td>
     <!-- <td mat-footer-cell *matFooterCellDef>asdf</td> -->
   </ng-container>
