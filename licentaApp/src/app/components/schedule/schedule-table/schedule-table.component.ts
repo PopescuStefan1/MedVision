@@ -230,4 +230,18 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
   getBgColor(index: number): string {
     return this.backgroundColors[index % this.backgroundColors.length];
   }
+
+  getTooltipText(appointment: Appointment): string {
+    return `Name: ${appointment.lastName} ${appointment.firstName}, 
+    Age: ${appointment.age}, 
+    Sex: ${appointment.sex}, 
+    Reason: ${this.getReasonTrimmed(appointment.comment)}`;
+  }
+
+  private getReasonTrimmed(comment: string | undefined): string {
+    if (!comment) {
+      return "-";
+    }
+    return comment.length < 100 ? comment : comment.substring(0, 100).concat("...");
+  }
 }
