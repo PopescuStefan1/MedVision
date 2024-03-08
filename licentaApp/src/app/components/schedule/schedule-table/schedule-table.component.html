@@ -16,6 +16,8 @@
           *ngIf="isAppointment(appointment)"
           [style.background-color]="getBgColor(i + appointment.datetime.getDay())"
           class="filled-appointment"
+          [matTooltip]="getTooltipText(appointment)"
+          matTooltipPosition="after"
         >
           <span class="name-span">{{ appointment.lastName }} {{ appointment.firstName }}</span>
           <span><strong>Age:</strong> {{ appointment.age }}</span>
