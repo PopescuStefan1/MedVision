@@ -18,6 +18,8 @@
           class="filled-appointment"
         >
           <span class="name-span">{{ appointment.lastName }} {{ appointment.firstName }}</span>
+          <span><strong>Age:</strong> {{ appointment.age }}</span>
+          <span><strong>Sex:</strong> {{ appointment.sex }}</span>
           <span class="time-span">{{ getAppointmentTimeDisplay(appointment) }}</span>
         </div>
         <div *ngIf="!isAppointment(appointment)" class="empty-appointment"></div>
