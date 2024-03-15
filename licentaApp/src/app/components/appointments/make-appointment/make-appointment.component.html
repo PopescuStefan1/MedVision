@@ -166,9 +166,17 @@
     </mat-form-field>
   </div>
   <div class="row">
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" hintLabel="Max 250 characters">
       <mat-label>Short description of your problem</mat-label>
-      <textarea rows="5" matInput formControlName="comment" placeholder="Ex. It hurts when I..."></textarea>
+      <textarea
+        rows="5"
+        matInput
+        formControlName="comment"
+        placeholder="Ex. It hurts when I..."
+        maxlength="250"
+        #textarea
+      ></textarea>
+      <mat-hint align="end">{{ textarea.value.length || 0 }}/250</mat-hint>
     </mat-form-field>
   </div>
 
