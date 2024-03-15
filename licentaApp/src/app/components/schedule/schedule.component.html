@@ -1,0 +1,29 @@
+<div class="container pt-5 pb-5">
+  <div class="row">
+    <div class="col">
+      <button mat-icon-button color="primary" (click)="onPrevClick()">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <button mat-icon-button color="primary" (click)="onNextClick()">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+      <input
+        [matDatepicker]="picker"
+        [matDatepickerFilter]="weekendFilter"
+        class="position-absolute opacity-0"
+        style="height: 36px"
+        (dateChange)="onDateChange($event)"
+        disabled
+      />
+      <mat-datepicker #picker disabled="false"></mat-datepicker>
+      <button mat-button color="primary" (click)="picker.open()">
+        {{ this.selectedStartOfWeek | date }} - {{ this.selectedEndOfWeek | date }}
+        <mat-icon *ngIf="!picker.opened">expand_more</mat-icon>
+        <mat-icon *ngIf="picker.opened">expand_less</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="table-div">
+    <app-schedule-table [startDate]="selectedStartOfWeek" [endDate]="selectedEndOfWeek"></app-schedule-table>
+  </div>
+</div>

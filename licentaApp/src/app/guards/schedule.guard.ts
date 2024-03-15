@@ -7,9 +7,8 @@ import { UserService } from "../services/user.service";
 @Injectable({
   providedIn: "root",
 })
-export class AppointmentsGuard implements CanActivate {
+export class ScheduleGuard implements CanActivate {
   constructor(private authService: AuthService, private userService: UserService, private router: Router) {}
-
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
@@ -20,8 +19,8 @@ export class AppointmentsGuard implements CanActivate {
         if (user) {
           return this.userService.getUserData(user.id).pipe(
             switchMap((userData) => {
-              if (userData.role === "medic") {
-                return of(this.router.createUrlTree(["/schedule"]));
+              if (userData.role === "patient") {
+                return of(this.router.createUrlTree(["/appointments"]));
               } else {
                 return of(true);
               }

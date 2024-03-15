@@ -23,6 +23,10 @@ import { ErrorStateMatcher, MAT_DATE_LOCALE, ShowOnDirtyErrorStateMatcher } from
 import { AppointmentsComponent } from "./components/appointments/appointments.component";
 import { MakeAppointmentComponent } from "./components/appointments/make-appointment/make-appointment.component";
 import { ViewAppointmentComponent } from "./components/appointments/view-appointment/view-appointment.component";
+import { ScheduleComponent } from "./components/schedule/schedule.component";
+import { ScheduleTableComponent } from "./components/schedule/schedule-table/schedule-table.component";
+import { DatePipe } from "@angular/common";
+import { ScheduleDetailsComponent } from './components/schedule/schedule-details/schedule-details.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +41,9 @@ import { ViewAppointmentComponent } from "./components/appointments/view-appoint
     AppointmentsComponent,
     MakeAppointmentComponent,
     ViewAppointmentComponent,
+    ScheduleComponent,
+    ScheduleTableComponent,
+    ScheduleDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -55,6 +62,7 @@ import { ViewAppointmentComponent } from "./components/appointments/view-appoint
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: "en-GB" },
     { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
+    DatePipe,
   ],
   bootstrap: [AppComponent],
 })

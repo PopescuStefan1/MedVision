@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Observable, combineLatest, map } from "rxjs";
+import { Observable, catchError, combineLatest, map } from "rxjs";
 import { Medic } from "../models/medic";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
 @Injectable({
@@ -45,5 +45,28 @@ export class MedicService {
 
     // Combine all observables into one observable
     return combineLatest(observables);
+  }
+
+  getMedicByUserId(userId: string): Observable<Medic> {
+    return this.firestore
+      .collection<Medic>("medics", (ref) => ref.where("userId", "==", userId))
+      .snapshotChanges()
+      .pipe(
+        map((medicsSnapshot) => {
+          if (medicsSnapshot.length > 0) {
+            const medic = medicsSnapshot[0].payload.doc.data() as Medic;
+            const documentId = medicsSnapshot[0].payload.doc.id;
+            medic.id = documentId;
+
+            return medic;
+          } else {
+            throw new Error("Medic not found");
+          }
+        }),
+        catchError((error) => {
+          console.error("Error fetching medic:", error);
+          throw error;
+        })
+      );
   }
 }
