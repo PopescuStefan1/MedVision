@@ -14,8 +14,7 @@ export class ScheduleComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.selectedStartOfWeek = this.getStartOfWeek(new Date());
-    this.selectedEndOfWeek = this.getEndOfWeek(new Date());
+    this.handleWeekStartAndEnd();
   }
 
   private getStartOfWeek(date: Date): Date {
@@ -38,8 +37,7 @@ export class ScheduleComponent implements OnInit {
     const selectedDate: Date | null = event.value;
     if (selectedDate) {
       this.selectedDate = selectedDate;
-      this.selectedStartOfWeek = this.getStartOfWeek(selectedDate);
-      this.selectedEndOfWeek = this.getEndOfWeek(selectedDate);
+      this.handleWeekStartAndEnd();
     }
   }
 
@@ -51,13 +49,26 @@ export class ScheduleComponent implements OnInit {
 
   onPrevClick(): void {
     this.selectedDate.setDate(this.selectedDate.getDate() - 7);
-    this.selectedStartOfWeek = this.getStartOfWeek(this.selectedDate);
-    this.selectedEndOfWeek = this.getEndOfWeek(this.selectedDate);
+    this.handleWeekStartAndEnd();
   }
 
   onNextClick(): void {
     this.selectedDate.setDate(this.selectedDate.getDate() + 7);
+    this.handleWeekStartAndEnd();
+  }
+
+  onTodayClick(): void {
+    this.selectedDate = new Date();
+    this.handleWeekStartAndEnd();
+  }
+
+  private handleWeekStartAndEnd(): void {
     this.selectedStartOfWeek = this.getStartOfWeek(this.selectedDate);
     this.selectedEndOfWeek = this.getEndOfWeek(this.selectedDate);
+  }
+
+  isSelectedToday(): boolean {
+    const today = new Date();
+    return this.selectedDate.toDateString() === today.toDateString();
   }
 }
