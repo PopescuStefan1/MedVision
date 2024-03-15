@@ -20,6 +20,7 @@
           matTooltipShowDelay="400"
           matTooltipClass="appointment-tooltip"
           matTooltipPosition="right"
+          (click)="onAppointmentClick(appointment)"
         >
           <span class="time-span">{{ getAppointmentTimeDisplay(appointment) }}</span>
           <span>
