@@ -243,4 +243,24 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
       data: { appointment: appointment, appointmentDuration: this.appointmentDuration },
     });
   }
+
+  isCurrentDay(dayAsString: string): boolean {
+    if (this.startDate) {
+      const dayOfMonth: number = +dayAsString.slice(-2);
+      const columnDate = new Date(this.startDate);
+
+      if (dayOfMonth < columnDate.getDate()) {
+        // Increment month if day of month is smaller than the starting date of the week
+        columnDate.setMonth(columnDate.getMonth() + 1);
+      }
+
+      columnDate.setDate(dayOfMonth);
+
+      const today = new Date();
+
+      return columnDate.toDateString() === today.toDateString();
+    }
+
+    return false;
+  }
 }
