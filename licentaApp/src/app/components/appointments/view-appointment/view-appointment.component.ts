@@ -28,7 +28,11 @@ export class ViewAppointmentComponent implements OnInit {
     this.appointments$ = this.appointmentService.getAppointmentsByUserId(this.userId);
 
     this.pastAppointments$ = this.appointments$.pipe(
-      map((appointments) => appointments.filter((appointment) => appointment.datetime < new Date()))
+      map((appointments) =>
+        appointments
+          .filter((appointment) => appointment.datetime < new Date())
+          .sort((a, b) => b.datetime.getTime() - a.datetime.getTime())
+      )
     );
     this.futureAppointments$ = this.appointments$.pipe(
       map((appointments) => appointments.filter((appointment) => appointment.datetime >= new Date()))
