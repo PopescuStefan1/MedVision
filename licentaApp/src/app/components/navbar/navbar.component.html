@@ -20,13 +20,17 @@
     <a mat-button routerLink="/"><span>Contact</span> <mat-icon>call</mat-icon></a>
     <a *ngIf="!isAuthenticated" mat-button routerLink="authenticate"><span>Login</span> <mat-icon>login</mat-icon></a>
     <ng-container *ngIf="isAuthenticated">
-      <button mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon>account_circle</mat-icon>
-      </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item [routerLink]="['/profile', userId]">Profile</button>
-        <button mat-menu-item (click)="logout()">Log out</button>
-      </mat-menu>
+      <ng-container *ngIf="userData$ | async as userData">
+        <span class="user-info">{{ capitalizeFirstLetter(userData.role) }} account</span>
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item disabled>{{ getUserFullName(userData.firstName, userData.lastName) }}</button>
+          <button mat-menu-item [routerLink]="['/profile', userId]">Profile</button>
+          <button mat-menu-item (click)="logout()">Log out</button>
+        </mat-menu>
+      </ng-container>
     </ng-container>
   </div>
 </mat-toolbar>
