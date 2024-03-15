@@ -36,4 +36,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.authService.logout();
     this.router.navigate([""]);
   }
+
+  capitalizeFirstLetter(input: string): string {
+    return input.charAt(0).toUpperCase() + input.slice(1);
+  }
+
+  getUserFullName(firstName: string | undefined, lastName: string | undefined): string {
+    if (!firstName || !lastName) {
+      return "Add your name in your profile";
+    }
+    return firstName.length > 0 && lastName.length > 0 ? `${lastName} ${firstName}` : "Add your name in your profile";
+  }
 }
