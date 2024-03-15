@@ -7,6 +7,8 @@ export interface FirebaseAppointment {
   datetime: Timestamp;
   firstName: string;
   lastName: string;
+  age: number;
+  sex: "Male" | "Female" | "Other";
   telephone: string;
   email: string;
   comment?: string;
