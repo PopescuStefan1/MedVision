@@ -15,3 +15,12 @@ mat-icon {
   align-items: center;
   justify-content: center;
 }
+
+.user-info {
+  color: color-mix(in srgb, #fff 60%, transparent);
+  font-size: 0.8rem;
+  line-height: 37px;
+  display: flex;
+  align-items: center;
+  font-style: italic;
+}
