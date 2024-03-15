@@ -22,6 +22,9 @@
         <mat-icon *ngIf="picker.opened">expand_less</mat-icon>
       </button>
     </div>
+    <div class="col d-flex justify-content-end">
+      <button mat-raised-button color="accent" (click)="onTodayClick()" [disabled]="isSelectedToday()">Today</button>
+    </div>
   </div>
   <div class="table-div">
     <app-schedule-table [startDate]="selectedStartOfWeek" [endDate]="selectedEndOfWeek"></app-schedule-table>
