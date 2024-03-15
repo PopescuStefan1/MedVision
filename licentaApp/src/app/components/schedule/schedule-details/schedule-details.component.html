@@ -1,0 +1,53 @@
+<div class="container">
+  <div class="row">
+    <h2>Appointment Details</h2>
+  </div>
+  <div class="row">
+    <h6>{{ data.appointment.datetime | date }}: {{ getAppointmentTimesAsString(data.appointment.datetime) }}</h6>
+  </div>
+  <div class="row">
+    <mat-divider></mat-divider>
+  </div>
+  <div class="row mt-2">
+    <h5>Patient Info</h5>
+  </div>
+  <div class="row">
+    <div class="detail-row">
+      <h6 class="m-0">Name:</h6>
+      <span>{{ data.appointment.lastName }} {{ data.appointment.firstName }}</span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="detail-row">
+      <h6 class="m-0">Age:</h6>
+      <span>{{ data.appointment.age }}</span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="detail-row">
+      <h6 class="m-0">Sex:</h6>
+      <span>{{ data.appointment.sex }}</span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="detail-row">
+      <h6 class="m-0">Email:</h6>
+      <span>{{ data.appointment.email }}</span>
+    </div>
+  </div>
+  <div class="row mb-2">
+    <div class="detail-row">
+      <h6 class="m-0">Phone number:</h6>
+      <span>{{ data.appointment.telephone }}</span>
+    </div>
+  </div>
+  <div class="row">
+    <mat-divider></mat-divider>
+  </div>
+  <div class="row mt-2">
+    <h5>Reason for appointment</h5>
+  </div>
+  <div class="row">
+    <p>{{ data.appointment.comment ? data.appointment.comment : "No reason given" }}</p>
+  </div>
+</div>

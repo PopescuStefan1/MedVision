@@ -26,6 +26,7 @@ import { ViewAppointmentComponent } from "./components/appointments/view-appoint
 import { ScheduleComponent } from "./components/schedule/schedule.component";
 import { ScheduleTableComponent } from "./components/schedule/schedule-table/schedule-table.component";
 import { DatePipe } from "@angular/common";
+import { ScheduleDetailsComponent } from './components/schedule/schedule-details/schedule-details.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { DatePipe } from "@angular/common";
     ViewAppointmentComponent,
     ScheduleComponent,
     ScheduleTableComponent,
+    ScheduleDetailsComponent,
   ],
   imports: [
     BrowserModule,

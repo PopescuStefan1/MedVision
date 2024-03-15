@@ -1,5 +1,6 @@
 import { DatePipe } from "@angular/common";
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { EMPTY, Observable, Subscription, catchError, switchMap } from "rxjs";
 import { Appointment } from "src/app/models/appointment";
 import { Medic } from "src/app/models/medic";
@@ -7,6 +8,7 @@ import { User } from "src/app/models/user.model";
 import { AppointmentService } from "src/app/services/appointment.service";
 import { AuthService } from "src/app/services/auth.service";
 import { MedicService } from "src/app/services/medic.service";
+import { ScheduleDetailsComponent } from "../schedule-details/schedule-details.component";
 
 export interface AppointmentTableData {
   hour: number;
@@ -41,7 +43,8 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
     private appointmentService: AppointmentService,
     private authService: AuthService,
     private medicService: MedicService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private dialog: MatDialog
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -217,16 +220,6 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
     return `${startTimeString} - ${endTimeString}`;
   }
 
-  getDateDisplay(appointment: Date): string {
-    const endTime = new Date(appointment);
-    endTime.setMinutes(endTime.getMinutes() + this.appointmentDuration);
-
-    const startTimeString = this.datePipe.transform(appointment, "HH:mm");
-    const endTimeString = this.datePipe.transform(endTime, "HH:mm");
-
-    return `${startTimeString} - ${endTimeString}`;
-  }
-
   getBgColor(index: number): string {
     return this.backgroundColors[index % this.backgroundColors.length];
   }
@@ -243,5 +236,11 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
       return "-";
     }
     return comment.length < 100 ? comment : comment.substring(0, 100).concat("...");
+  }
+
+  onAppointmentClick(appointment: Appointment): void {
+    const dialogRef = this.dialog.open(ScheduleDetailsComponent, {
+      data: { appointment: appointment, appointmentDuration: this.appointmentDuration },
+    });
   }
 }
