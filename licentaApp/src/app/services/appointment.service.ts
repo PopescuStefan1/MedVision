@@ -5,6 +5,7 @@ import { Observable, Subject, from, map, tap } from "rxjs";
 import { Medic } from "../models/medic";
 import { Appointment } from "../models/appointment";
 import { FirebaseAppointment } from "../models/firebase-appointment";
+import { QuerySnapshot } from "firebase/firestore";
 
 @Injectable({
   providedIn: "root",
@@ -73,7 +74,7 @@ export class AppointmentService {
     );
   }
 
-  getMedicAppointmentBookedTimes(selectedMedicId: number, date: Date) {
+  getMedicAppointmentBookedTimes(selectedMedicId: string, date: Date): Observable<Set<Date>> {
     const startOfDay = Timestamp.fromDate(new Date(date.getFullYear(), date.getMonth(), date.getDate()));
     const endOfDay = Timestamp.fromDate(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1));
 
@@ -99,6 +100,52 @@ export class AppointmentService {
           });
 
           return bookedTimes;
+        })
+      );
+  }
+
+  getMedicWeekAppointments(selectedMedicId: string, startDate: Date, endDate: Date): Observable<Appointment[]> {
+    const startOfFirstDay: Timestamp = Timestamp.fromDate(
+      new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate())
+    );
+    const endOfLastDay: Timestamp = Timestamp.fromDate(
+      new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() + 1)
+    );
+
+    return this.firestore
+      .collection<FirebaseAppointment>("appointments", (ref) =>
+        ref
+          .where("medicId", "==", selectedMedicId)
+          .where("datetime", ">=", startOfFirstDay)
+          .where("datetime", "<", endOfLastDay)
+      )
+      .get()
+      .pipe(
+        map((querySnapshot) => {
+          const appointments: Appointment[] = [];
+
+          querySnapshot.forEach((doc) => {
+            const appointmentData: FirebaseAppointment = doc.data();
+
+            // Convert firebase appointment to web app appointment
+            const appointment: Appointment = {
+              city: appointmentData.city,
+              email: appointmentData.email,
+              firstName: appointmentData.firstName,
+              lastName: appointmentData.lastName,
+              age: appointmentData.age,
+              sex: appointmentData.sex,
+              medicId: appointmentData.medicId,
+              telephone: appointmentData.telephone,
+              userId: appointmentData.userId,
+              comment: appointmentData.comment,
+              datetime: appointmentData.datetime.toDate(),
+            };
+
+            appointments.push(appointment);
+          });
+
+          return appointments;
         })
       );
   }
