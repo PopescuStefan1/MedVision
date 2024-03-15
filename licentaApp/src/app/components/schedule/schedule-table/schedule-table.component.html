@@ -17,6 +17,7 @@
           [style.background-color]="getBgColor(i + appointment.datetime.getDay())"
           class="filled-appointment"
           [matTooltip]="getTooltipText(appointment)"
+          matTooltipShowDelay="400"
           matTooltipClass="appointment-tooltip"
           matTooltipPosition="right"
         >
