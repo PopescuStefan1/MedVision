@@ -4,6 +4,8 @@ import { ActivatedRoute } from "@angular/router";
 import { UserService } from "src/app/services/user.service";
 import { MyErrorStateMatcher } from "../auth/auth.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { Observable, Subscription } from "rxjs";
+import { UserProfile } from "src/app/models/user-profile";
 
 @Component({
   selector: "app-user-profile",
@@ -19,6 +21,7 @@ export class UserProfileComponent implements OnInit {
   maxDate: Date;
   isLoading: boolean = false;
   isFormChanged: boolean = false;
+  isMedicUser: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -36,6 +39,8 @@ export class UserProfileComponent implements OnInit {
     this.userService.getUserData(this.userId).subscribe((userData) => {
       this.createUserForm(userData);
       this.subscribeToFormChanges();
+
+      this.isMedicUser = userData.role === "medic";
       this.isLoading = false;
     });
   }
