@@ -28,7 +28,7 @@ export class AppointmentsGuard implements CanActivate {
             })
           );
         } else {
-          return of(this.router.createUrlTree(["/authenticate"]));
+          return of(this.router.createUrlTree(["/not-authorized"]));
         }
       })
     );
