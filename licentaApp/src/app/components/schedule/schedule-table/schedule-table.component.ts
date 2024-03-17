@@ -122,8 +122,8 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
         }
         return EMPTY;
       }),
-      switchMap((medic: Medic) => {
-        if (medic.id && this.startDate && this.endDate) {
+      switchMap((medic: Medic | null) => {
+        if (medic?.id && this.startDate && this.endDate) {
           return this.appointmentService.getMedicWeekAppointments(medic.id, startDate, endDate).pipe(
             catchError((error) => {
               // Error handling

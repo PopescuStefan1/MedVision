@@ -4,11 +4,11 @@
 
 <form *ngIf="isLoaded" [formGroup]="medicPageForm" (ngSubmit)="onSubmit()" class="col-12 col-md-6 offset-md-3 p-4">
   <div class="row text-center">
-    <h2>Set up your medic page</h2>
+    <h2>{{ firstCreation ? "Set up" : "Edit" }} your medic page</h2>
   </div>
 
   <div class="row text-center">
-    <h6>After you complete this form, your information will be available in the medics page</h6>
+    <h6 *ngIf="firstCreation">After you complete this form, your information will be available in the medics page</h6>
   </div>
 
   <mat-divider></mat-divider>
@@ -106,17 +106,33 @@
     </mat-form-field>
   </div>
 
-  <div class="row mt-3">
-    <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-sm-10 offset-sm-1 col-12">
-      <button
-        class="p-1 w-100"
-        type="submit"
-        mat-raised-button
-        color="primary"
-        [disabled]="medicPageForm.invalid || !isFormChanged"
-      >
-        Update
-      </button>
-    </div>
+  <mat-divider></mat-divider>
+
+  <div class="row text-center mt-3">
+    <h6>Your page is currently {{ isCurrentlyVisible ? "visible" : "hidden" }}</h6>
+  </div>
+
+  <div class="row d-flex gap-3">
+    <button
+      class="p-1 col"
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="medicPageForm.invalid || !isFormChanged"
+      type="submit"
+    >
+      Update
+    </button>
+    <button
+      [disabled]="firstCreation || isFormChanged"
+      class="p-1 col"
+      mat-raised-button
+      [color]="isCurrentlyVisible ? 'warn' : 'accent'"
+      class="col"
+      (click)="toggleMedicVisibility()"
+      type="button"
+    >
+      {{ isCurrentlyVisible ? "Hide your page from the medic list" : "Make your page visible" }}
+    </button>
   </div>
 </form>
