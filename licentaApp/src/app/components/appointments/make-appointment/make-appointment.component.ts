@@ -249,7 +249,6 @@ export class MakeAppointmentComponent implements OnInit {
   openSnackBar(message: string) {
     this._snackBar.open(message, undefined, {
       duration: 10000,
-      panelClass: ["mat-toolbar", "mat-primary"],
     });
   }
 }

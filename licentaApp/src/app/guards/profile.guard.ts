@@ -20,13 +20,13 @@ export class ProfileGuard implements CanActivate {
           const userId = user.id;
           const requestedUserId = route.paramMap.get("userId");
 
-          if (!requestedUserId || userId === requestedUserId) {
+          if (userId === requestedUserId) {
             return true;
           } else {
             return this.router.createUrlTree(["profile", userId]);
           }
         } else {
-          return this.router.createUrlTree(["/authenticate"]);
+          return this.router.createUrlTree(["/not-authorized"]);
         }
       })
     );

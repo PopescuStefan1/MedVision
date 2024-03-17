@@ -10,19 +10,54 @@ import { AppointmentsComponent } from "./components/appointments/appointments.co
 import { AppointmentsGuard } from "./guards/appointments.guard";
 import { ScheduleComponent } from "./components/schedule/schedule.component";
 import { ScheduleGuard } from "./guards/schedule.guard";
+import { MedicProfileComponent } from "./components/medics/medic-profile/medic-profile.component";
+import { NotAuthorizedComponent } from "./components/not-authorized/not-authorized.component";
+import { MedicPageGuard } from "./guards/medic-page.guard";
 
 const routes: Routes = [
-  { path: "", component: HomeComponent },
-  { path: "authenticate", component: AuthComponent, canActivate: [LoginauthGuard] },
-  { path: "medics", component: MedicsComponent },
+  { path: "", title: "Ditama Clinic - Home", component: HomeComponent },
+  { path: "authenticate", title: "Authenticate", component: AuthComponent, canActivate: [LoginauthGuard] },
+  {
+    path: "medics",
+    title: "Ditama Clinic - Medics",
+    component: MedicsComponent,
+  },
+  {
+    path: "medic-page/:userId",
+    title: "Ditama Clinic - Set up your medic page",
+    component: MedicProfileComponent,
+    canActivate: [MedicPageGuard],
+  },
+  {
+    path: "medic-page",
+    redirectTo: "medic-page/ ",
+  },
   {
     path: "appointments/:city/:specialty/:medicId",
+    title: "Ditama Clinic - Appointments",
     component: AppointmentsComponent,
     canActivate: [AppointmentsGuard],
   },
-  { path: "appointments", component: AppointmentsComponent, canActivate: [AppointmentsGuard] },
-  { path: "schedule", component: ScheduleComponent, canActivate: [ScheduleGuard] },
-  { path: "profile/:userId", component: UserProfileComponent, canActivate: [ProfileGuard] },
+  {
+    path: "appointments",
+    title: "Ditama Clinic - Appointments",
+    component: AppointmentsComponent,
+    canActivate: [AppointmentsGuard],
+  },
+  {
+    path: "schedule",
+    title: "Ditama Clinic - Medic Schedule",
+    component: ScheduleComponent,
+    canActivate: [ScheduleGuard],
+  },
+  {
+    path: "profile/:userId",
+    title: "Ditama Clinic - User Profile",
+    component: UserProfileComponent,
+    canActivate: [ProfileGuard],
+  },
+  { path: "profile", redirectTo: "profile/ " },
+  { path: "not-authorized", title: "Diatma Clinic - Unauthorized Access", component: NotAuthorizedComponent },
   { path: "**", redirectTo: "" },
 ];
 

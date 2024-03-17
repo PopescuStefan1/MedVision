@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { Observable, catchError, combineLatest, map } from "rxjs";
+import { Observable, catchError, combineLatest, from, map, switchMap, take, throwError } from "rxjs";
 import { Medic } from "../models/medic";
-import { AngularFirestore } from "@angular/fire/compat/firestore";
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from "@angular/fire/compat/firestore";
 @Injectable({
   providedIn: "root",
 })
@@ -11,6 +11,21 @@ export class MedicService {
   getAllMedics(): Observable<Medic[]> {
     return this.firestore
       .collection<Medic>("medics")
+      .snapshotChanges()
+      .pipe(
+        map((snaps) => {
+          return snaps.map((snap) => {
+            const data = snap.payload.doc.data() as Medic;
+            const id = snap.payload.doc.id;
+            return { id, ...data };
+          });
+        })
+      );
+  }
+
+  getVisibleMedics(): Observable<Medic[]> {
+    return this.firestore
+      .collection<Medic>("medics", (ref) => ref.where("isVisible", "==", true))
       .snapshotChanges()
       .pipe(
         map((snaps) => {
@@ -47,7 +62,7 @@ export class MedicService {
     return combineLatest(observables);
   }
 
-  getMedicByUserId(userId: string): Observable<Medic> {
+  getMedicByUserId(userId: string): Observable<Medic | null> {
     return this.firestore
       .collection<Medic>("medics", (ref) => ref.where("userId", "==", userId))
       .snapshotChanges()
@@ -60,12 +75,64 @@ export class MedicService {
 
             return medic;
           } else {
-            throw new Error("Medic not found");
+            return null;
           }
         }),
         catchError((error) => {
-          console.error("Error fetching medic:", error);
           throw error;
+        })
+      );
+  }
+
+  addMedic(medic: Medic): Observable<any> {
+    console.log(medic);
+    const collectionRef: AngularFirestoreCollection<Medic> = this.firestore.collection("medics");
+    return from(collectionRef.add(medic));
+  }
+
+  editMedicByUserId(userId: string, medic: Medic): Observable<void> {
+    return this.firestore
+      .collection<Medic>("medics", (ref) => ref.where("userId", "==", userId))
+      .snapshotChanges()
+      .pipe(
+        take(1),
+        switchMap((medicsSnapshot) => {
+          const documentId = medicsSnapshot[0]?.payload.doc.id;
+          if (!documentId) {
+            // Handle the case where no document is found for the given userId
+            return throwError(() => new Error("No matching document found for the provided userId"));
+          }
+
+          const medicDocRef: AngularFirestoreDocument<Medic> = this.firestore.collection("medics").doc(documentId);
+          return from(medicDocRef.update(medic));
+        }),
+        catchError((error) => {
+          // Handle any errors that occur during the process
+          console.error("Error updating medic:", error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  updateMedicVisibility(userId: string, isVisible: boolean): Observable<void> {
+    return this.firestore
+      .collection<Medic>("medics", (ref) => ref.where("userId", "==", userId))
+      .snapshotChanges()
+      .pipe(
+        take(1),
+        switchMap((medicsSnapshot) => {
+          const documentId = medicsSnapshot[0]?.payload.doc.id;
+          if (!documentId) {
+            return throwError(() => new Error("No matching document found for the provided userId"));
+          }
+
+          const medicDocRef: AngularFirestoreDocument<Medic> = this.firestore.collection("medics").doc(documentId);
+
+          return from(medicDocRef.update({ isVisible: isVisible }));
+        }),
+        catchError((error) => {
+          console.error("Error updating medic field:", error);
+          return throwError(() => error);
         })
       );
   }
