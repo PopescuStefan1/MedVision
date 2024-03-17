@@ -23,7 +23,7 @@ export class MedicsComponent implements OnInit {
 
   fetchMedics() {
     this.isFetching = true;
-    this.medicService.getAllMedics().subscribe({
+    this.medicService.getVisibleMedics().subscribe({
       next: (medics) => {
         this.medics = medics;
         this.isFetching = false;

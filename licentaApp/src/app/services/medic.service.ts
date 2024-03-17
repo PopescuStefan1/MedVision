@@ -23,6 +23,21 @@ export class MedicService {
       );
   }
 
+  getVisibleMedics(): Observable<Medic[]> {
+    return this.firestore
+      .collection<Medic>("medics", (ref) => ref.where("isVisible", "==", true))
+      .snapshotChanges()
+      .pipe(
+        map((snaps) => {
+          return snaps.map((snap) => {
+            const data = snap.payload.doc.data() as Medic;
+            const id = snap.payload.doc.id;
+            return { id, ...data };
+          });
+        })
+      );
+  }
+
   getMedicById(id: string): Observable<Medic> {
     return this.firestore.collection<Medic>("medics").doc(id).valueChanges() as Observable<Medic>;
   }
