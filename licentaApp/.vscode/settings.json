@@ -1,3 +1,4 @@
 {
-  "prettier.useEditorConfig": false
+  "prettier.useEditorConfig": false,
+  "files.autoGuessEncoding": true
 }

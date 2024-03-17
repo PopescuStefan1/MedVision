@@ -17,7 +17,6 @@ export class MedicPageGuard implements CanActivate {
     return this.authService.user.pipe(
       take(1),
       switchMap((user) => {
-        console.log(user);
         if (user) {
           const userId = user.id;
           const requestedUserId = route.paramMap.get("userId");

@@ -1,141 +1,109 @@
-<!-- <div *ngIf="isLoading" class="d-flex justify-content-center mt-5">
+<div *ngIf="!isLoaded" class="d-flex justify-content-center mt-5">
   <mat-spinner></mat-spinner>
 </div>
 
-<form
-  *ngIf="!isLoading"
-  [formGroup]="profileForm"
-  (ngSubmit)="onSubmit()"
-  class="col-12 col-md-6 offset-md-3 p-4 text-center"
->
-  <div class="row">
-    <h2>Edit your Information</h2>
+<form *ngIf="isLoaded" [formGroup]="medicPageForm" (ngSubmit)="onSubmit()" class="col-12 col-md-6 offset-md-3 p-4">
+  <div class="row text-center">
+    <h2>Set up your medic page</h2>
   </div>
 
-  <a *ngIf="isMedicUser" class="mb-2" mat-stroked-button routerLink="/medic-page">
-    <em>Click here to set up your medic page</em>
-  </a>
+  <div class="row text-center">
+    <h6>After you complete this form, your information will be available in the medics page</h6>
+  </div>
 
-  <div class="row">
-    <mat-form-field appearance="outline">
-      <mat-label>Email</mat-label>
-      <input matInput formControlName="email" />
-    </mat-form-field>
+  <mat-divider></mat-divider>
+
+  <div class="row p-1 mt-1">
+    <h3>Medic information</h3>
   </div>
 
   <div class="row">
-    <mat-form-field appearance="outline" class="col-md-6 col-12">
-      <mat-label>First Name</mat-label>
-      <input matInput type="text" formControlName="firstName" />
-      <mat-error *ngIf="profileForm.get('firstName')?.hasError('required') && profileForm.get('firstName')?.touched">
-        Please input your name
-      </mat-error>
-    </mat-form-field>
-
     <mat-form-field appearance="outline" class="col-md-6 col-12">
       <mat-label>Last Name</mat-label>
       <input matInput type="text" formControlName="lastName" />
-      <mat-error *ngIf="profileForm.get('lastName')?.hasError('required') && profileForm.get('lastName')?.touched">
-        Please input your name
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="col-md-6 col-12">
+      <mat-label>First Name</mat-label>
+      <input matInput type="text" formControlName="firstName" />
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field appearance="outline">
+      <mat-label>Specialty</mat-label>
+      <input matInput formControlName="specialty" placeholder="Ex. Dermatology" />
+      <mat-error
+        *ngIf="medicPageForm.get('specialty')?.hasError('required') && medicPageForm.get('specialty')?.touched"
+      >
+        This field is required
       </mat-error>
     </mat-form-field>
   </div>
 
   <div class="row">
-    <mat-form-field appearance="outline" class="col-md-4 col-sm-6 col-12">
-      <mat-label>Sex</mat-label>
-      <mat-select formControlName="sex">
-        <mat-option value="male">Male</mat-option>
-        <mat-option value="female">Female</mat-option>
-      </mat-select>
-      <mat-error *ngIf="profileForm.get('sex')?.hasError('required') && profileForm.get('lastName')?.touched">
-        Please select your sex
+    <mat-form-field appearance="outline" class="col">
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" placeholder="Ex. Professor, Primary Doctor" />
+      <mat-error *ngIf="medicPageForm.get('title')?.hasError('required') && medicPageForm.get('title')?.touched">
+        This field is required
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="col-md-4 col-sm-6 col-12">
-      <mat-label>Date of Birth</mat-label>
-      <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" formControlName="dateOfBirth" />
-      <mat-hint>DD/MM/YYYY</mat-hint>
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker startView="multi-year"></mat-datepicker>
+    <mat-form-field appearance="outline" class="col">
+      <mat-label>Short Title</mat-label>
+      <input matInput formControlName="shortTitle" placeholder="Ex. Prof. Dr." />
       <mat-error
-        *ngIf="profileForm.get('dateOfBirth')?.hasError('required') && profileForm.get('dateOfBirth')?.touched"
+        *ngIf="medicPageForm.get('shortTitle')?.hasError('required') && medicPageForm.get('shortTitle')?.touched"
       >
-        Date of Birth is required
-      </mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="col-md-4 col-12">
-      <mat-label>Nationality</mat-label>
-      <input matInput type="text" formControlName="nationality" />
-      <mat-error
-        *ngIf="profileForm.get('nationality')?.hasError('required') && profileForm.get('nationality')?.touched"
-      >
-        Please input your nationality
+        This field is required
       </mat-error>
     </mat-form-field>
   </div>
 
-  <div formGroupName="address">
-    <div class="row">
-      <mat-form-field appearance="outline" class="col-md-8 col-12">
-        <mat-label>Street</mat-label>
-        <input matInput type="text" formControlName="street" />
-        <mat-error
-          *ngIf="profileForm.get('address.street')?.hasError('required') && profileForm.get('address.street')?.touched"
-        >
-          Street is required.
-        </mat-error>
-      </mat-form-field>
+  <mat-divider></mat-divider>
 
-      <mat-form-field appearance="outline" class="col-md-4 col-12">
-        <mat-label>Country</mat-label>
-        <input matInput type="text" formControlName="country" />
-        <mat-error
-          *ngIf="
-            profileForm.get('address.country')?.hasError('required') && profileForm.get('address.country')?.touched
-          "
-        >
-          Country is required.
-        </mat-error>
-      </mat-form-field>
-    </div>
+  <div class="row p-1 mt-1">
+    <h3>Doctor's office information</h3>
+  </div>
 
-    <div class="row">
-      <mat-form-field appearance="outline" class="col-md-4 col-sm-6 col-12">
-        <mat-label>State</mat-label>
-        <input matInput type="text" formControlName="state" />
-        <mat-error
-          *ngIf="profileForm.get('address.state')?.hasError('required') && profileForm.get('address.state')?.touched"
-        >
-          State is required.
-        </mat-error>
-      </mat-form-field>
+  <div class="row">
+    <mat-form-field appearance="outline">
+      <mat-label>City</mat-label>
+      <mat-select formControlName="city">
+        <mat-option *ngFor="let city of cityNames" [value]="city">{{ city }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="medicPageForm.get('city')?.hasError('required')">Please select your city</mat-error>
+    </mat-form-field>
+  </div>
 
-      <mat-form-field appearance="outline" class="col-md-4 col-sm-6 col-12">
-        <mat-label>City</mat-label>
-        <input matInput type="text" formControlName="city" />
-        <mat-error
-          *ngIf="profileForm.get('address.city')?.hasError('required') && profileForm.get('address.city')?.touched"
-        >
-          City is required.
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="outline" class="col-md-4 col-12">
-        <mat-label>Postal Code</mat-label>
-        <input matInput #postalCode type="text" formControlName="postalCode" maxlength="6" />
-        <mat-hint align="end">{{ postalCode.value.length || 0 }}/6</mat-hint>
-        <mat-error
-          *ngIf="
-            profileForm.get('address.postalCode')?.hasError('required') &&
-            profileForm.get('address.postalCode')?.touched
-          "
-        >
-          Postal Code is required.
-        </mat-error>
-      </mat-form-field>
-    </div>
+  <div class="row">
+    <mat-form-field appearance="outline">
+      <mat-label>Work Email</mat-label>
+      <input matInput formControlName="email" />
+      <mat-error *ngIf="medicPageForm.get('email')?.hasError('required') && medicPageForm.get('email')?.touched">
+        This field is required
+      </mat-error>
+      <mat-error *ngIf="medicPageForm.get('email')?.hasError('email') && medicPageForm.get('email')?.touched">
+        Please input a valid email
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field appearance="outline">
+      <mat-label>Phone Number</mat-label>
+      <span matPrefix>+40 &nbsp;</span>
+      <input matInput type="tel" formControlName="telephone" placeholder="720123456" maxlength="9" />
+      <mat-error
+        *ngIf="medicPageForm.get('telephone')?.hasError('required') && medicPageForm.get('telephone')?.touched"
+      >
+        This field is required
+      </mat-error>
+      <mat-error *ngIf="medicPageForm.get('telephone')?.hasError('pattern') && medicPageForm.get('telephone')?.touched">
+        Please input a valid phone number
+      </mat-error>
+    </mat-form-field>
   </div>
 
   <div class="row mt-3">
@@ -145,10 +113,10 @@
         type="submit"
         mat-raised-button
         color="primary"
-        [disabled]="profileForm.invalid || !isFormChanged"
+        [disabled]="medicPageForm.invalid || !isFormChanged"
       >
         Update
       </button>
     </div>
   </div>
-</form> -->
+</form>
