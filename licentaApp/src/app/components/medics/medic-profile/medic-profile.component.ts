@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { Subscription, catchError, combineLatest, forkJoin, map, of, tap } from "rxjs";
+import { Subscription, combineLatest } from "rxjs";
 import { Medic } from "src/app/models/medic";
 import { UserProfile } from "src/app/models/user-profile";
 import { MedicService } from "src/app/services/medic.service";
 import { UserService } from "src/app/services/user.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { cityNames } from "src/app/city_data/cityData";
 
@@ -29,7 +30,8 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private medicService: MedicService
+    private medicService: MedicService,
+    private _snackBar: MatSnackBar
   ) {
     this.userId = this.route.snapshot.paramMap.get("userId") || "";
   }
@@ -97,17 +99,41 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
     };
 
     if (this.firstCreation) {
-      this.medicService.addMedic(medic).subscribe();
+      this.medicService.addMedic(medic).subscribe(() => {
+        this.openEditSnackbar("Successfully set up your medic page");
+      });
     } else {
-      this.medicService.editMedicByUserId(this.userId, medic).subscribe();
+      this.medicService.editMedicByUserId(this.userId, medic).subscribe(() => {
+        this.openEditSnackbar("Successfully edited your medic page");
+      });
     }
 
     this.firstCreation = false;
-    this.medicPageForm.reset();
     this.isFormChanged = false;
   }
 
   toggleMedicVisibility(): void {
-    this.medicService.updateMedicVisibility(this.userId, !this.isCurrentlyVisible).subscribe();
+    this.medicService.updateMedicVisibility(this.userId, !this.isCurrentlyVisible).subscribe(() => {
+      this.isCurrentlyVisible
+        ? this.openVisibilitySnackbar("Your page is now visible")
+        : this.openVisibilitySnackbar("Your page is now hidden");
+    });
+  }
+
+  private openEditSnackbar(message: string): void {
+    this._snackBar.open(message, undefined, {
+      duration: 5000,
+    });
+  }
+
+  private openVisibilitySnackbar(message: string): void {
+    const snackBarRef = this._snackBar.open(message, "Undo", {
+      duration: 5000,
+      verticalPosition: "top",
+    });
+
+    snackBarRef.onAction().subscribe(() => {
+      this.medicService.updateMedicVisibility(this.userId, !this.isCurrentlyVisible).subscribe();
+    });
   }
 }
