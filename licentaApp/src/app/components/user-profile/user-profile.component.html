@@ -12,9 +12,18 @@
     <h2>Edit your Information</h2>
   </div>
 
-  <a *ngIf="isMedicUser" class="mb-2" mat-stroked-button [routerLink]="['/medic-page', userId]">
+  <button
+    *ngIf="isMedicUser"
+    class="mb-2"
+    mat-stroked-button
+    type="button"
+    (click)="onMedicPageButtonClick()"
+    [disabled]="!isProfileFilled"
+    matTooltip="Please fill out your profile information before setting up your medic page"
+    [matTooltipDisabled]="isProfileFilled"
+  >
     <em>Click here to set up your medic page</em>
-  </a>
+  </button>
 
   <div class="row">
     <mat-form-field appearance="outline">
