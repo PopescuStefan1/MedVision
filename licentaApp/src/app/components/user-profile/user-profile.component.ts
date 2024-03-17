@@ -4,8 +4,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { UserService } from "src/app/services/user.service";
 import { MyErrorStateMatcher } from "../auth/auth.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { Observable, Subscription } from "rxjs";
-import { UserProfile } from "src/app/models/user-profile";
 
 @Component({
   selector: "app-user-profile",
@@ -43,12 +41,12 @@ export class UserProfileComponent implements OnInit {
       this.subscribeToFormChanges();
 
       this.isMedicUser = userData.role === "medic";
-      this.isLoading = false;
 
       if (userData.firstName) {
         // If the profile has been filled by the user enable the medic button
         this.isProfileFilled = true;
       }
+      this.isLoading = false;
     });
   }
 
