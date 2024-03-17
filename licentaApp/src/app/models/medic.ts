@@ -11,4 +11,5 @@ export interface Medic {
   email: string;
   phoneNumber: string;
   userId: string;
+  isVisible: boolean;
 }

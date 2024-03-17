@@ -5,7 +5,6 @@ import { Observable, Subject, from, map, tap } from "rxjs";
 import { Medic } from "../models/medic";
 import { Appointment } from "../models/appointment";
 import { FirebaseAppointment } from "../models/firebase-appointment";
-import { QuerySnapshot } from "firebase/firestore";
 
 @Injectable({
   providedIn: "root",
@@ -150,7 +149,7 @@ export class AppointmentService {
       );
   }
 
-  addApointment(appointmentData: Appointment) {
+  addApointment(appointmentData: Appointment): Observable<any> {
     const firebaseAppointmentData: FirebaseAppointment = {
       ...appointmentData,
       datetime: Timestamp.fromDate(appointmentData.datetime),

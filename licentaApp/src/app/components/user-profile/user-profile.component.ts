@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { UserService } from "src/app/services/user.service";
 import { MyErrorStateMatcher } from "../auth/auth.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -19,12 +19,15 @@ export class UserProfileComponent implements OnInit {
   maxDate: Date;
   isLoading: boolean = false;
   isFormChanged: boolean = false;
+  isMedicUser: boolean = false;
+  isProfileFilled: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private router: Router
   ) {
     this.userId = this.route.snapshot.paramMap.get("userId") || "";
     this.minDate = new Date(1900, 0, 1);
@@ -36,6 +39,13 @@ export class UserProfileComponent implements OnInit {
     this.userService.getUserData(this.userId).subscribe((userData) => {
       this.createUserForm(userData);
       this.subscribeToFormChanges();
+
+      this.isMedicUser = userData.role === "medic";
+
+      if (userData.firstName) {
+        // If the profile has been filled by the user enable the medic button
+        this.isProfileFilled = true;
+      }
       this.isLoading = false;
     });
   }
@@ -73,7 +83,6 @@ export class UserProfileComponent implements OnInit {
   openSnackBar(message: string) {
     this._snackBar.open(message, undefined, {
       duration: 5000,
-      panelClass: ["mat-toolbar", "mat-primary"],
     });
   }
 
@@ -84,11 +93,16 @@ export class UserProfileComponent implements OnInit {
       this.userService.updateUserData(this.userId, updatedUserData).subscribe({
         next: () => {
           this.openSnackBar("Successfully updated personal information.");
+          this.isProfileFilled = true;
         },
         error: (error) => {
           this.openSnackBar(`An error occured ${error}`);
         },
       });
     }
+  }
+
+  onMedicPageButtonClick(): void {
+    this.router.navigate(["medic-page", this.userId]);
   }
 }
