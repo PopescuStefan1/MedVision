@@ -83,7 +83,6 @@ export class UserProfileComponent implements OnInit {
   openSnackBar(message: string) {
     this._snackBar.open(message, undefined, {
       duration: 5000,
-      panelClass: ["mat-toolbar", "mat-primary"],
     });
   }
 
