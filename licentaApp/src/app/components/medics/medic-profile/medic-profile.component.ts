@@ -25,6 +25,7 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
   cityNames: string[] = [];
   firstCreation: boolean = false;
   isCurrentlyVisible: boolean = false;
+  selectedFile?: File;
 
   constructor(
     private route: ActivatedRoute,
@@ -135,5 +136,16 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
     snackBarRef.onAction().subscribe(() => {
       this.medicService.updateMedicVisibility(this.userId, !this.isCurrentlyVisible).subscribe();
     });
+  }
+
+  onFileSelected(event: any): void {
+    const reader = new FileReader();
+    if (event.target.files && event.target.files[0]) {
+      // Read the selected file as data URL
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (e: any) => {
+        this.selectedFile = e.target.result;
+      };
+    }
   }
 }
