@@ -1,0 +1,8 @@
+.profileImgButton {
+  transform: scale(2.5);
+  margin-top: 25%;
+}
+
+.profileImgDiv {
+  background-color: var(--pastel);
+}
