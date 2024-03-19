@@ -36,7 +36,7 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
   startHour: number = 8;
   endHour: number = 16;
   appointmentDuration: number = 20;
-  backgroundColors = ["var(--primary)", "#00BDAE", "var(--accent)"];
+  backgroundColors = ["var(--primary)", "var(--pastel)", "var(--accent)"];
   private subscription: Subscription = new Subscription();
 
   constructor(
