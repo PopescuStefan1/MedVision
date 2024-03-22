@@ -26,6 +26,7 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
   firstCreation: boolean = false;
   isCurrentlyVisible: boolean = false;
   selectedFile?: File;
+  backgroundImageUrl: string = "";
 
   constructor(
     private route: ActivatedRoute,
@@ -139,12 +140,21 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
   }
 
   onFileSelected(event: any): void {
-    const reader = new FileReader();
-    if (event.target.files && event.target.files[0]) {
-      // Read the selected file as data URL
-      reader.readAsDataURL(event.target.files[0]);
-      reader.onload = (e: any) => {
-        this.selectedFile = e.target.result;
+    // const reader = new FileReader();
+    // if (event.target.files && event.target.files[0]) {
+    //   // Read the selected file as data URL
+    //   reader.readAsDataURL(event.target.files[0]);
+    //   reader.onload = (e: any) => {
+    //     this.selectedFile = e.target.result;
+    //     console.log(this.selectedFile);
+    //   };
+    // }
+    const file: File = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.backgroundImageUrl = reader.result as string;
       };
     }
   }

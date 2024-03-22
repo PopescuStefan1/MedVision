@@ -4,6 +4,13 @@
   </div>
 
   <ng-container *ngIf="isLoaded">
+    <div class="row profile-header-div">
+      <div class="img-div" [ngStyle]="{ 'background-image': 'url(' + backgroundImageUrl + ')' }"></div>
+      <div>
+        <button type="button" (click)="fileInput.click()">input img</button>
+        <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file" accept="image/*" />
+      </div>
+    </div>
     <div class="row text-center">
       <h2>{{ firstCreation ? "Set up" : "Edit" }} your medic page</h2>
     </div>
@@ -14,127 +21,116 @@
   </ng-container>
 
   <form *ngIf="isLoaded" [formGroup]="medicPageForm" (ngSubmit)="onSubmit()" class="w-100 mt-3">
+    <div class="row p-1 mt-1">
+      <h3>Medic information</h3>
+    </div>
     <div class="row">
-      <div class="col-4 text-center me-4 ms-3 profileImgDiv">
-        <button type="button" mat-fab color="" (click)="fileInput.click()" class="profileImgButton">
-          <mat-icon *ngIf="!selectedFile">account_circle</mat-icon>
-          <img *ngIf="selectedFile" [src]="selectedFile" class="w-100 h-100" style="border-radius: 50%" />
-        </button>
-        <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file" accept="image/*" />
-      </div>
-      <div class="col">
-        <div class="row p-1 mt-1">
-          <h3>Medic information</h3>
-        </div>
-        <div class="row">
-          <mat-form-field appearance="outline" class="col-md-6 col-12">
-            <mat-label>Last Name</mat-label>
-            <input matInput type="text" formControlName="lastName" />
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="col-md-6 col-12">
-            <mat-label>First Name</mat-label>
-            <input matInput type="text" formControlName="firstName" />
-          </mat-form-field>
-        </div>
-        <div class="row">
-          <mat-form-field appearance="outline">
-            <mat-label>Specialty</mat-label>
-            <input matInput formControlName="specialty" placeholder="Ex. Dermatology" />
-            <mat-error
-              *ngIf="medicPageForm.get('specialty')?.hasError('required') && medicPageForm.get('specialty')?.touched"
-            >
-              This field is required
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div class="row">
-          <mat-form-field appearance="outline" class="col">
-            <mat-label>Title</mat-label>
-            <input matInput formControlName="title" placeholder="Ex. Professor, Primary Doctor" />
-            <mat-error *ngIf="medicPageForm.get('title')?.hasError('required') && medicPageForm.get('title')?.touched">
-              This field is required
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="col">
-            <mat-label>Short Title</mat-label>
-            <input matInput formControlName="shortTitle" placeholder="Ex. Prof. Dr." />
-            <mat-error
-              *ngIf="medicPageForm.get('shortTitle')?.hasError('required') && medicPageForm.get('shortTitle')?.touched"
-            >
-              This field is required
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <mat-divider></mat-divider>
-        <div class="row p-1 mt-1">
-          <h3>Doctor's office information</h3>
-        </div>
-        <div class="row">
-          <mat-form-field appearance="outline">
-            <mat-label>City</mat-label>
-            <mat-select formControlName="city">
-              <mat-option *ngFor="let city of cityNames" [value]="city">{{ city }}</mat-option>
-            </mat-select>
-            <mat-error *ngIf="medicPageForm.get('city')?.hasError('required')">Please select your city</mat-error>
-          </mat-form-field>
-        </div>
-        <div class="row">
-          <mat-form-field appearance="outline">
-            <mat-label>Work Email</mat-label>
-            <input matInput formControlName="email" />
-            <mat-error *ngIf="medicPageForm.get('email')?.hasError('required') && medicPageForm.get('email')?.touched">
-              This field is required
-            </mat-error>
-            <mat-error *ngIf="medicPageForm.get('email')?.hasError('email') && medicPageForm.get('email')?.touched">
-              Please input a valid email
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div class="row">
-          <mat-form-field appearance="outline">
-            <mat-label>Phone Number</mat-label>
-            <span matPrefix>+40 &nbsp;</span>
-            <input matInput type="tel" formControlName="telephone" placeholder="720123456" maxlength="9" />
-            <mat-error
-              *ngIf="medicPageForm.get('telephone')?.hasError('required') && medicPageForm.get('telephone')?.touched"
-            >
-              This field is required
-            </mat-error>
-            <mat-error
-              *ngIf="medicPageForm.get('telephone')?.hasError('pattern') && medicPageForm.get('telephone')?.touched"
-            >
-              Please input a valid phone number
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <mat-divider></mat-divider>
-        <div class="row text-center mt-3">
-          <h6>Your page is currently {{ isCurrentlyVisible ? "visible" : "hidden" }}</h6>
-        </div>
-        <div class="row d-flex gap-3">
-          <button
-            class="p-1 col"
-            type="submit"
-            mat-raised-button
-            color="primary"
-            [disabled]="medicPageForm.invalid || !isFormChanged"
-            type="submit"
-          >
-            Update
-          </button>
-          <button
-            [disabled]="firstCreation || isFormChanged"
-            class="p-1 col"
-            mat-raised-button
-            [color]="isCurrentlyVisible ? 'warn' : 'accent'"
-            class="col"
-            (click)="toggleMedicVisibility()"
-            type="button"
-          >
-            {{ isCurrentlyVisible ? "Hide your page from the medic list" : "Make your page visible" }}
-          </button>
-        </div>
-      </div>
+      <mat-form-field appearance="outline" class="col-md-6 col-12">
+        <mat-label>Last Name</mat-label>
+        <input matInput type="text" formControlName="lastName" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="col-md-6 col-12">
+        <mat-label>First Name</mat-label>
+        <input matInput type="text" formControlName="firstName" />
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Specialty</mat-label>
+        <input matInput formControlName="specialty" placeholder="Ex. Dermatology" />
+        <mat-error
+          *ngIf="medicPageForm.get('specialty')?.hasError('required') && medicPageForm.get('specialty')?.touched"
+        >
+          This field is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field appearance="outline" class="col">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title" placeholder="Ex. Professor, Primary Doctor" />
+        <mat-error *ngIf="medicPageForm.get('title')?.hasError('required') && medicPageForm.get('title')?.touched">
+          This field is required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="col">
+        <mat-label>Short Title</mat-label>
+        <input matInput formControlName="shortTitle" placeholder="Ex. Prof. Dr." />
+        <mat-error
+          *ngIf="medicPageForm.get('shortTitle')?.hasError('required') && medicPageForm.get('shortTitle')?.touched"
+        >
+          This field is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="row p-1 mt-1">
+      <h3>Doctor's office information</h3>
+    </div>
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>City</mat-label>
+        <mat-select formControlName="city">
+          <mat-option *ngFor="let city of cityNames" [value]="city">{{ city }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="medicPageForm.get('city')?.hasError('required')">Please select your city</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Work Email</mat-label>
+        <input matInput formControlName="email" />
+        <mat-error *ngIf="medicPageForm.get('email')?.hasError('required') && medicPageForm.get('email')?.touched">
+          This field is required
+        </mat-error>
+        <mat-error *ngIf="medicPageForm.get('email')?.hasError('email') && medicPageForm.get('email')?.touched">
+          Please input a valid email
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Phone Number</mat-label>
+        <span matPrefix>+40 &nbsp;</span>
+        <input matInput type="tel" formControlName="telephone" placeholder="720123456" maxlength="9" />
+        <mat-error
+          *ngIf="medicPageForm.get('telephone')?.hasError('required') && medicPageForm.get('telephone')?.touched"
+        >
+          This field is required
+        </mat-error>
+        <mat-error
+          *ngIf="medicPageForm.get('telephone')?.hasError('pattern') && medicPageForm.get('telephone')?.touched"
+        >
+          Please input a valid phone number
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="row text-center mt-3">
+      <h6>Your page is currently {{ isCurrentlyVisible ? "visible" : "hidden" }}</h6>
+    </div>
+    <div class="row d-flex gap-3">
+      <button
+        class="p-1 col"
+        type="submit"
+        mat-raised-button
+        color="primary"
+        [disabled]="medicPageForm.invalid || !isFormChanged"
+        type="submit"
+      >
+        Update
+      </button>
+      <button
+        [disabled]="firstCreation || isFormChanged"
+        class="p-1 col"
+        mat-raised-button
+        [color]="isCurrentlyVisible ? 'warn' : 'accent'"
+        class="col"
+        (click)="toggleMedicVisibility()"
+        type="button"
+      >
+        {{ isCurrentlyVisible ? "Hide your page from the medic list" : "Make your page visible" }}
+      </button>
     </div>
   </form>
 </div>

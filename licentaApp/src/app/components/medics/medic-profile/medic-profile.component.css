@@ -1,8 +1,14 @@
-.profileImgButton {
-  transform: scale(2.5);
-  margin-top: 25%;
+.profile-header-div {
+  height: 25vh;
+  display: flex;
+  align-items: center;
+  padding: 2rem;
 }
 
-.profileImgDiv {
-  background-color: var(--pastel);
+.img-div {
+  border-radius: 50%;
+  border: 3px solid black;
+  aspect-ratio: 1;
+  background-size: cover;
+  flex: 0 0 180px;
 }
