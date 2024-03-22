@@ -1,0 +1,28 @@
+.profile-header-div {
+  height: 25vh;
+  display: flex;
+  align-items: center;
+  padding: 2rem;
+}
+
+.img-div {
+  border: 2px solid var(--accent);
+  aspect-ratio: 1;
+  background-size: cover;
+  flex: 0 0 156px;
+  box-sizing: border-box;
+  position: relative;
+  padding: 0;
+}
+
+.img-div img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.add-photo-button {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+}

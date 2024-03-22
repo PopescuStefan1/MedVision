@@ -2,11 +2,12 @@ import { Injectable } from "@angular/core";
 import { Observable, catchError, combineLatest, from, map, switchMap, take, throwError } from "rxjs";
 import { Medic } from "../models/medic";
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from "@angular/fire/compat/firestore";
+import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from "@angular/fire/compat/storage";
 @Injectable({
   providedIn: "root",
 })
 export class MedicService {
-  constructor(private firestore: AngularFirestore) {}
+  constructor(private firestore: AngularFirestore, private storage: AngularFireStorage) {}
 
   getAllMedics(): Observable<Medic[]> {
     return this.firestore
@@ -85,7 +86,6 @@ export class MedicService {
   }
 
   addMedic(medic: Medic): Observable<any> {
-    console.log(medic);
     const collectionRef: AngularFirestoreCollection<Medic> = this.firestore.collection("medics");
     return from(collectionRef.add(medic));
   }
@@ -132,6 +132,53 @@ export class MedicService {
         }),
         catchError((error) => {
           console.error("Error updating medic field:", error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  getDefaulImgUrl(): Observable<string> {
+    return this.storage.ref("medic-images/default-medic-img.avif").getDownloadURL();
+  }
+
+  uploadImage(userId: string, file: File, path: string): Observable<string> {
+    const storageRef: AngularFireStorageReference = this.storage.ref(
+      `${path}/${userId}/${new Date().getTime()}${file.name}`
+    );
+    const task: AngularFireUploadTask = storageRef.put(file);
+
+    console.log("I am in uploadImage");
+    return from(task).pipe(
+      switchMap(() =>
+        storageRef.getDownloadURL().pipe(
+          catchError((error) => {
+            console.error("Error getting download URL:", error);
+            return throwError(() => error);
+          })
+        )
+      ),
+      catchError((error) => throwError(() => error))
+    );
+  }
+
+  setMedicImageUrl(userId: string, imageURL: string): Observable<void> {
+    return this.firestore
+      .collection<Medic>("medics", (ref) => ref.where("userId", "==", userId))
+      .snapshotChanges()
+      .pipe(
+        take(1),
+        switchMap((medicsSnapshot) => {
+          const documentId = medicsSnapshot[0]?.payload.doc.id;
+          if (!documentId) {
+            return throwError(() => new Error("No matching document found for the provided userId"));
+          }
+
+          const medicDocRef: AngularFirestoreDocument<Medic> = this.firestore.collection("medics").doc(documentId);
+
+          return from(medicDocRef.update({ photoUrl: imageURL }));
+        }),
+        catchError((error) => {
+          console.error("Error updating medic photo url:", error);
           return throwError(() => error);
         })
       );
