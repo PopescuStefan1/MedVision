@@ -10,6 +10,14 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { cityNames } from "src/app/city_data/cityData";
 
+interface MedicDetail {
+  firstName?: string;
+  lastName?: string;
+  specialty?: string;
+  title?: string;
+  shortTitle?: string;
+}
+
 @Component({
   selector: "app-medic-profile",
   templateUrl: "./medic-profile.component.html",
@@ -27,6 +35,7 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
   isCurrentlyVisible: boolean = false;
   selectedFile?: File;
   backgroundImageUrl: string = "";
+  medicDetail: MedicDetail = {};
 
   constructor(
     private route: ActivatedRoute,
@@ -50,15 +59,31 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
       this.firstCreation = !!!medicData;
       this.createMedicPageForm(userData, medicData);
 
+      // Set medic details
+      this.medicDetail = {
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        specialty: medicData ? medicData.specialty : "",
+        title: medicData ? medicData.title : "",
+        shortTitle: medicData ? medicData.shortTitle : "",
+      };
+
       if (medicData) {
         this.isCurrentlyVisible = medicData.isVisible;
+        if (!medicData.photoUrl) {
+          this.medicService.getDefaulImgUrl().subscribe((imgUrl) => {
+            this.backgroundImageUrl = imgUrl;
+            this.isLoaded = true;
+          });
+        } else {
+          this.backgroundImageUrl = medicData.photoUrl;
+          this.isLoaded = true;
+        }
       }
 
       this.medicPageForm.valueChanges.subscribe((newFormValue) => {
         this.isFormChanged = !this.isEqual(newFormValue, this.initialFormValue);
       });
-
-      this.isLoaded = true;
     });
   }
 
@@ -79,6 +104,12 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
     });
 
     this.initialFormValue = this.medicPageForm.value;
+  }
+
+  onMedicDetailsChange(): void {
+    this.medicDetail.specialty = this.medicPageForm.get("specialty")?.value;
+    this.medicDetail.title = this.medicPageForm.get("title")?.value;
+    this.medicDetail.shortTitle = this.medicPageForm.get("shortTitle")?.value;
   }
 
   private isEqual(obj1: any, obj2: any): boolean {
