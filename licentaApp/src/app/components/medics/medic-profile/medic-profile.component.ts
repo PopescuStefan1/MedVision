@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { Subscription, combineLatest } from "rxjs";
+import { Subscription, combineLatest, switchMap, tap } from "rxjs";
 import { Medic } from "src/app/models/medic";
 import { UserProfile } from "src/app/models/user-profile";
 import { MedicService } from "src/app/services/medic.service";
@@ -9,6 +9,14 @@ import { UserService } from "src/app/services/user.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { cityNames } from "src/app/city_data/cityData";
+
+interface MedicDetail {
+  firstName?: string;
+  lastName?: string;
+  specialty?: string;
+  title?: string;
+  shortTitle?: string;
+}
 
 @Component({
   selector: "app-medic-profile",
@@ -25,6 +33,10 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
   cityNames: string[] = [];
   firstCreation: boolean = false;
   isCurrentlyVisible: boolean = false;
+  uploadedFile?: File;
+  imageUrl: string = "";
+  imageChanged: boolean = false;
+  medicDetail: MedicDetail = {};
 
   constructor(
     private route: ActivatedRoute,
@@ -48,15 +60,31 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
       this.firstCreation = !!!medicData;
       this.createMedicPageForm(userData, medicData);
 
+      // Set medic details
+      this.medicDetail = {
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        specialty: medicData ? medicData.specialty : "",
+        title: medicData ? medicData.title : "",
+        shortTitle: medicData ? medicData.shortTitle : "",
+      };
+
       if (medicData) {
         this.isCurrentlyVisible = medicData.isVisible;
+        if (!medicData.photoUrl) {
+          this.medicService.getDefaulImgUrl().subscribe((imgUrl) => {
+            this.imageUrl = imgUrl;
+            this.isLoaded = true;
+          });
+        } else {
+          this.imageUrl = medicData.photoUrl;
+          this.isLoaded = true;
+        }
       }
 
       this.medicPageForm.valueChanges.subscribe((newFormValue) => {
         this.isFormChanged = !this.isEqual(newFormValue, this.initialFormValue);
       });
-
-      this.isLoaded = true;
     });
   }
 
@@ -79,6 +107,12 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
     this.initialFormValue = this.medicPageForm.value;
   }
 
+  onMedicDetailsChange(): void {
+    this.medicDetail.specialty = this.medicPageForm.get("specialty")?.value;
+    this.medicDetail.title = this.medicPageForm.get("title")?.value;
+    this.medicDetail.shortTitle = this.medicPageForm.get("shortTitle")?.value;
+  }
+
   private isEqual(obj1: any, obj2: any): boolean {
     return JSON.stringify(obj1) === JSON.stringify(obj2);
   }
@@ -96,20 +130,51 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
       patientIds: [],
       isVisible: false,
       userId: this.userId,
+      photoUrl: this.imageUrl,
     };
 
-    if (this.firstCreation) {
-      this.medicService.addMedic(medic).subscribe(() => {
-        this.openEditSnackbar("Successfully set up your medic page");
-      });
-    } else {
-      this.medicService.editMedicByUserId(this.userId, medic).subscribe(() => {
-        this.openEditSnackbar("Successfully edited your medic page");
-      });
-    }
+    this.handleMedicSave(medic);
 
     this.firstCreation = false;
     this.isFormChanged = false;
+    this.imageChanged = false;
+  }
+
+  private handleMedicSave(medic: Medic): void {
+    if (this.firstCreation) {
+      this.medicService
+        .addMedic(medic)
+        .pipe(
+          tap(() => {
+            this.openEditSnackbar(
+              "Successfully set up your medic page. If you want your page to appear in the medics list, make sure to set your page to visible!"
+            );
+            this.handleImageUpload();
+          })
+        )
+        .subscribe();
+    } else {
+      this.medicService
+        .editMedicByUserId(this.userId, medic)
+        .pipe(
+          tap(() => {
+            this.openEditSnackbar(
+              "Successfully edited your medic page. If you want your page to appear in the medics list, make sure to set your page to visible!"
+            );
+            this.handleImageUpload();
+          })
+        )
+        .subscribe();
+    }
+  }
+
+  private handleImageUpload(): void {
+    if (this.imageChanged && this.uploadedFile) {
+      this.medicService
+        .uploadImage(this.userId, this.uploadedFile, "medic-images")
+        .pipe(switchMap((downloadURL) => this.medicService.setMedicImageUrl(this.userId, downloadURL)))
+        .subscribe();
+    }
   }
 
   toggleMedicVisibility(): void {
@@ -122,7 +187,7 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
 
   private openEditSnackbar(message: string): void {
     this._snackBar.open(message, undefined, {
-      duration: 5000,
+      duration: 10000,
     });
   }
 
@@ -135,5 +200,18 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
     snackBarRef.onAction().subscribe(() => {
       this.medicService.updateMedicVisibility(this.userId, !this.isCurrentlyVisible).subscribe();
     });
+  }
+
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.imageUrl = reader.result as string;
+        this.imageChanged = true;
+        this.uploadedFile = file;
+      };
+    }
   }
 }
