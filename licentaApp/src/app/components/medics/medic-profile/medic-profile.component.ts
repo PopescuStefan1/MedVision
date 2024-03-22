@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { Subscription, combineLatest } from "rxjs";
+import { Subscription, combineLatest, switchMap, tap } from "rxjs";
 import { Medic } from "src/app/models/medic";
 import { UserProfile } from "src/app/models/user-profile";
 import { MedicService } from "src/app/services/medic.service";
@@ -33,8 +33,9 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
   cityNames: string[] = [];
   firstCreation: boolean = false;
   isCurrentlyVisible: boolean = false;
-  selectedFile?: File;
-  backgroundImageUrl: string = "";
+  uploadedFile?: File;
+  imageUrl: string = "";
+  imageChanged: boolean = false;
   medicDetail: MedicDetail = {};
 
   constructor(
@@ -72,11 +73,11 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
         this.isCurrentlyVisible = medicData.isVisible;
         if (!medicData.photoUrl) {
           this.medicService.getDefaulImgUrl().subscribe((imgUrl) => {
-            this.backgroundImageUrl = imgUrl;
+            this.imageUrl = imgUrl;
             this.isLoaded = true;
           });
         } else {
-          this.backgroundImageUrl = medicData.photoUrl;
+          this.imageUrl = medicData.photoUrl;
           this.isLoaded = true;
         }
       }
@@ -129,20 +130,46 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
       patientIds: [],
       isVisible: false,
       userId: this.userId,
+      photoUrl: this.imageUrl,
     };
 
-    if (this.firstCreation) {
-      this.medicService.addMedic(medic).subscribe(() => {
-        this.openEditSnackbar("Successfully set up your medic page");
-      });
-    } else {
-      this.medicService.editMedicByUserId(this.userId, medic).subscribe(() => {
-        this.openEditSnackbar("Successfully edited your medic page");
-      });
-    }
+    this.handleMedicSave(medic);
 
     this.firstCreation = false;
     this.isFormChanged = false;
+  }
+
+  private handleMedicSave(medic: Medic): void {
+    if (this.firstCreation) {
+      this.medicService
+        .addMedic(medic)
+        .pipe(
+          tap(() => {
+            this.openEditSnackbar("Successfully set up your medic page");
+            this.handleImageUpload();
+          })
+        )
+        .subscribe();
+    } else {
+      this.medicService
+        .editMedicByUserId(this.userId, medic)
+        .pipe(
+          tap(() => {
+            this.openEditSnackbar("Successfully edited your medic page");
+            this.handleImageUpload();
+          })
+        )
+        .subscribe();
+    }
+  }
+
+  private handleImageUpload(): void {
+    if (this.imageChanged && this.uploadedFile) {
+      this.medicService
+        .uploadImage(this.userId, this.uploadedFile, "medic-images")
+        .pipe(switchMap((downloadURL) => this.medicService.setMedicImageUrl(this.userId, downloadURL)))
+        .subscribe();
+    }
   }
 
   toggleMedicVisibility(): void {
@@ -171,21 +198,14 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
   }
 
   onFileSelected(event: any): void {
-    // const reader = new FileReader();
-    // if (event.target.files && event.target.files[0]) {
-    //   // Read the selected file as data URL
-    //   reader.readAsDataURL(event.target.files[0]);
-    //   reader.onload = (e: any) => {
-    //     this.selectedFile = e.target.result;
-    //     console.log(this.selectedFile);
-    //   };
-    // }
     const file: File = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
-        this.backgroundImageUrl = reader.result as string;
+        this.imageUrl = reader.result as string;
+        this.imageChanged = true;
+        this.uploadedFile = file;
       };
     }
   }

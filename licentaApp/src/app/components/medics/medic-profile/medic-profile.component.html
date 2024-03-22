@@ -14,14 +14,14 @@
 
   <form *ngIf="isLoaded" [formGroup]="medicPageForm" (ngSubmit)="onSubmit()" class="w-100 mt-3">
     <div class="row profile-header-div position-relative">
-      <div class="img-div col">
-        <img [src]="backgroundImageUrl" alt="Profile picture" />
+      <div class="img-div col me-4">
+        <img [src]="imageUrl" alt="Profile picture" />
         <button class="add-photo-button" type="button" mat-fab color="accent" (click)="fileInput.click()">
           <mat-icon>add_a_photo</mat-icon>
         </button>
         <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file" accept="image/*" />
       </div>
-      <div class="col text-end">
+      <div class="col">
         <div class="row">
           <h1>{{ medicDetail.shortTitle }} {{ medicDetail.lastName }} {{ medicDetail.firstName }}</h1>
         </div>
