@@ -4,23 +4,33 @@
   </div>
 
   <ng-container *ngIf="isLoaded">
-    <div class="row profile-header-div">
-      <div class="img-div" [ngStyle]="{ 'background-image': 'url(' + backgroundImageUrl + ')' }"></div>
-      <div>
-        <button type="button" (click)="fileInput.click()">input img</button>
-        <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file" accept="image/*" />
-      </div>
-    </div>
     <div class="row text-center">
       <h2>{{ firstCreation ? "Set up" : "Edit" }} your medic page</h2>
     </div>
     <div class="row text-center">
       <h6 *ngIf="firstCreation">After you complete this form, your information will be available in the medics page</h6>
     </div>
-    <mat-divider></mat-divider>
   </ng-container>
 
   <form *ngIf="isLoaded" [formGroup]="medicPageForm" (ngSubmit)="onSubmit()" class="w-100 mt-3">
+    <div class="row profile-header-div position-relative">
+      <div class="img-div col">
+        <img [src]="backgroundImageUrl" alt="Profile picture" />
+        <button class="add-photo-button" type="button" mat-fab color="accent" (click)="fileInput.click()">
+          <mat-icon>add_a_photo</mat-icon>
+        </button>
+        <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file" accept="image/*" />
+      </div>
+      <div class="col text-end">
+        <div class="row">
+          <h1>{{ medicDetail.shortTitle }} {{ medicDetail.lastName }} {{ medicDetail.firstName }}</h1>
+        </div>
+        <div class="row">
+          <h5>{{ medicDetail.title }} in {{ medicDetail.specialty }}</h5>
+        </div>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
     <div class="row p-1 mt-1">
       <h3>Medic information</h3>
     </div>
@@ -37,7 +47,13 @@
     <div class="row">
       <mat-form-field appearance="outline">
         <mat-label>Specialty</mat-label>
-        <input matInput formControlName="specialty" placeholder="Ex. Dermatology" />
+        <input
+          matInput
+          formControlName="specialty"
+          placeholder="Ex. Dermatology"
+          (input)="onMedicDetailsChange()"
+          maxlength="30"
+        />
         <mat-error
           *ngIf="medicPageForm.get('specialty')?.hasError('required') && medicPageForm.get('specialty')?.touched"
         >
@@ -48,14 +64,26 @@
     <div class="row">
       <mat-form-field appearance="outline" class="col">
         <mat-label>Title</mat-label>
-        <input matInput formControlName="title" placeholder="Ex. Professor, Primary Doctor" />
+        <input
+          matInput
+          formControlName="title"
+          placeholder="Ex. Professor, Primary Doctor"
+          (input)="onMedicDetailsChange()"
+          maxlength="50"
+        />
         <mat-error *ngIf="medicPageForm.get('title')?.hasError('required') && medicPageForm.get('title')?.touched">
           This field is required
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline" class="col">
         <mat-label>Short Title</mat-label>
-        <input matInput formControlName="shortTitle" placeholder="Ex. Prof. Dr." />
+        <input
+          matInput
+          formControlName="shortTitle"
+          placeholder="Ex. Prof. Dr."
+          (input)="onMedicDetailsChange()"
+          maxlength="20"
+        />
         <mat-error
           *ngIf="medicPageForm.get('shortTitle')?.hasError('required') && medicPageForm.get('shortTitle')?.touched"
         >

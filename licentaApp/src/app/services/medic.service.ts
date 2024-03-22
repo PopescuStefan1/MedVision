@@ -2,11 +2,12 @@ import { Injectable } from "@angular/core";
 import { Observable, catchError, combineLatest, from, map, switchMap, take, throwError } from "rxjs";
 import { Medic } from "../models/medic";
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from "@angular/fire/compat/firestore";
+import { AngularFireStorage } from "@angular/fire/compat/storage";
 @Injectable({
   providedIn: "root",
 })
 export class MedicService {
-  constructor(private firestore: AngularFirestore) {}
+  constructor(private firestore: AngularFirestore, private storage: AngularFireStorage) {}
 
   getAllMedics(): Observable<Medic[]> {
     return this.firestore
@@ -135,5 +136,9 @@ export class MedicService {
           return throwError(() => error);
         })
       );
+  }
+
+  getDefaulImgUrl(): Observable<string> {
+    return this.storage.ref("medic-images/default-medic-img.avif").getDownloadURL();
   }
 }
