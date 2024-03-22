@@ -137,6 +137,7 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
 
     this.firstCreation = false;
     this.isFormChanged = false;
+    this.imageChanged = false;
   }
 
   private handleMedicSave(medic: Medic): void {
@@ -145,7 +146,9 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
         .addMedic(medic)
         .pipe(
           tap(() => {
-            this.openEditSnackbar("Successfully set up your medic page");
+            this.openEditSnackbar(
+              "Successfully set up your medic page. If you want your page to appear in the medics list, make sure to set your page to visible!"
+            );
             this.handleImageUpload();
           })
         )
@@ -155,7 +158,9 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
         .editMedicByUserId(this.userId, medic)
         .pipe(
           tap(() => {
-            this.openEditSnackbar("Successfully edited your medic page");
+            this.openEditSnackbar(
+              "Successfully edited your medic page. If you want your page to appear in the medics list, make sure to set your page to visible!"
+            );
             this.handleImageUpload();
           })
         )
@@ -182,7 +187,7 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
 
   private openEditSnackbar(message: string): void {
     this._snackBar.open(message, undefined, {
-      duration: 5000,
+      duration: 10000,
     });
   }
 
