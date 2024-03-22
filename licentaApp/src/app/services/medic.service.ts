@@ -86,7 +86,6 @@ export class MedicService {
   }
 
   addMedic(medic: Medic): Observable<any> {
-    console.log(medic);
     const collectionRef: AngularFirestoreCollection<Medic> = this.firestore.collection("medics");
     return from(collectionRef.add(medic));
   }

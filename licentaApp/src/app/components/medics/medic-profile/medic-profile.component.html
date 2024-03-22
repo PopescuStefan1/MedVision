@@ -143,19 +143,22 @@
         type="submit"
         mat-raised-button
         color="primary"
-        [disabled]="medicPageForm.invalid || !isFormChanged"
+        [disabled]="medicPageForm.invalid || (!isFormChanged && !imageChanged)"
         type="submit"
       >
         Update
       </button>
       <button
-        [disabled]="firstCreation || isFormChanged"
+        [disabled]="firstCreation || isFormChanged || imageChanged"
         class="p-1 col"
         mat-raised-button
         [color]="isCurrentlyVisible ? 'warn' : 'accent'"
         class="col"
         (click)="toggleMedicVisibility()"
         type="button"
+        matTooltip="You cannot change your visibility while you have unsaved changes. Please save or discard your changes and try again!"
+        [matTooltipDisabled]="!firstCreation && !isFormChanged && !imageChanged"
+        matTooltipPosition="above"
       >
         {{ isCurrentlyVisible ? "Hide your page from the medic list" : "Make your page visible" }}
       </button>
