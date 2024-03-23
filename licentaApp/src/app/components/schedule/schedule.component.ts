@@ -14,6 +14,7 @@ export class ScheduleComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
+    this.selectedDate.setHours(0, 0, 0, 0);
     this.handleWeekStartAndEnd();
   }
 
@@ -28,9 +29,12 @@ export class ScheduleComponent implements OnInit {
 
   private getEndOfWeek(date: Date): Date {
     const day = date.getDay();
-    const diff = date.getDate() + (5 - day);
+    const resultDate = new Date(date);
+    resultDate.setDate(date.getDate() + (5 - day));
+    // Set time to end of day
+    resultDate.setHours(23, 59, 59, 999);
 
-    return new Date(date.setDate(diff));
+    return resultDate;
   }
 
   onDateChange(event: MatDatepickerInputEvent<Date>) {
@@ -59,6 +63,8 @@ export class ScheduleComponent implements OnInit {
 
   onTodayClick(): void {
     this.selectedDate = new Date();
+    this.selectedDate.setHours(0, 0, 0, 0);
+
     this.handleWeekStartAndEnd();
   }
 
@@ -67,8 +73,11 @@ export class ScheduleComponent implements OnInit {
     this.selectedEndOfWeek = this.getEndOfWeek(this.selectedDate);
   }
 
-  isSelectedToday(): boolean {
+  isCurrentWeekSelected(): boolean {
     const today = new Date();
-    return this.selectedDate.toDateString() === today.toDateString();
+    const sunday = new Date();
+    sunday.setDate(this.selectedStartOfWeek.getDate() + 7);
+
+    return today.getTime() > this.selectedStartOfWeek.getTime() && today.getTime() < sunday.getTime();
   }
 }
