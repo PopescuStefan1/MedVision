@@ -55,7 +55,6 @@ export class MedicsComponent implements OnInit {
       this.userService.getUserData(this.userId).subscribe((userData) => {
         this.userData = userData;
         this.isFetching = false;
-        console.log(this.userId, this.userData);
       });
     } else {
       this.isFetching = false;
