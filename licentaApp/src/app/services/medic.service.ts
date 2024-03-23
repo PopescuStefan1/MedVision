@@ -147,7 +147,6 @@ export class MedicService {
     );
     const task: AngularFireUploadTask = storageRef.put(file);
 
-    console.log("I am in uploadImage");
     return from(task).pipe(
       switchMap(() =>
         storageRef.getDownloadURL().pipe(
