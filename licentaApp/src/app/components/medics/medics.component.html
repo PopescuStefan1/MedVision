@@ -6,11 +6,23 @@
     <h1>An Error Occurred!</h1>
     <p>{{ error }}</p>
   </div>
-  <mat-grid-list *ngIf="!isFetching" cols="3" gutterSize="3rem">
+  <ng-container *ngIf="!isFetching && !error && isAuthenticated && userData?.role === 'medic'">
+    <div class="row mb-1">
+      <div class="col-2 offset-5">
+        <button class="mb-2" mat-raised-button type="button" color="primary" (click)="onMedicPageButtonClick()">
+          <em>To set up or edit your medic page, go to your profile</em>
+        </button>
+      </div>
+    </div>
+  </ng-container>
+  <mat-grid-list *ngIf="!isFetching && !error" cols="3" gutterSize="3rem">
     <mat-grid-tile *ngFor="let medic of medics">
       <mat-card class="medic-card">
         <mat-card-title-group class="mb-2">
-          <mat-card-title>{{ medic.shortTitle }} {{ medic.firstName }} {{ medic.lastName }}</mat-card-title>
+          <mat-card-title>
+            <mat-icon *ngIf="medic.userId === userId" matTooltip="This is you">star</mat-icon>
+            {{ medic.shortTitle }} {{ medic.firstName }} {{ medic.lastName }}
+          </mat-card-title>
           <mat-card-subtitle>{{ medic.specialty }}</mat-card-subtitle>
           <img
             mat-card-lg-image
@@ -32,13 +44,13 @@
           </button>
           <button mat-button color="accent" [matMenuTriggerFor]="menu">Contact</button>
           <mat-menu #menu="matMenu" yPosition="above">
-            <button mat-menu-item>
+            <button mat-menu-item (click)="onMailClick(medic.email)">
               <mat-icon>email</mat-icon>
-              <span>Send Email</span>
+              <span>{{ medic.email }}</span>
             </button>
-            <button mat-menu-item>
+            <button mat-menu-item (click)="onPhoneClick(medic.phoneNumber)">
               <mat-icon>phone</mat-icon>
-              <span>Phone Call</span>
+              <span>+40{{ medic.phoneNumber }}</span>
             </button>
           </mat-menu>
         </mat-card-actions>

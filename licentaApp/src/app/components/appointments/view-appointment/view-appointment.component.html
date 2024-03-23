@@ -3,6 +3,9 @@
     <mat-accordion class="appointmentAccordion" multi>
       <ng-container *ngIf="futureAppointments$ | async as appointments">
         <h4 class="upcoming-appointments-header">Upcoming appointments</h4>
+        <h6 *ngIf="appointments.length === 0">
+          <em>No upcoming appointments</em>
+        </h6>
         <mat-expansion-panel *ngFor="let appointment of appointments">
           <mat-expansion-panel-header>
             <mat-panel-title> Upcoming appointment </mat-panel-title>
@@ -62,6 +65,9 @@
     <mat-accordion class="appointmentAccordion" multi>
       <ng-container *ngIf="pastAppointments$ | async as appointments">
         <h4 class="past-appointments-header">Past appointments</h4>
+        <h6 *ngIf="appointments.length === 0">
+          <em>No past appointments</em>
+        </h6>
         <mat-expansion-panel *ngFor="let appointment of appointments">
           <mat-expansion-panel-header>
             <mat-panel-title> Past appointment </mat-panel-title>
