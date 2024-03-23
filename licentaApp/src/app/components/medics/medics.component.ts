@@ -63,9 +63,13 @@ export class MedicsComponent implements OnInit {
   }
 
   onScheduleAppointmentClick(selectedMedic: Medic) {
-    this.router.navigate(["/appointments"], {
-      queryParams: { city: selectedMedic.city, specialty: selectedMedic.specialty, medicId: selectedMedic.id },
-    });
+    if (this.isAuthenticated) {
+      this.router.navigate(["/appointments"], {
+        queryParams: { city: selectedMedic.city, specialty: selectedMedic.specialty, medicId: selectedMedic.id },
+      });
+    } else {
+      this.router.navigate(["/authenticate"]);
+    }
   }
 
   onMedicPageButtonClick(): void {
