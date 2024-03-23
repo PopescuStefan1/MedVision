@@ -20,7 +20,7 @@ export class ScheduleGuard implements CanActivate {
           return this.userService.getUserData(user.id).pipe(
             switchMap((userData) => {
               if (userData.role === "patient") {
-                return of(this.router.createUrlTree(["/appointments"]));
+                return of(this.router.createUrlTree(["/not-authorized"]));
               } else {
                 return of(true);
               }
