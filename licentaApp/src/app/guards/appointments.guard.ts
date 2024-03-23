@@ -18,15 +18,7 @@ export class AppointmentsGuard implements CanActivate {
       take(1),
       switchMap((user) => {
         if (user) {
-          return this.userService.getUserData(user.id).pipe(
-            switchMap((userData) => {
-              if (userData.role === "medic") {
-                return of(this.router.createUrlTree(["/schedule"]));
-              } else {
-                return of(true);
-              }
-            })
-          );
+          return of(true);
         } else {
           return of(this.router.createUrlTree(["/not-authorized"]));
         }
