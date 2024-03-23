@@ -1,4 +1,7 @@
 <div class="container p-5">
+  <div class="row text-center mb-4">
+    <h1>Our Medics</h1>
+  </div>
   <div *ngIf="isFetching && !error" class="pt-5 mt-5">
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>
@@ -7,15 +10,15 @@
     <p>{{ error }}</p>
   </div>
   <ng-container *ngIf="!isFetching && !error && isAuthenticated && userData?.role === 'medic'">
-    <div class="row mb-1">
-      <div class="col-2 offset-5">
-        <button class="mb-2" mat-raised-button type="button" color="primary" (click)="onMedicPageButtonClick()">
+    <div class="row text-center">
+      <div>
+        <button mat-raised-button type="button" color="primary" (click)="onMedicPageButtonClick()">
           <em>To set up or edit your medic page, go to your profile</em>
         </button>
       </div>
     </div>
   </ng-container>
-  <mat-grid-list *ngIf="!isFetching && !error" cols="3" gutterSize="3rem">
+  <mat-grid-list *ngIf="!isFetching && !error" cols="3" gutterSize="2rem">
     <mat-grid-tile *ngFor="let medic of medics">
       <mat-card class="medic-card">
         <mat-card-title-group class="mb-2">
