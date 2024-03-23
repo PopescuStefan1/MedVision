@@ -1,5 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
+import { Router } from "@angular/router";
+import { EMPTY, switchMap } from "rxjs";
+import { AuthService } from "src/app/services/auth.service";
+import { MedicService } from "src/app/services/medic.service";
 
 @Component({
   selector: "app-schedule",
@@ -11,11 +15,38 @@ export class ScheduleComponent implements OnInit {
   selectedStartOfWeek: Date = new Date();
   selectedEndOfWeek: Date = new Date();
   week: Date[] = [];
-  constructor() {}
+  medicPageExists: boolean = false;
+  isLoadingMedicInfo: boolean = false;
+  userId?: string;
+
+  constructor(private authService: AuthService, private medicService: MedicService, private router: Router) {}
 
   ngOnInit(): void {
-    this.selectedDate.setHours(0, 0, 0, 0);
-    this.handleWeekStartAndEnd();
+    this.isLoadingMedicInfo = true;
+
+    this.authService.user
+      .pipe(
+        switchMap((user) => {
+          if (user) {
+            this.userId = user.id;
+            return this.medicService.getMedicByUserId(user.id);
+          } else {
+            this.medicPageExists = false;
+            this.isLoadingMedicInfo = false;
+            return EMPTY;
+          }
+        })
+      )
+      .subscribe((medic) => {
+        if (medic) {
+          this.selectedDate.setHours(0, 0, 0, 0);
+          this.handleWeekStartAndEnd();
+          this.medicPageExists = true;
+        } else {
+          this.medicPageExists = false;
+        }
+        this.isLoadingMedicInfo = false;
+      });
   }
 
   private getStartOfWeek(date: Date): Date {
@@ -79,5 +110,9 @@ export class ScheduleComponent implements OnInit {
     sunday.setDate(this.selectedStartOfWeek.getDate() + 7);
 
     return today.getTime() > this.selectedStartOfWeek.getTime() && today.getTime() < sunday.getTime();
+  }
+
+  onProfileButtonClick(): void {
+    this.router.navigate(["/profile", this.userId]);
   }
 }
