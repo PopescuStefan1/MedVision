@@ -23,7 +23,9 @@
       </button>
     </div>
     <div class="col d-flex justify-content-end">
-      <button mat-raised-button color="accent" (click)="onTodayClick()" [disabled]="isSelectedToday()">Today</button>
+      <button mat-raised-button color="accent" (click)="onTodayClick()" [disabled]="isCurrentWeekSelected()">
+        Today
+      </button>
     </div>
   </div>
   <div class="table-div">
