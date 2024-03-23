@@ -1,4 +1,18 @@
-<div class="container pt-5 pb-5">
+<div *ngIf="!medicPageExists && !isLoadingMedicInfo" class="container mt-5">
+  <div class="row text-center">
+    <h1>Please set up your medic page before checking your schedule!</h1>
+    <h4>You can do this from your profile.</h4>
+  </div>
+  <div class="row mt-4">
+    <div class="text-center">
+      <button mat-raised-button color="accent" (click)="onProfileButtonClick()">
+        Click here to go to your profile
+      </button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="medicPageExists" class="container pt-5 pb-5">
   <div class="row">
     <div class="col">
       <button mat-icon-button color="primary" (click)="onPrevClick()">
