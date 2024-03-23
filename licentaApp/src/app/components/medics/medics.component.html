@@ -44,13 +44,13 @@
           </button>
           <button mat-button color="accent" [matMenuTriggerFor]="menu">Contact</button>
           <mat-menu #menu="matMenu" yPosition="above">
-            <button mat-menu-item>
+            <button mat-menu-item (click)="onMailClick(medic.email)">
               <mat-icon>email</mat-icon>
-              <span>Send Email</span>
+              <span>{{ medic.email }}</span>
             </button>
-            <button mat-menu-item>
+            <button mat-menu-item (click)="onPhoneClick(medic.phoneNumber)">
               <mat-icon>phone</mat-icon>
-              <span>Phone Call</span>
+              <span>+40{{ medic.phoneNumber }}</span>
             </button>
           </mat-menu>
         </mat-card-actions>

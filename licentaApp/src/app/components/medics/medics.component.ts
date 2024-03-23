@@ -75,4 +75,13 @@ export class MedicsComponent implements OnInit {
   onMedicPageButtonClick(): void {
     this.router.navigate(["profile", this.userId]);
   }
+
+  onMailClick(email: string): void {
+    window.open(`mailto:${email}`);
+  }
+
+  onPhoneClick(phoneNumber: string): void {
+    const prefix: string = "+40";
+    window.open(`tel:${prefix}${phoneNumber}`);
+  }
 }
