@@ -19,7 +19,10 @@
     <mat-grid-tile *ngFor="let medic of medics">
       <mat-card class="medic-card">
         <mat-card-title-group class="mb-2">
-          <mat-card-title> {{ medic.shortTitle }} {{ medic.firstName }} {{ medic.lastName }} </mat-card-title>
+          <mat-card-title>
+            <mat-icon *ngIf="medic.userId === userId" matTooltip="This is you">star</mat-icon>
+            {{ medic.shortTitle }} {{ medic.firstName }} {{ medic.lastName }}
+          </mat-card-title>
           <mat-card-subtitle>{{ medic.specialty }}</mat-card-subtitle>
           <img
             mat-card-lg-image
