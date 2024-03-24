@@ -1,0 +1,17 @@
+:host {
+  --icon-scale: 6;
+}
+
+.block-icon {
+  transform: scale(var(--icon-scale));
+}
+
+.icon-div {
+  height: calc(var(--icon-scale) * 24px);
+  box-sizing: border-box;
+}
+
+.text {
+  color: gray;
+  margin: 0;
+}
