@@ -1,1 +1,30 @@
-<p>not-authorized works!</p>
+<div class="container p-5">
+  <div class="row mt-4">
+    <div class="col icon-div d-flex align-items-center justify-content-center">
+      <mat-icon class="block-icon">block</mat-icon>
+    </div>
+  </div>
+  <div class="row text-center mt-5">
+    <h1>You are not authorized to access this page</h1>
+  </div>
+  <div class="row text-center mt-4">
+    <p class="text">
+      It seems like {{ currentUser ? "your current account doesn't" : "you don't" }} have permission to access this
+      page.
+    </p>
+  </div>
+  <div class="row text-center">
+    <p class="text">Please sign in {{ currentUser ? "with a different account" : "" }} and try again.</p>
+  </div>
+  <div class="row text-center mt-4">
+    <p class="text">If you believe this is a mistake, please contact your administrator.</p>
+  </div>
+  <div class="row mt-4">
+    <div *ngIf="currentUser" class="col-2 offset-4">
+      <button mat-button color="warn" (click)="onLogoutClick()">Logout</button>
+    </div>
+    <div class="col-2" [ngClass]="!currentUser ? 'offset-5' : ''">
+      <button mat-button color="primary" (click)="onReturnToMainPageClick()">Return to Main Page</button>
+    </div>
+  </div>
+</div>
