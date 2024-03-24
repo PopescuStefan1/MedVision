@@ -125,21 +125,12 @@ export class AppointmentService {
           const appointments: Appointment[] = [];
 
           querySnapshot.forEach((doc) => {
-            const appointmentData: FirebaseAppointment = doc.data();
+            const firebaseAppointmentData: FirebaseAppointment = doc.data();
 
             // Convert firebase appointment to web app appointment
             const appointment: Appointment = {
-              city: appointmentData.city,
-              email: appointmentData.email,
-              firstName: appointmentData.firstName,
-              lastName: appointmentData.lastName,
-              age: appointmentData.age,
-              sex: appointmentData.sex,
-              medicId: appointmentData.medicId,
-              telephone: appointmentData.telephone,
-              userId: appointmentData.userId,
-              comment: appointmentData.comment,
-              datetime: appointmentData.datetime.toDate(),
+              ...firebaseAppointmentData,
+              datetime: firebaseAppointmentData.datetime.toDate(),
             };
 
             appointments.push(appointment);
