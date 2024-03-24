@@ -31,6 +31,10 @@ export class MakeAppointmentComponent implements OnInit {
   fromDate: Date | undefined;
   isLoadingAppointmentAdd: boolean = false;
 
+  imageUrl: string = "";
+  imageUploaded: boolean = false;
+  uploadedFile?: File;
+
   constructor(
     private appointmentService: AppointmentService,
     private formBuilder: FormBuilder,
@@ -216,6 +220,7 @@ export class MakeAppointmentComponent implements OnInit {
   onSubmit() {
     if (this.appointmentForm.valid) {
       this.isLoadingAppointmentAdd = true;
+
       const appointmentData = this.appointmentForm.value;
       const appointment: Appointment = {
         city: appointmentData.city,
@@ -231,24 +236,79 @@ export class MakeAppointmentComponent implements OnInit {
         comment: appointmentData.comment,
       };
 
-      this.appointmentService.addApointment(appointment).subscribe({
-        next: () => {
-          this.appointmentForm.reset();
-          this.openSnackBar("Successfully created your appointment.");
-        },
-        error: (error) => {
-          this.openSnackBar(`An error occured ${error}`);
-        },
-        complete: () => {
-          this.isLoadingAppointmentAdd = false;
-        },
-      });
+      if (this.imageUploaded && this.uploadedFile) {
+        this.appointmentService
+          // Upload image
+          .uploadImage(this.uploadedFile, "appointment-images")
+          .pipe(
+            switchMap((url) => {
+              // After upload, add the img url to the appointment
+              appointment.imgUrl = url;
+
+              // Add appointment to db
+              return this.appointmentService.addApointment(appointment);
+            })
+          )
+          .subscribe({
+            next: () => {
+              this.appointmentForm.reset();
+              this.openSnackBar("Successfully created your appointment.");
+            },
+            error: (error) => {
+              this.openSnackBar(`An error occured ${error}`);
+            },
+            complete: () => {
+              this.isLoadingAppointmentAdd = false;
+            },
+          });
+      }
+
+      // this.appointmentService.addApointment(appointment).subscribe({
+      //   next: () => {
+      //     this.appointmentForm.reset();
+      //     this.openSnackBar("Successfully created your appointment.");
+      //   },
+      //   error: (error) => {
+      //     this.openSnackBar(`An error occured ${error}`);
+      //   },
+      //   complete: () => {
+      //     this.isLoadingAppointmentAdd = false;
+      //   },
+      // });
     }
   }
+
+  // private handleImageUpload(): void {
+  //   if (this.imageUploaded && this.uploadedFile) {
+  //     this.medicService
+  //       .uploadImage(this.userId, this.uploadedFile, "medic-images")
+  //       .pipe(switchMap((downloadURL) => this.medicService.setMedicImageUrl(this.userId, downloadURL)))
+  //       .subscribe();
+  //   }
+  // }
 
   openSnackBar(message: string) {
     this._snackBar.open(message, undefined, {
       duration: 10000,
     });
+  }
+
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.imageUrl = reader.result as string;
+        this.imageUploaded = true;
+        this.uploadedFile = file;
+        console.log(this.imageUrl, this.imageUploaded, this.uploadedFile);
+      };
+    }
+  }
+
+  removeImage(): void {
+    this.imageUrl = "";
+    this.imageUploaded = false;
   }
 }

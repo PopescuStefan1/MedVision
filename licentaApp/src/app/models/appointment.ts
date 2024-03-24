@@ -10,4 +10,5 @@ export interface Appointment {
   telephone: string;
   email: string;
   comment?: string;
+  imgUrl?: string;
 }

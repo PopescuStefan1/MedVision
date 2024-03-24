@@ -12,4 +12,5 @@ export interface FirebaseAppointment {
   telephone: string;
   email: string;
   comment?: string;
+  imgUrl?: string;
 }

@@ -1,10 +1,11 @@
 import { Injectable } from "@angular/core";
-import { AngularFirestore } from "@angular/fire/compat/firestore";
+import { AngularFirestore, AngularFirestoreDocument } from "@angular/fire/compat/firestore";
 import { Timestamp } from "@angular/fire/firestore";
-import { Observable, Subject, from, map, tap } from "rxjs";
+import { Observable, Subject, catchError, from, map, switchMap, take, tap, throwError } from "rxjs";
 import { Medic } from "../models/medic";
 import { Appointment } from "../models/appointment";
 import { FirebaseAppointment } from "../models/firebase-appointment";
+import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from "@angular/fire/compat/storage";
 
 @Injectable({
   providedIn: "root",
@@ -13,7 +14,7 @@ export class AppointmentService {
   private addAppointmentSubject = new Subject<void>();
   public addAppointment$ = this.addAppointmentSubject.asObservable();
 
-  constructor(private firestore: AngularFirestore) {}
+  constructor(private firestore: AngularFirestore, private storage: AngularFireStorage) {}
 
   getDistinctCities(): Observable<string[]> {
     return this.firestore
@@ -185,5 +186,22 @@ export class AppointmentService {
           return appointments;
         })
       );
+  }
+
+  uploadImage(file: File, path: string): Observable<string> {
+    const storageRef: AngularFireStorageReference = this.storage.ref(`${path}/${new Date().getTime()}${file.name}`);
+    const task: AngularFireUploadTask = storageRef.put(file);
+
+    return from(task).pipe(
+      switchMap(() => {
+        return storageRef.getDownloadURL().pipe(
+          catchError((error) => {
+            console.error("Error getting download URL:", error);
+            return throwError(() => error);
+          })
+        );
+      }),
+      catchError((error) => throwError(() => error))
+    );
   }
 }

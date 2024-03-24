@@ -14,12 +14,12 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
           <div class="row text-center mb-3">
-            <h5>Appointment Details</h5>
+            <h2>Appointment Details</h2>
           </div>
           <div class="row">
             <div class="col-6">
               <div class="row">
-                <h6>Appointment Info</h6>
+                <h4>Appointment Info</h4>
               </div>
               <div class="row">
                 <p><strong>City:</strong> {{ appointment.city }}</p>
@@ -38,7 +38,7 @@
             </div>
             <div class="col-6">
               <div class="row">
-                <h6>Patient Info</h6>
+                <h4>Patient Info</h4>
               </div>
               <div class="row">
                 <p><strong>Patient Name:</strong> {{ appointment.firstName }} {{ appointment.lastName }}</p>
@@ -47,13 +47,23 @@
                 <p><strong>Email:</strong> {{ appointment.email }}</p>
               </div>
               <div class="row">
-                <p><strong>Phone Number:</strong> {{ appointment.telephone }}</p>
+                <p><strong>Phone Number:</strong> +40{{ appointment.telephone }}</p>
               </div>
               <div class="row">
                 <p><strong>Reason:</strong> {{ appointment.comment ? appointment.comment : "No reason given" }}</p>
               </div>
             </div>
           </div>
+          <ng-container *ngIf="appointment.imgUrl">
+            <div class="row">
+              <h4>Uploaded image:</h4>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <img [src]="appointment.imgUrl" alt="Appointment Image" class="w-100" />
+              </div>
+            </div>
+          </ng-container>
         </mat-expansion-panel>
       </ng-container>
     </mat-accordion>
@@ -75,13 +85,13 @@
               {{ appointment.datetime | date }}
             </mat-panel-description>
           </mat-expansion-panel-header>
-          <div class="row text-center mb-3">
-            <h5>Appointment Details</h5>
+          <div class="row mb-3">
+            <h2>Appointment Details</h2>
           </div>
           <div class="row">
             <div class="col-6">
               <div class="row">
-                <h6>Appointment Info</h6>
+                <h4>Appointment Info</h4>
               </div>
               <div class="row">
                 <p><strong>City:</strong> {{ appointment.city }}</p>
@@ -100,7 +110,7 @@
             </div>
             <div class="col-6">
               <div class="row">
-                <h6>Patient Info</h6>
+                <h4>Patient Info</h4>
               </div>
               <div class="row">
                 <p><strong>Patient Name:</strong> {{ appointment.firstName }} {{ appointment.lastName }}</p>
@@ -109,13 +119,23 @@
                 <p><strong>Email:</strong> {{ appointment.email }}</p>
               </div>
               <div class="row">
-                <p><strong>Phone Number:</strong> {{ appointment.telephone }}</p>
+                <p><strong>Phone Number:</strong> +40{{ appointment.telephone }}</p>
               </div>
               <div class="row">
                 <p><strong>Reason:</strong> {{ appointment.comment ? appointment.comment : "No reason given" }}</p>
               </div>
             </div>
           </div>
+          <ng-container *ngIf="appointment.imgUrl">
+            <div class="row">
+              <h4>Uploaded image:</h4>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <img [src]="appointment.imgUrl" alt="Appointment Image" class="w-100" />
+              </div>
+            </div>
+          </ng-container>
         </mat-expansion-panel>
       </ng-container>
     </mat-accordion>
