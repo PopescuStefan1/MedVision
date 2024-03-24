@@ -9,3 +9,9 @@
 .submit-button {
   height: 40px;
 }
+
+.disclaimer {
+  font-size: 14px;
+  color: gray;
+  margin-top: 5px;
+}
