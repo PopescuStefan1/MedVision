@@ -180,6 +180,24 @@
     </mat-form-field>
   </div>
 
+  <div *ngIf="imageUploaded" class="row mt-2 text-center">
+    <img [src]="imageUrl" alt="Appointment image" />
+  </div>
+
+  <div class="row mt-3 mb-3">
+    <button
+      class="add-photo-button"
+      type="button"
+      mat-raised-button
+      [color]="imageUploaded ? 'warn' : 'accent'"
+      (click)="imageUploaded ? removeImage() : fileInput.click()"
+    >
+      {{ imageUploaded ? "Remove image" : "Optional: Add an image." }}
+    </button>
+    <p class="disclaimer">Please only add an image if you believe it will help the medic diagnose you</p>
+    <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file" accept="image/*" />
+  </div>
+
   <div class="row">
     <button
       class="submit-button"
