@@ -148,14 +148,14 @@ export class MedicService {
     const task: AngularFireUploadTask = storageRef.put(file);
 
     return from(task).pipe(
-      switchMap(() =>
-        storageRef.getDownloadURL().pipe(
+      switchMap(() => {
+        return storageRef.getDownloadURL().pipe(
           catchError((error) => {
             console.error("Error getting download URL:", error);
             return throwError(() => error);
           })
-        )
-      ),
+        );
+      }),
       catchError((error) => throwError(() => error))
     );
   }
