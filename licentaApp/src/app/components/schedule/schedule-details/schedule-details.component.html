@@ -50,4 +50,16 @@
   <div class="row">
     <p>{{ data.appointment.comment ? data.appointment.comment : "No reason given" }}</p>
   </div>
+
+  <ng-container *ngIf="data.appointment.imgUrl">
+    <div class="row">
+      <mat-divider></mat-divider>
+    </div>
+    <div class="row mt-2">
+      <h5>Uploaded Image:</h5>
+    </div>
+    <div class="row">
+      <img [src]="data.appointment.imgUrl" alt="Appointment Image" />
+    </div>
+  </ng-container>
 </div>
