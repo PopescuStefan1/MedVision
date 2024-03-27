@@ -29,6 +29,7 @@ import { DatePipe } from "@angular/common";
 import { ScheduleDetailsComponent } from "./components/schedule/schedule-details/schedule-details.component";
 import { MedicProfileComponent } from "./components/medics/medic-profile/medic-profile.component";
 import { NotAuthorizedComponent } from './components/not-authorized/not-authorized.component';
+import { ContactComponent } from './components/contact/contact.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { NotAuthorizedComponent } from './components/not-authorized/not-authoriz
     ScheduleDetailsComponent,
     MedicProfileComponent,
     NotAuthorizedComponent,
+    ContactComponent,
   ],
   imports: [
     BrowserModule,
