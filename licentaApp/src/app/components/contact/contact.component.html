@@ -1,0 +1,126 @@
+<div class="container p-4">
+  <div class="row text-center mt-5">
+    <h1>Contact us</h1>
+  </div>
+  <div class="row text-center">
+    <div class="col-12 col-md-6 offset-md-3 form-subtitle">
+      <p>
+        Got any question about our website or our services? Please fill the following form and we will try to reach you
+        as soon as we can.
+      </p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-7">
+      <form class="p-4 me-4" [formGroup]="contactForm">
+        <div class="row">
+          <mat-form-field appearance="outline" class="col-6" [floatLabel]="'always'">
+            <mat-label>First name</mat-label>
+            <input matInput formControlName="firstName" placeholder="First name" />
+            <mat-error
+              *ngIf="contactForm.get('firstName')?.hasError('required') && contactForm.get('firstName')?.touched"
+            >
+              Please input your name
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-6" [floatLabel]="'always'">
+            <mat-label>Last name</mat-label>
+            <input matInput formControlName="lastName" placeholder="Last name" />
+            <mat-error
+              *ngIf="contactForm.get('firstName')?.hasError('required') && contactForm.get('firstName')?.touched"
+            >
+              Please input your name
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field appearance="outline" [floatLabel]="'always'">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" placeholder="you@example.com" />
+            <mat-error *ngIf="contactForm.get('email')?.hasError('required') && contactForm.get('email')?.touched">
+              Please input your email
+            </mat-error>
+            <mat-error *ngIf="contactForm.get('email')?.hasError('email') && contactForm.get('email')?.touched">
+              Please input a valid email address
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field appearance="outline" [floatLabel]="'always'">
+            <mat-label>Phone Number</mat-label>
+            <span matPrefix>+40 &nbsp;</span>
+            <input matInput type="tel" formControlName="phoneNumber" placeholder="777-777-777" maxlength="9" />
+            <mat-error
+              *ngIf="contactForm.get('phoneNumber')?.hasError('required') && contactForm.get('phoneNumber')?.touched"
+            >
+              Please input your phone number
+            </mat-error>
+            <mat-error
+              *ngIf="contactForm.get('phoneNumber')?.hasError('pattern') && contactForm.get('phoneNumber')?.touched"
+            >
+              Please input a valid phone number
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field appearance="outline" [floatLabel]="'always'">
+            <mat-label>Message</mat-label>
+            <textarea rows="7" matInput formControlName="message" placeholder="Leave us a message..."></textarea>
+            <mat-hint>Please be as descriptive as possible</mat-hint>
+            <mat-error *ngIf="contactForm.get('message')?.hasError('required') && contactForm.get('message')?.touched">
+              Please input a message
+            </mat-error>
+            <mat-error *ngIf="contactForm.get('message')?.hasError('minlength') && contactForm.get('message')?.touched">
+              Please tell us a bit more about the problem
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="row ps-3 pt-3">
+          <h6>Please select all that apply</h6>
+        </div>
+        <div class="row ps-3">
+          <div class="col-5">
+            <mat-checkbox formControlName="medicProblem" color="primary">Medic page issues</mat-checkbox>
+          </div>
+          <div class="col">
+            <mat-checkbox formControlName="accountProblem" color="primary">Account issues</mat-checkbox>
+          </div>
+        </div>
+        <div class="row mt-2 ps-3">
+          <div class="col-5">
+            <mat-checkbox formControlName="appointmentProblem" color="primary">Appointment issues</mat-checkbox>
+          </div>
+          <div class="col">
+            <mat-checkbox formControlName="scheduleProblem" color="primary">
+              Schedule issues <em>(only for medic accounts)</em>
+            </mat-checkbox>
+          </div>
+        </div>
+        <div class="row mt-2 mb-2 ps-3">
+          <div class="col-5">
+            <mat-checkbox formControlName="otherProblem" color="primary">Other issues</mat-checkbox>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="row mt-2 ps-3">
+          <div class="col-5">
+            <mat-checkbox formControlName="medicJoin" color="primary">I am a medic and want to join</mat-checkbox>
+          </div>
+          <div class="col">
+            <mat-checkbox formControlName="otherReason" color="primary">Other</mat-checkbox>
+          </div>
+        </div>
+
+        <div class="row ps-4 mt-4 me-1">
+          <button class="p-1 fs-6" mat-raised-button color="primary" type="submit" [disabled]="contactForm.invalid">
+            Send message
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="col-5" style="background-color: gray"></div>
+  </div>
+</div>
