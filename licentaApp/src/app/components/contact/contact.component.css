@@ -1,3 +1,7 @@
 .form-subtitle {
   color: darkslategray;
 }
+
+p.form-subtitle {
+  margin: 0 0 8px;
+}
