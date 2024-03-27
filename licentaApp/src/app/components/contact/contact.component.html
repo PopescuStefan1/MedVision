@@ -1,0 +1,170 @@
+<div class="container p-4">
+  <div class="row text-center mt-5">
+    <h1>Contact us</h1>
+  </div>
+  <div class="row text-center">
+    <div class="col-12 col-md-6 offset-md-3 form-subtitle">
+      <h6>
+        Got any question about our website or our services? Please fill the following form and we will try to reach you
+        as soon as we can.
+      </h6>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-8">
+      <form class="p-4 me-4" [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <mat-form-field appearance="outline" class="col-6" [floatLabel]="'always'">
+            <mat-label>First name</mat-label>
+            <input matInput formControlName="firstName" placeholder="First name" />
+            <mat-error
+              *ngIf="contactForm.get('firstName')?.hasError('required') && contactForm.get('firstName')?.touched"
+            >
+              Please input your name
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-6" [floatLabel]="'always'">
+            <mat-label>Last name</mat-label>
+            <input matInput formControlName="lastName" placeholder="Last name" />
+            <mat-error
+              *ngIf="contactForm.get('firstName')?.hasError('required') && contactForm.get('firstName')?.touched"
+            >
+              Please input your name
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field appearance="outline" [floatLabel]="'always'">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" placeholder="you@example.com" />
+            <mat-error *ngIf="contactForm.get('email')?.hasError('required') && contactForm.get('email')?.touched">
+              Please input your email
+            </mat-error>
+            <mat-error *ngIf="contactForm.get('email')?.hasError('email') && contactForm.get('email')?.touched">
+              Please input a valid email address
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field appearance="outline" [floatLabel]="'always'">
+            <mat-label>Phone Number</mat-label>
+            <span matPrefix>+40 &nbsp;</span>
+            <input matInput type="tel" formControlName="phoneNumber" placeholder="777-777-777" maxlength="9" />
+            <mat-error
+              *ngIf="contactForm.get('phoneNumber')?.hasError('required') && contactForm.get('phoneNumber')?.touched"
+            >
+              Please input your phone number
+            </mat-error>
+            <mat-error
+              *ngIf="contactForm.get('phoneNumber')?.hasError('pattern') && contactForm.get('phoneNumber')?.touched"
+            >
+              Please input a valid phone number
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field appearance="outline" [floatLabel]="'always'">
+            <mat-label>Message</mat-label>
+            <textarea rows="7" matInput formControlName="message" placeholder="Leave us a message..."></textarea>
+            <mat-hint>Please be as descriptive as possible</mat-hint>
+            <mat-error *ngIf="contactForm.get('message')?.hasError('required') && contactForm.get('message')?.touched">
+              Please input a message
+            </mat-error>
+            <mat-error *ngIf="contactForm.get('message')?.hasError('minlength') && contactForm.get('message')?.touched">
+              Please tell us a bit more about the problem
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="row ps-3 pt-3">
+          <h6>Please select all that apply</h6>
+        </div>
+        <div class="row ps-3">
+          <div class="col-5">
+            <mat-checkbox formControlName="medicProblem" color="primary">Medic page issues</mat-checkbox>
+          </div>
+          <div class="col">
+            <mat-checkbox formControlName="accountProblem" color="primary">Account issues</mat-checkbox>
+          </div>
+        </div>
+        <div class="row mt-2 ps-3">
+          <div class="col-5">
+            <mat-checkbox formControlName="appointmentProblem" color="primary">Appointment issues</mat-checkbox>
+          </div>
+          <div class="col">
+            <mat-checkbox formControlName="scheduleProblem" color="primary">
+              Schedule issues <em>(only for medic accounts)</em>
+            </mat-checkbox>
+          </div>
+        </div>
+        <div class="row mt-2 mb-2 ps-3">
+          <div class="col-5">
+            <mat-checkbox formControlName="otherProblem" color="primary">Other issues</mat-checkbox>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="row mt-2 ps-3">
+          <div class="col-5">
+            <mat-checkbox formControlName="medicJoin" color="primary">I am a medic and want to join</mat-checkbox>
+          </div>
+          <div class="col">
+            <mat-checkbox formControlName="otherReason" color="primary">Other</mat-checkbox>
+          </div>
+        </div>
+
+        <div class="row ps-4 mt-4 me-1">
+          <button class="p-1 fs-6" mat-raised-button color="primary" type="submit" [disabled]="contactForm.invalid">
+            Send message
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="col-4 mt-4 pe-4">
+      <div class="row">
+        <h2>Contact Information</h2>
+      </div>
+      <div class="row">
+        <p class="form-subtitle">If you prefer, you can speak directly to us through one of the following channels</p>
+      </div>
+      <div class="row mt-4">
+        <h4>Email us</h4>
+      </div>
+      <div class="row">
+        <p class="form-subtitle">
+          Our inbox is open 24/7. Shoot us a mail and we will get back to you as soon as possible.
+        </p>
+      </div>
+      <div class="row">
+        <div class="col">
+          <a mat-button href="mailto:stefan.ro95@gmail.com"><mat-icon>outgoing_mail</mat-icon> stefan.ro95@gmail.com</a>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <h4>Call us</h4>
+      </div>
+      <div class="row">
+        <p class="form-subtitle">Call our team Mon-Fri from 8am to 5pm</p>
+      </div>
+      <div class="row">
+        <div class="col">
+          <a mat-button href="tel:+40723254030"><mat-icon>phone_in_talk</mat-icon> +40-723-254-030</a>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <h4>Visit us</h4>
+      </div>
+      <div class="row">
+        <p class="form-subtitle">If you want to chat with us in person, you can find us here:</p>
+      </div>
+      <div class="row">
+        <div class="col">
+          <a mat-button href="https://maps.app.goo.gl/D27PT2GQs2UAb58e9">
+            <mat-icon>location_on</mat-icon> Strada Clinicii 7, Etajul 2, Brașov, România
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

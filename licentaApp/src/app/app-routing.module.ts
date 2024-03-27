@@ -13,6 +13,7 @@ import { ScheduleGuard } from "./guards/schedule.guard";
 import { MedicProfileComponent } from "./components/medics/medic-profile/medic-profile.component";
 import { NotAuthorizedComponent } from "./components/not-authorized/not-authorized.component";
 import { MedicPageGuard } from "./guards/medic-page.guard";
+import { ContactComponent } from "./components/contact/contact.component";
 
 const routes: Routes = [
   { path: "", title: "Ditama Clinic - Home", component: HomeComponent },
@@ -57,6 +58,7 @@ const routes: Routes = [
     canActivate: [ProfileGuard],
   },
   { path: "profile", redirectTo: "profile/ " },
+  { path: "contact", component: ContactComponent },
   { path: "not-authorized", title: "Diatma Clinic - Unauthorized Access", component: NotAuthorizedComponent },
   { path: "**", redirectTo: "" },
 ];
