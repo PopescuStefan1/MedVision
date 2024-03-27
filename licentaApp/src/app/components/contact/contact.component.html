@@ -13,7 +13,7 @@
 
   <div class="row">
     <div class="col-7">
-      <form class="p-4 me-4" [formGroup]="contactForm">
+      <form class="p-4 me-4" [formGroup]="contactForm" (ngSubmit)="onSubmit()">
         <div class="row">
           <mat-form-field appearance="outline" class="col-6" [floatLabel]="'always'">
             <mat-label>First name</mat-label>
