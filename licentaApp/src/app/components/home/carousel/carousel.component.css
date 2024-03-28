@@ -49,7 +49,7 @@
   position: absolute;
   height: 100%;
   width: 100%;
-  background-image: linear-gradient(transparent 30%, black);
+  background-image: linear-gradient(transparent 30%, rgba(0, 0, 0, 0.8) 80%, rgba(0, 0, 0, 0.8));
   z-index: 2;
 }
 
