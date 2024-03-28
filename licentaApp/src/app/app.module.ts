@@ -30,6 +30,7 @@ import { ScheduleDetailsComponent } from "./components/schedule/schedule-details
 import { MedicProfileComponent } from "./components/medics/medic-profile/medic-profile.component";
 import { NotAuthorizedComponent } from './components/not-authorized/not-authorized.component';
 import { ContactComponent } from './components/contact/contact.component';
+import { AboutComponent } from './components/about/about.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { ContactComponent } from './components/contact/contact.component';
     MedicProfileComponent,
     NotAuthorizedComponent,
     ContactComponent,
+    AboutComponent,
   ],
   imports: [
     BrowserModule,
