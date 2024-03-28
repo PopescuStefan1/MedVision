@@ -31,17 +31,18 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding-bottom: 8%;
+  padding-bottom: 4%;
 }
 
 .image-title {
   font-size: 64px;
   font-weight: 500;
-  margin-bottom: 8%;
+  margin-bottom: 4%;
 }
 
 .image-content {
   font-size: 32px;
+  margin-bottom: 4%;
 }
 
 .div-container {
@@ -66,4 +67,8 @@
   color: #222;
   font-size: 20px;
   line-height: 2;
+}
+
+.arrow-icon {
+  transform: scale(2.5);
 }
