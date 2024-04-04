@@ -1,21 +1,23 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from "@angular/forms";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { MatSelectChange } from "@angular/material/select";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
-import { Observable, map, switchMap } from "rxjs";
+import { Observable, Subscription, map, switchMap } from "rxjs";
 import { Appointment } from "src/app/models/appointment";
 import { AppointmentTime } from "src/app/models/appointment-time";
 import { Medic } from "src/app/models/medic";
+import { UserProfile } from "src/app/models/user-profile";
 import { AppointmentService } from "src/app/services/appointment.service";
+import { UserService } from "src/app/services/user.service";
 
 @Component({
   selector: "app-make-appointment",
   templateUrl: "./make-appointment.component.html",
   styleUrls: ["./make-appointment.component.css"],
 })
-export class MakeAppointmentComponent implements OnInit {
+export class MakeAppointmentComponent implements OnInit, OnDestroy {
   @Input() userId: string = "";
   city?: string;
   specialty?: string;
@@ -30,6 +32,9 @@ export class MakeAppointmentComponent implements OnInit {
   availableTimes$: Observable<any> = new Observable();
   fromDate: Date | undefined;
   isLoadingAppointmentAdd: boolean = false;
+  hasProfileInfo: boolean = false;
+  userData?: UserProfile;
+  profileSub: Subscription = new Subscription();
 
   imageUrl: string = "";
   imageUploaded: boolean = false;
@@ -39,7 +44,8 @@ export class MakeAppointmentComponent implements OnInit {
     private appointmentService: AppointmentService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private userService: UserService
   ) {
     this.cities$ = this.appointmentService.getDistinctCities();
   }
@@ -47,13 +53,25 @@ export class MakeAppointmentComponent implements OnInit {
   ngOnInit(): void {
     this.formLoaded = false;
     this.getRouteParams();
-    this.createAppointmentForm();
 
-    if (this.city && this.specialty && this.medicId) {
-      this.autoFillWithRouteParams();
-    } else {
-      this.formLoaded = true;
-    }
+    this.profileSub = this.userService.getUserData(this.userId).subscribe((userData) => {
+      if (userData.firstName) {
+        // If the profile has been filled by the user enable autofill button
+        this.hasProfileInfo = true;
+        this.userData = userData;
+      }
+      this.createAppointmentForm();
+
+      if (this.city && this.specialty && this.medicId) {
+        this.autoFillWithRouteParams();
+      } else {
+        this.formLoaded = true;
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.profileSub.unsubscribe();
   }
 
   private getRouteParams() {
@@ -310,5 +328,35 @@ export class MakeAppointmentComponent implements OnInit {
   removeImage(): void {
     this.imageUrl = "";
     this.imageUploaded = false;
+  }
+
+  onAutofillClick(): void {
+    this.appointmentForm.get("firstName")?.setValue(this.userData?.firstName);
+    this.appointmentForm.get("lastName")?.setValue(this.userData?.lastName);
+    this.appointmentForm.get("email")?.setValue(this.userData?.email);
+
+    const sexValue = this.userData?.sex![0].toUpperCase().concat(this.userData?.sex!.slice(1));
+    this.appointmentForm.get("sex")?.setValue(sexValue);
+
+    const age = this.calculateAge(this.userData?.dateOfBirth!);
+    this.appointmentForm.get("age")?.setValue(age);
+  }
+
+  private calculateAge(birthDate: Date): number {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const birthYear = birthDate.getFullYear();
+
+    let age: number = currentYear - birthYear;
+
+    // Check if the birthday has occurred this year
+    if (
+      currentDate.getMonth() < birthDate.getMonth() ||
+      (currentDate.getMonth() === birthDate.getMonth() && currentDate.getDate() < birthDate.getDate())
+    ) {
+      age--;
+    }
+
+    return age;
   }
 }

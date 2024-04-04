@@ -10,7 +10,7 @@
   </div>
 
   <div class="row">
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="col-6">
       <mat-label>City</mat-label>
       <mat-select formControlName="city" (selectionChange)="onCityChange($event)">
         <ng-template *ngIf="!(cities$ | async); else loaded">
@@ -24,9 +24,7 @@
         This field is required
       </mat-error>
     </mat-form-field>
-  </div>
-  <div class="row">
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="col-6">
       <mat-label>Specialty</mat-label>
       <mat-select
         formControlName="specialty"
@@ -44,6 +42,7 @@
       </mat-error>
     </mat-form-field>
   </div>
+  <div class="row"></div>
   <div class="row">
     <mat-form-field appearance="outline">
       <mat-label>Medic</mat-label>
@@ -94,8 +93,26 @@
       </mat-error>
     </mat-form-field>
   </div>
+
+  <mat-divider></mat-divider>
+  <div class="row mt-2">
+    <div class="col-4 offset-4">
+      <button
+        mat-button
+        type="button"
+        color="primary"
+        [disabled]="!hasProfileInfo"
+        matTooltip="To enable autofill, please fill out your personal information on your profile page"
+        [matTooltipDisabled]="hasProfileInfo"
+        (click)="onAutofillClick()"
+      >
+        Autofill information
+      </button>
+    </div>
+  </div>
+
   <div class="row">
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="col-6">
       <mat-label>First Name</mat-label>
       <input matInput type="text" formControlName="firstName" />
       <mat-error
@@ -104,52 +121,13 @@
         This field is required
       </mat-error>
     </mat-form-field>
-  </div>
-  <div class="row">
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="col-6">
       <mat-label>Last Name</mat-label>
       <input matInput type="text" formControlName="lastName" />
       <mat-error
         *ngIf="appointmentForm.get('lastName')?.hasError('required') && appointmentForm.get('lastName')?.touched"
       >
         This field is required
-      </mat-error>
-    </mat-form-field>
-  </div>
-  <div class="row">
-    <mat-form-field appearance="outline" class="col-6">
-      <mat-label>Age</mat-label>
-      <input matInput type="number" min="0" max="120" formControlName="age" />
-      <mat-error *ngIf="appointmentForm.get('age')?.hasError('required') && appointmentForm.get('age')?.touched">
-        This field is required
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="col-6">
-      <mat-label>Sex</mat-label>
-      <mat-select formControlName="sex">
-        <mat-option value="Male">Male </mat-option>
-        <mat-option value="Female">Female </mat-option>
-        <mat-option value="Other">Other </mat-option>
-      </mat-select>
-      <mat-error *ngIf="appointmentForm.get('sex')?.hasError('required') && appointmentForm.get('sex')?.touched">
-        This field is required
-      </mat-error>
-    </mat-form-field>
-  </div>
-  <div class="row">
-    <mat-form-field appearance="outline">
-      <mat-label>Phone Number</mat-label>
-      <span matPrefix>+40 &nbsp;</span>
-      <input matInput type="tel" formControlName="telephone" placeholder="720123456" maxlength="9" />
-      <mat-error
-        *ngIf="appointmentForm.get('telephone')?.hasError('required') && appointmentForm.get('telephone')?.touched"
-      >
-        This field is required
-      </mat-error>
-      <mat-error
-        *ngIf="appointmentForm.get('telephone')?.hasError('pattern') && appointmentForm.get('telephone')?.touched"
-      >
-        Please input a valid phone number
       </mat-error>
     </mat-form-field>
   </div>
@@ -162,6 +140,41 @@
       </mat-error>
       <mat-error *ngIf="appointmentForm.get('email')?.hasError('email') && appointmentForm.get('email')?.touched">
         Please input a valid email
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field appearance="outline" class="col-4">
+      <mat-label>Sex</mat-label>
+      <mat-select formControlName="sex">
+        <mat-option value="Male">Male </mat-option>
+        <mat-option value="Female">Female </mat-option>
+        <mat-option value="Other">Other </mat-option>
+      </mat-select>
+      <mat-error *ngIf="appointmentForm.get('sex')?.hasError('required') && appointmentForm.get('sex')?.touched">
+        This field is required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col-4">
+      <mat-label>Age</mat-label>
+      <input matInput type="number" min="0" max="120" formControlName="age" />
+      <mat-error *ngIf="appointmentForm.get('age')?.hasError('required') && appointmentForm.get('age')?.touched">
+        This field is required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col-4">
+      <mat-label>Phone Number</mat-label>
+      <span matPrefix>+40 &nbsp;</span>
+      <input matInput type="tel" formControlName="telephone" placeholder="720123456" maxlength="9" />
+      <mat-error
+        *ngIf="appointmentForm.get('telephone')?.hasError('required') && appointmentForm.get('telephone')?.touched"
+      >
+        This field is required
+      </mat-error>
+      <mat-error
+        *ngIf="appointmentForm.get('telephone')?.hasError('pattern') && appointmentForm.get('telephone')?.touched"
+      >
+        Please input a valid phone number
       </mat-error>
     </mat-form-field>
   </div>
