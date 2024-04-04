@@ -93,8 +93,26 @@
       </mat-error>
     </mat-form-field>
   </div>
+
+  <mat-divider></mat-divider>
+  <div class="row mt-2">
+    <div class="col-4 offset-4">
+      <button
+        mat-button
+        type="button"
+        color="primary"
+        [disabled]="!hasProfileInfo"
+        matTooltip="To enable autofill, please fill out your personal information on your profile page"
+        [matTooltipDisabled]="hasProfileInfo"
+        (click)="onAutofillClick()"
+      >
+        Autofill information
+      </button>
+    </div>
+  </div>
+
   <div class="row">
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="col-6">
       <mat-label>First Name</mat-label>
       <input matInput type="text" formControlName="firstName" />
       <mat-error
@@ -103,15 +121,25 @@
         This field is required
       </mat-error>
     </mat-form-field>
-  </div>
-  <div class="row">
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="col-6">
       <mat-label>Last Name</mat-label>
       <input matInput type="text" formControlName="lastName" />
       <mat-error
         *ngIf="appointmentForm.get('lastName')?.hasError('required') && appointmentForm.get('lastName')?.touched"
       >
         This field is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" placeholder="stefanpopescu@gmail.com" />
+      <mat-error *ngIf="appointmentForm.get('email')?.hasError('required') && appointmentForm.get('email')?.touched">
+        This field is required
+      </mat-error>
+      <mat-error *ngIf="appointmentForm.get('email')?.hasError('email') && appointmentForm.get('email')?.touched">
+        Please input a valid email
       </mat-error>
     </mat-form-field>
   </div>
@@ -147,19 +175,6 @@
         *ngIf="appointmentForm.get('telephone')?.hasError('pattern') && appointmentForm.get('telephone')?.touched"
       >
         Please input a valid phone number
-      </mat-error>
-    </mat-form-field>
-  </div>
-  <div class="row"></div>
-  <div class="row">
-    <mat-form-field appearance="outline">
-      <mat-label>Email</mat-label>
-      <input matInput type="email" formControlName="email" placeholder="stefanpopescu@gmail.com" />
-      <mat-error *ngIf="appointmentForm.get('email')?.hasError('required') && appointmentForm.get('email')?.touched">
-        This field is required
-      </mat-error>
-      <mat-error *ngIf="appointmentForm.get('email')?.hasError('email') && appointmentForm.get('email')?.touched">
-        Please input a valid email
       </mat-error>
     </mat-form-field>
   </div>
