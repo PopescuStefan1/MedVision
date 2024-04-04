@@ -10,7 +10,7 @@
   </div>
 
   <div class="row">
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="col-6">
       <mat-label>City</mat-label>
       <mat-select formControlName="city" (selectionChange)="onCityChange($event)">
         <ng-template *ngIf="!(cities$ | async); else loaded">
@@ -24,9 +24,7 @@
         This field is required
       </mat-error>
     </mat-form-field>
-  </div>
-  <div class="row">
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="col-6">
       <mat-label>Specialty</mat-label>
       <mat-select
         formControlName="specialty"
@@ -44,6 +42,7 @@
       </mat-error>
     </mat-form-field>
   </div>
+  <div class="row"></div>
   <div class="row">
     <mat-form-field appearance="outline">
       <mat-label>Medic</mat-label>
@@ -117,14 +116,7 @@
     </mat-form-field>
   </div>
   <div class="row">
-    <mat-form-field appearance="outline" class="col-6">
-      <mat-label>Age</mat-label>
-      <input matInput type="number" min="0" max="120" formControlName="age" />
-      <mat-error *ngIf="appointmentForm.get('age')?.hasError('required') && appointmentForm.get('age')?.touched">
-        This field is required
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="col-6">
+    <mat-form-field appearance="outline" class="col-4">
       <mat-label>Sex</mat-label>
       <mat-select formControlName="sex">
         <mat-option value="Male">Male </mat-option>
@@ -135,9 +127,14 @@
         This field is required
       </mat-error>
     </mat-form-field>
-  </div>
-  <div class="row">
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="col-4">
+      <mat-label>Age</mat-label>
+      <input matInput type="number" min="0" max="120" formControlName="age" />
+      <mat-error *ngIf="appointmentForm.get('age')?.hasError('required') && appointmentForm.get('age')?.touched">
+        This field is required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col-4">
       <mat-label>Phone Number</mat-label>
       <span matPrefix>+40 &nbsp;</span>
       <input matInput type="tel" formControlName="telephone" placeholder="720123456" maxlength="9" />
@@ -153,6 +150,7 @@
       </mat-error>
     </mat-form-field>
   </div>
+  <div class="row"></div>
   <div class="row">
     <mat-form-field appearance="outline">
       <mat-label>Email</mat-label>
