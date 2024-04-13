@@ -241,7 +241,7 @@ export class ScheduleTableComponent implements OnChanges, OnInit, OnDestroy {
   onAppointmentClick(appointment: Appointment): void {
     this.dialog.open(ScheduleDetailsComponent, {
       data: { appointment: appointment, appointmentDuration: this.appointmentDuration },
-      maxWidth: "800px",
+      width: "800px",
     });
   }
 
