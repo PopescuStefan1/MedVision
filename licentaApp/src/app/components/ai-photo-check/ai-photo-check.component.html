@@ -1,16 +1,11 @@
 <div class="container mt-5">
   <div class="row text-center">
-    <h1>Do you have a spot or a lesion on your skin that worries you?</h1>
+    <h1>Do you have a spot, bump or lesion on your skin?</h1>
   </div>
   <div class="row text-center">
-    <h5>Upload a photo of it and our cutting edge AI will tell you exactly what it is!</h5>
+    <h5>Upload a photo of it and our cutting edge AI will attempt to tell you what it is!</h5>
   </div>
 
-  <div *ngIf="imageUrl" class="row mt-5 text-center">
-    <div class="col-6 offset-3">
-      <img [src]="imageUrl" class="image" />
-    </div>
-  </div>
   <div *ngIf="!imageUrl" class="row mt-5">
     <div class="col-6 offset-3">
       <div class="dropzone" ngClass="" appFileDragNDropDirective (filesChangeEmiter)="onFileDrop($event)">
@@ -24,6 +19,11 @@
   </div>
 
   <ng-container *ngIf="imageUrl">
+    <div class="row mt-5 text-center">
+      <div class="col-6 offset-3">
+        <img [src]="imageUrl" class="image" />
+      </div>
+    </div>
     <div class="row mt-3">
       <div class="col-6 offset-3 text-center">
         <input type="file" name="file" id="file" (change)="onFileChange($event)" #fileInput accept="image/*" />
