@@ -1,0 +1,19 @@
+<div class="container mt-5">
+  <div class="row text-center">
+    <h1>Do you have a spot or a bump on your skin that worries you?</h1>
+  </div>
+  <div class="row text-center">
+    <h5>Upload a photo of it and our cutting edge AI will tell you exactly what it is!</h5>
+  </div>
+  <div class="row mt-5">
+    <div class="col-6 offset-3">
+      <div class="dropzone" ngClass="" appFileDragNDropDirective (filesChangeEmiter)="onFileDrop($event)">
+        <input type="file" name="file" id="file" (change)="onFileChange($event)" #fileInput />
+        <button mat-raised-button color="accent" style="font-size: large" (click)="fileInput.click()">
+          <mat-icon>upload_file</mat-icon> Select your file
+        </button>
+        <label for="file"> or Drop it here! </label>
+      </div>
+    </div>
+  </div>
+</div>
