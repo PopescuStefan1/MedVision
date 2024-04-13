@@ -5,8 +5,15 @@
   <div class="row text-center">
     <h5>Upload a photo of it and our cutting edge AI will attempt to tell you what it is!</h5>
   </div>
+  <div class="row mt-2">
+    <div class="col text-center">
+      <h6 class="help d-inline-block" (click)="openHelpDialog()">
+        <div class="d-flex align-items-center gap-1"><span>How to use this feature</span><mat-icon>help</mat-icon></div>
+      </h6>
+    </div>
+  </div>
 
-  <div *ngIf="!imageUrl" class="row mt-5">
+  <div *ngIf="!imageUrl" class="row mt-3">
     <div class="col-6 offset-3">
       <div class="dropzone" ngClass="" appFileDragNDropDirective (filesChangeEmiter)="onFileDrop($event)">
         <input type="file" name="file" id="file" (change)="onFileChange($event)" #fileInput accept="image/*" />

@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { DescriptionDialogComponent } from "./description-dialog/description-dialog.component";
+import { HelpDialogComponent } from "./help-dialog/help-dialog.component";
 
 @Component({
   selector: "app-ai-photo-check",
@@ -49,7 +50,7 @@ export class AIPhotoCheckComponent implements OnInit {
       shortName: "mel",
       value: 0.003,
       description:
-        "Melanoma is a type of skin cancer that originates in melanocytes, the cells responsible for producing melanin, the pigment that gives skin its color.",
+        "Melanoma is a type of skin cancer that originates in melanocytes, the cells responsible for producing melanin, the pigment that gives skin its color. Melanoma is a potentially serious form of skin cancer that requires prompt diagnosis and treatment for the best outcome.",
       needsConsult: true,
     },
     {
@@ -112,9 +113,15 @@ export class AIPhotoCheckComponent implements OnInit {
   }
 
   openDescription(name: string, description: string, needsConsult: boolean): void {
-    const dialogRef = this.dialog.open(DescriptionDialogComponent, {
+    this.dialog.open(DescriptionDialogComponent, {
       width: "600px",
       data: { name: name, description: description, needsConsult: needsConsult },
+    });
+  }
+
+  openHelpDialog(): void {
+    this.dialog.open(HelpDialogComponent, {
+      width: "600px",
     });
   }
 }

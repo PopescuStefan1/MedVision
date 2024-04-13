@@ -46,3 +46,17 @@ input[type="file"] {
   font-size: 14px;
   margin: 0;
 }
+
+.help {
+  font-style: italic;
+  border-bottom: dotted 1px var(--primary);
+  color: var(--primary);
+  opacity: 0.75;
+  cursor: pointer;
+  padding-left: 1px;
+}
+
+.help:hover {
+  border-bottom: solid 1px var(--primary);
+  opacity: 1;
+}
