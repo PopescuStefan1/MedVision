@@ -34,6 +34,7 @@ import { AboutComponent } from './components/about/about.component';
 import { AIPhotoCheckComponent } from './components/ai-photo-check/ai-photo-check.component';
 import { FileDragNDropDirectiveDirective } from './directives/file-drag-ndrop-directive.directive';
 import { DescriptionDialogComponent } from './components/ai-photo-check/description-dialog/description-dialog.component';
+import { HelpDialogComponent } from './components/ai-photo-check/help-dialog/help-dialog.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { DescriptionDialogComponent } from './components/ai-photo-check/descript
     AIPhotoCheckComponent,
     FileDragNDropDirectiveDirective,
     DescriptionDialogComponent,
+    HelpDialogComponent,
   ],
   imports: [
     BrowserModule,
