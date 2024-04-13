@@ -32,3 +32,17 @@ input[type="file"] {
 .result-value {
   font-size: 24px;
 }
+
+.disclaimer-title {
+  color: gray;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.disclaimer-content {
+  color: gray;
+  font-style: italic;
+  font-size: 14px;
+  margin: 0;
+}
