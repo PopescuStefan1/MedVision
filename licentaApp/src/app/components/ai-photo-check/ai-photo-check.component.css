@@ -1,0 +1,15 @@
+.dropzone {
+  height: 200px;
+  display: flex;
+  width: 100%;
+  background-color: #eee;
+  border: dotted 2px #aaa;
+  border-radius: 24px;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+input[type="file"] {
+  display: none;
+}
