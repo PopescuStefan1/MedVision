@@ -1,0 +1,12 @@
+<h2>{{ data.name }}</h2>
+<h5 [style.color]="data.needsConsult ? ' red' : 'orange'">
+  {{
+    data.needsConsult
+      ? "SETTING UP A CONSULT IS HIGHLY RECOMMENDED!"
+      : "Setting up a consult is recommended if the lesion is bothersome or changes in any way"
+  }}
+</h5>
+
+<mat-divider class="mt-3 mb-3"></mat-divider>
+
+<p>{{ data.description }}</p>

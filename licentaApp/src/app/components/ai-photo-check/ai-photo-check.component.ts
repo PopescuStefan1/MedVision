@@ -1,4 +1,6 @@
 import { Component, OnInit } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
+import { DescriptionDialogComponent } from "./description-dialog/description-dialog.component";
 
 @Component({
   selector: "app-ai-photo-check",
@@ -56,7 +58,7 @@ export class AIPhotoCheckComponent implements OnInit {
       value: 0.996,
       description:
         "Melanocytic nevi, commonly known as moles, are benign growths on the skin that develop when melanocytes (pigment-producing cells) grow in clusters. Although most moles are benign, it's essential to monitor them for any changes that could indicate skin cancer, such as melanoma.",
-      needsConsult: true,
+      needsConsult: false,
     },
     {
       name: "Vascular lesion",
@@ -68,7 +70,7 @@ export class AIPhotoCheckComponent implements OnInit {
     },
   ];
 
-  constructor() {}
+  constructor(public dialog: MatDialog) {}
 
   ngOnInit(): void {}
 
@@ -109,5 +111,10 @@ export class AIPhotoCheckComponent implements OnInit {
     return sortedResults.slice(0, 3);
   }
 
-  openDescription(name: string, description: string, needsConsult: boolean): void {}
+  openDescription(name: string, description: string, needsConsult: boolean): void {
+    const dialogRef = this.dialog.open(DescriptionDialogComponent, {
+      width: "600px",
+      data: { name: name, description: description, needsConsult: needsConsult },
+    });
+  }
 }
