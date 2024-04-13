@@ -13,3 +13,22 @@
 input[type="file"] {
   display: none;
 }
+
+.image {
+  max-width: 100%;
+  max-height: 200px;
+}
+
+.results-div {
+  background-color: var(--primary);
+  color: white;
+  border-radius: 24px;
+}
+
+.result-name {
+  font-size: 24px;
+}
+
+.result-value {
+  font-size: 24px;
+}
