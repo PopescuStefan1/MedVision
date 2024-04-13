@@ -48,7 +48,10 @@
           </div>
           <div *ngFor="let result of getTopResults()" class="row">
             <div class="d-flex gap-2 fs-5 align-items-center">
-              <span (click)="openDescription(result.name, result.description, result.needsConsult)">
+              <span
+                (click)="openDescription(result.name, result.description, result.needsConsult)"
+                style="cursor: pointer"
+              >
                 {{ result.name }} ({{ result.shortName }}): <strong>{{ result.value * 100 }}%</strong>
               </span>
               <button
