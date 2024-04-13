@@ -260,6 +260,7 @@ export class MakeAppointmentComponent implements OnInit, OnDestroy {
           .uploadImage(this.uploadedFile, "appointment-images")
           .pipe(
             switchMap((url) => {
+              console.log("After upload image");
               // After upload, add the img url to the appointment
               appointment.imgUrl = url;
 
@@ -269,6 +270,8 @@ export class MakeAppointmentComponent implements OnInit, OnDestroy {
           )
           .subscribe({
             next: () => {
+              console.log("After add appointment");
+
               this.appointmentForm.reset();
               this.openSnackBar("Successfully created your appointment.");
             },
@@ -279,20 +282,20 @@ export class MakeAppointmentComponent implements OnInit, OnDestroy {
               this.isLoadingAppointmentAdd = false;
             },
           });
+      } else {
+        this.appointmentService.addApointment(appointment).subscribe({
+          next: () => {
+            this.appointmentForm.reset();
+            this.openSnackBar("Successfully created your appointment.");
+          },
+          error: (error) => {
+            this.openSnackBar(`An error occured ${error}`);
+          },
+          complete: () => {
+            this.isLoadingAppointmentAdd = false;
+          },
+        });
       }
-
-      // this.appointmentService.addApointment(appointment).subscribe({
-      //   next: () => {
-      //     this.appointmentForm.reset();
-      //     this.openSnackBar("Successfully created your appointment.");
-      //   },
-      //   error: (error) => {
-      //     this.openSnackBar(`An error occured ${error}`);
-      //   },
-      //   complete: () => {
-      //     this.isLoadingAppointmentAdd = false;
-      //   },
-      // });
     }
   }
 
