@@ -25,7 +25,7 @@
     </div>
   </div>
 
-  <ng-container *ngIf="imageUrl">
+  <ng-container *ngIf="predictionMade">
     <div class="row mt-5 text-center">
       <div class="col-6 offset-3">
         <img [src]="imageUrl" class="image" />
@@ -52,7 +52,7 @@
                 (click)="openDescription(result.name, result.description, result.needsConsult)"
                 style="cursor: pointer"
               >
-                {{ result.name }} ({{ result.shortName }}): <strong>{{ result.value * 100 }}%</strong>
+                {{ result.name }} ({{ result.shortName }}): <strong>{{ result.value * 100 | number }}%</strong>
               </span>
               <button
                 mat-icon-button
