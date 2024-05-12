@@ -15,6 +15,7 @@ import { NotAuthorizedComponent } from "./components/not-authorized/not-authoriz
 import { MedicPageGuard } from "./guards/medic-page.guard";
 import { ContactComponent } from "./components/contact/contact.component";
 import { AboutComponent } from "./components/about/about.component";
+import { AIPhotoCheckComponent } from "./components/ai-photo-check/ai-photo-check.component";
 
 const routes: Routes = [
   { path: "", title: "Ditama Clinic - Home", component: HomeComponent },
@@ -61,6 +62,7 @@ const routes: Routes = [
   { path: "profile", redirectTo: "profile/ " },
   { path: "contact", component: ContactComponent },
   { path: "about", component: AboutComponent },
+  { path: "ai-photo-check", component: AIPhotoCheckComponent },
   { path: "not-authorized", title: "Diatma Clinic - Unauthorized Access", component: NotAuthorizedComponent },
   { path: "**", redirectTo: "" },
 ];

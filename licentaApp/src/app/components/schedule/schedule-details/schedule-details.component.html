@@ -1,14 +1,14 @@
-<div class="container">
+<div class="container" mat-dialog-content>
   <div class="row">
     <h2>Appointment Details</h2>
   </div>
   <div class="row">
     <h6>{{ data.appointment.datetime | date }}: {{ getAppointmentTimesAsString(data.appointment.datetime) }}</h6>
   </div>
+
+  <mat-divider class="mt-2 mb-2"></mat-divider>
+
   <div class="row">
-    <mat-divider></mat-divider>
-  </div>
-  <div class="row mt-2">
     <h5>Patient Info</h5>
   </div>
   <div class="row">
@@ -35,31 +35,62 @@
       <span>{{ data.appointment.email }}</span>
     </div>
   </div>
-  <div class="row mb-2">
+  <div class="row">
     <div class="detail-row">
       <h6 class="m-0">Phone number:</h6>
       <span>+40{{ data.appointment.telephone }}</span>
     </div>
   </div>
+
+  <mat-divider class="mt-2 mb-sm-2"></mat-divider>
+
   <div class="row">
-    <mat-divider></mat-divider>
-  </div>
-  <div class="row mt-2">
     <h5>Reason for appointment</h5>
   </div>
   <div class="row">
-    <p>{{ data.appointment.comment ? data.appointment.comment : "No reason given" }}</p>
+    <p style="margin: 0">{{ data.appointment.comment ? data.appointment.comment : "No reason given" }}</p>
   </div>
 
   <ng-container *ngIf="data.appointment.imgUrl">
+    <mat-divider class="mt-2 mb-2"></mat-divider>
+
     <div class="row">
-      <mat-divider></mat-divider>
-    </div>
-    <div class="row mt-2">
       <h5>Uploaded Image:</h5>
     </div>
     <div class="row">
       <img [src]="data.appointment.imgUrl" alt="Appointment Image" />
     </div>
+
+    <ng-container *ngIf="predictionMade">
+      <mat-divider class="mt-3 mb-3"></mat-divider>
+
+      <div class="row">
+        <div class="results-div p-4 ps-5 col-10 offset-1">
+          <div class="row">
+            <h4>Predictions:</h4>
+          </div>
+          <div *ngFor="let result of getTopResults()" class="row">
+            <div class="d-flex gap-2 fs-5 align-items-center">
+              <span>
+                {{ result.name }} ({{ result.shortName }}):
+                <strong>{{ result.value * 100 | number : "1.0-2" }}%</strong>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <p class="disclaimer-content">
+          <strong>These predictions should not be used for a diagnosis!</strong> The model that powers this web page is
+          not 100% accurate. It may produce <strong>false</strong> results with a <strong>high</strong> confidence. This
+          model should only be used for informational purposes. Always use your own professional judgement when
+          diagnosing a patient.
+        </p>
+      </div>
+    </ng-container>
   </ng-container>
+
+  <div *ngIf="data.appointment.imgUrl && modelLoaded && !predictionMade" mat-dialog-actions>
+    <button mat-raised-button color="accent" (click)="onGetAnalysisClick()">Get AI analysis</button>
+  </div>
 </div>
