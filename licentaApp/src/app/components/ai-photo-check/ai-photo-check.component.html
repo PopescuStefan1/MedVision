@@ -13,7 +13,9 @@
     </div>
   </div>
 
-  <div *ngIf="!imageUrl" class="row mt-3">
+  <div *ngIf="!modelLoaded" class="row mt-3">Loading model...</div>
+
+  <div *ngIf="!imageUrl && modelLoaded" class="row mt-3">
     <div class="col-6 offset-3">
       <div class="dropzone" ngClass="" appFileDragNDropDirective (filesChangeEmiter)="onFileDrop($event)">
         <input type="file" name="file" id="file" (change)="onFileChange($event)" #fileInput accept="image/*" />
@@ -52,7 +54,8 @@
                 (click)="openDescription(result.name, result.description, result.needsConsult)"
                 style="cursor: pointer"
               >
-                {{ result.name }} ({{ result.shortName }}): <strong>{{ result.value * 100 | number }}%</strong>
+                {{ result.name }} ({{ result.shortName }}):
+                <strong>{{ result.value * 100 | number : "1.0-2" }}%</strong>
               </span>
               <button
                 mat-icon-button
