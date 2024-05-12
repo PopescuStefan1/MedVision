@@ -1,0 +1,54 @@
+.dropzone {
+  height: 200px;
+  display: flex;
+  width: 100%;
+  background-color: #eee;
+  border: dotted 2px #aaa;
+  border-radius: 24px;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.image {
+  max-width: 100%;
+  max-height: 200px;
+}
+
+.results-div {
+  background-color: var(--primary);
+  color: white;
+  border-radius: 24px;
+}
+
+.disclaimer-title {
+  color: gray;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.disclaimer-content {
+  color: gray;
+  font-style: italic;
+  font-size: 14px;
+  margin: 0;
+}
+
+.help {
+  font-style: italic;
+  border-bottom: dotted 1px var(--primary);
+  color: var(--primary);
+  opacity: 0.75;
+  cursor: pointer;
+  padding-left: 1px;
+}
+
+.help:hover {
+  border-bottom: solid 1px var(--primary);
+  opacity: 1;
+}
