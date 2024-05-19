@@ -1,1 +1,21 @@
 <app-carousel></app-carousel>
+
+<div class="container">
+  <div class="row">
+    <div class="col-4">
+      <button mat-raised-button color="primary" class="call-to-action" (click)="onContactButtonClick()">
+        Contact us <mat-icon>contact_support</mat-icon>
+      </button>
+    </div>
+    <div class="col-4">
+      <button mat-raised-button color="accent" class="call-to-action" (click)="onMedicsButtonClick()">
+        <mat-icon>medical_information</mat-icon> Check our medics
+      </button>
+    </div>
+    <div class="col-4">
+      <button mat-raised-button color="primary" class="call-to-action" (click)="onAboutButtonClick()">
+        About our clinic <mat-icon>info</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
