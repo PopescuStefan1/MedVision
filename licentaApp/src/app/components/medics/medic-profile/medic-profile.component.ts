@@ -127,17 +127,12 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
       shortTitle: this.medicPageForm.get("shortTitle")?.value,
       city: this.medicPageForm.get("city")?.value,
       phoneNumber: this.medicPageForm.get("telephone")?.value,
-      patientIds: [],
       isVisible: false,
       userId: this.userId,
       photoUrl: this.imageUrl,
     };
 
     this.handleMedicSave(medic);
-
-    this.firstCreation = false;
-    this.isFormChanged = false;
-    this.imageChanged = false;
   }
 
   private handleMedicSave(medic: Medic): void {
@@ -169,11 +164,27 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
   }
 
   private handleImageUpload(): void {
+    console.log(this.imageChanged, this.uploadedFile);
     if (this.imageChanged && this.uploadedFile) {
       this.medicService
         .uploadImage(this.userId, this.uploadedFile, "medic-images")
-        .pipe(switchMap((downloadURL) => this.medicService.setMedicImageUrl(this.userId, downloadURL)))
-        .subscribe();
+        .pipe(
+          switchMap((downloadURL) => {
+            console.log("Setting medic image");
+            return this.medicService.setMedicImageUrl(this.userId, downloadURL);
+          })
+        )
+        .subscribe(() => {
+          // Reset flags
+          this.firstCreation = false;
+          this.isFormChanged = false;
+          this.imageChanged = false;
+        });
+    } else {
+      // Reset flags
+      this.firstCreation = false;
+      this.isFormChanged = false;
+      this.imageChanged = false;
     }
   }
 

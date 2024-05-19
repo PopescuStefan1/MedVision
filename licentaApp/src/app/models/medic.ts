@@ -6,7 +6,6 @@ export interface Medic {
   shortTitle: string;
   specialty: string;
   city: string;
-  patientIds: number[];
   photoUrl?: string;
   email: string;
   phoneNumber: string;
