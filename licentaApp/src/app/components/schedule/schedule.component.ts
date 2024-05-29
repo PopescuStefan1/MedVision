@@ -106,7 +106,7 @@ export class ScheduleComponent implements OnInit {
 
   isCurrentWeekSelected(): boolean {
     const today = new Date();
-    const sunday = new Date();
+    const sunday = new Date(this.selectedStartOfWeek);
     sunday.setDate(this.selectedStartOfWeek.getDate() + 7);
 
     return today.getTime() > this.selectedStartOfWeek.getTime() && today.getTime() < sunday.getTime();
