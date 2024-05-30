@@ -18,7 +18,7 @@ export class AppointmentService {
 
   getDistinctCities(): Observable<string[]> {
     return this.firestore
-      .collection("medics")
+      .collection("medics", (ref) => ref.where("isVisible", "==", true))
       .get()
       .pipe(
         map((querySnapshot) => {
@@ -40,7 +40,7 @@ export class AppointmentService {
 
   getSpecialtiesForCity(selectedCity: string) {
     return this.firestore
-      .collection("medics", (ref) => ref.where("city", "==", selectedCity))
+      .collection("medics", (ref) => ref.where("isVisible", "==", true).where("city", "==", selectedCity))
       .get()
       .pipe(
         map((querySnapshot) => {
@@ -63,7 +63,7 @@ export class AppointmentService {
   getMedicsForCityAndSpecialty(selectedCity: string, selectedSpecialty: string) {
     return this.firestore
       .collection<Medic>("medics", (ref) =>
-        ref.where("city", "==", selectedCity).where("specialty", "==", selectedSpecialty)
+        ref.where("isVisible", "==", true).where("city", "==", selectedCity).where("specialty", "==", selectedSpecialty)
       )
       .valueChanges({ idField: "id" });
   }
