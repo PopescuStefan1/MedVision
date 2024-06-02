@@ -62,7 +62,12 @@ const routes: Routes = [
   { path: "profile", redirectTo: "profile/ " },
   { path: "contact", title: "Ditama Clinic - Contact", component: ContactComponent },
   { path: "about", title: "Ditama Clinic - About", component: AboutComponent },
-  { path: "ai-photo-check", title: "Ditama Clinic - Skin Lesion Analyser", component: AIPhotoCheckComponent },
+  {
+    path: "ai-photo-check",
+    title: "Ditama Clinic - Skin Lesion Analyser",
+    component: AIPhotoCheckComponent,
+    canActivate: [AppointmentsGuard],
+  },
   { path: "not-authorized", title: "Diatma Clinic - Unauthorized Access", component: NotAuthorizedComponent },
   { path: "**", redirectTo: "" },
 ];
