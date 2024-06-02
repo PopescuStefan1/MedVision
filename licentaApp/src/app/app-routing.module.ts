@@ -60,9 +60,9 @@ const routes: Routes = [
     canActivate: [ProfileGuard],
   },
   { path: "profile", redirectTo: "profile/ " },
-  { path: "contact", component: ContactComponent },
-  { path: "about", component: AboutComponent },
-  { path: "ai-photo-check", component: AIPhotoCheckComponent },
+  { path: "contact", title: "Ditama Clinic - Contact", component: ContactComponent },
+  { path: "about", title: "Ditama Clinic - About", component: AboutComponent },
+  { path: "ai-photo-check", title: "Ditama Clinic - Skin Lesion Analyser", component: AIPhotoCheckComponent },
   { path: "not-authorized", title: "Diatma Clinic - Unauthorized Access", component: NotAuthorizedComponent },
   { path: "**", redirectTo: "" },
 ];
