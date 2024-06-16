@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { Observable, from, map } from "rxjs";
 import { UserProfile } from "../models/user-profile";
+import { doc } from "firebase/firestore";
 
 @Injectable({
   providedIn: "root",
@@ -12,6 +13,7 @@ export class UserService {
   getUserData(docId: string): Observable<UserProfile> {
     const userDocRef = this.firestore.collection("users").doc(docId);
 
+    console.log(docId);
     return userDocRef.valueChanges().pipe(map((data) => (data ? this.convertTimestampsToDates(data) : data)));
   }
 
