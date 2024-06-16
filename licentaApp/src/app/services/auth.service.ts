@@ -55,34 +55,18 @@ export class AuthService {
     });
   }
 
-  signup(email: string, password: string): Observable<AuthResponseData> {
-    return this.http
-      .post<AuthResponseData>(
-        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDE8NW8L3l2Rtf0chpZqlUWZVwBPxSm18I",
-        {
-          email: email,
-          password: password,
-          returnSecureToken: true,
-        }
-      )
-      .pipe(
-        catchError(this.handleError),
-        tap((responseData) => {
-          this.handleAuthentication(
-            responseData.email,
-            responseData.localId,
-            responseData.idToken,
-            +responseData.expiresIn
-          );
-
-          const userData: UserProfile = {
-            email: responseData.email,
-            role: "patient",
-          };
-
-          this.addUserToFirestore(responseData.localId, userData).subscribe();
-        })
-      );
+  signup(email: string, password: string): Observable<any> {
+    return from(this.afAuth.createUserWithEmailAndPassword(email, password)).pipe(
+      catchError(this.handleError),
+      tap((credential) => {
+        const { email, uid } = credential.user!;
+        const userData: UserProfile = {
+          email: email!,
+          role: "patient", // Set the user role here
+        };
+        this.addUserToFirestore(uid, userData).subscribe();
+      })
+    );
   }
 
   private addUserToFirestore(userId: string, userData: any) {
