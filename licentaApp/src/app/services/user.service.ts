@@ -13,7 +13,6 @@ export class UserService {
   getUserData(docId: string): Observable<UserProfile> {
     const userDocRef = this.firestore.collection("users").doc(docId);
 
-    console.log(docId);
     return userDocRef.valueChanges().pipe(map((data) => (data ? this.convertTimestampsToDates(data) : data)));
   }
 

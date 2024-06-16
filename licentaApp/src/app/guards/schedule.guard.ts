@@ -13,22 +13,26 @@ export class ScheduleGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.authService.user.pipe(
-      take(1),
-      switchMap((user) => {
-        if (user) {
-          return this.userService.getUserData(user.id).pipe(
-            switchMap((userData) => {
-              if (userData.role === "patient") {
-                return of(this.router.createUrlTree(["/not-authorized"]));
-              } else {
-                return of(true);
-              }
-            })
-          );
-        } else {
-          return of(this.router.createUrlTree(["/not-authorized"]));
-        }
+    return this.authService.waitForAuthStateInitialization().pipe(
+      switchMap(() => {
+        return this.authService.user.pipe(
+          take(1),
+          switchMap((user) => {
+            if (user) {
+              return this.userService.getUserData(user.id).pipe(
+                switchMap((userData) => {
+                  if (userData.role === "patient") {
+                    return of(this.router.createUrlTree(["/not-authorized"]));
+                  } else {
+                    return of(true);
+                  }
+                })
+              );
+            } else {
+              return of(this.router.createUrlTree(["/not-authorized"]));
+            }
+          })
+        );
       })
     );
   }

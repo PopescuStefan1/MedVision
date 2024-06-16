@@ -19,7 +19,12 @@ import { AIPhotoCheckComponent } from "./components/ai-photo-check/ai-photo-chec
 
 const routes: Routes = [
   { path: "", title: "Ditama Clinic - Home", component: HomeComponent },
-  { path: "authenticate", title: "Authenticate", component: AuthComponent, canActivate: [LoginauthGuard] },
+  {
+    path: "authenticate",
+    title: "Ditama Clinic - Authenticate",
+    component: AuthComponent,
+    canActivate: [LoginauthGuard],
+  },
   {
     path: "medics",
     title: "Ditama Clinic - Medics",
@@ -68,7 +73,7 @@ const routes: Routes = [
     component: AIPhotoCheckComponent,
     canActivate: [AppointmentsGuard],
   },
-  { path: "not-authorized", title: "Diatma Clinic - Unauthorized Access", component: NotAuthorizedComponent },
+  { path: "not-authorized", title: "Ditama Clinic - Unauthorized Access", component: NotAuthorizedComponent },
   { path: "**", redirectTo: "" },
 ];
 
