@@ -22,6 +22,7 @@ export interface AuthResponseData {
 export class AuthService {
   private _user = new BehaviorSubject<User | null>(null);
   private tokenExpirationTimer: any;
+  private authStateInitialized = false;
 
   constructor(private http: HttpClient, private firestore: AngularFirestore, private afAuth: AngularFireAuth) {
     this.initAuthListener();
@@ -32,22 +33,24 @@ export class AuthService {
   }
 
   isAuthenticated() {
-    console.log("isauth");
     return this.user.pipe(map((user) => !!user));
   }
 
   private initAuthListener() {
     this.afAuth.authState.subscribe((user) => {
-      console.log("Auth State:", user ? "Auth" : "Not Auth");
       if (user) {
         user.getIdTokenResult().then((tokenResult) => {
           const loadedUser = new User(user.email!, user.uid, tokenResult.token);
           this._user.next(loadedUser);
 
           this.setAutoLogout(new Date(tokenResult.expirationTime).getTime() - new Date().getTime());
+
+          this.authStateInitialized = true;
         });
       } else {
         this._user.next(null);
+
+        this.authStateInitialized = true;
       }
     });
   }
@@ -105,7 +108,6 @@ export class AuthService {
   }
 
   private setAutoLogout(expirationDuration: number) {
-    console.log(expirationDuration);
     this.clearAutoLogout();
     this.tokenExpirationTimer = setTimeout(() => {
       this.logout();
@@ -146,5 +148,20 @@ export class AuthService {
 
     const err = new Error(errorMessage);
     return throwError(() => err);
+  }
+
+  waitForAuthStateInitialization(): Observable<boolean> {
+    return new Observable((observer) => {
+      const checkAuthStateInitialized = () => {
+        if (this.authStateInitialized) {
+          observer.next(true);
+          observer.complete();
+        } else {
+          setTimeout(checkAuthStateInitialized, 100); // Check again after a short delay
+        }
+      };
+
+      checkAuthStateInitialized(); // Start checking
+    });
   }
 }
