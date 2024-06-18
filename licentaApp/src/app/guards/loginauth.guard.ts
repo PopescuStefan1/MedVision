@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
-import { Observable } from "rxjs";
+import { Observable, of, switchMap, take } from "rxjs";
 import { AuthService } from "../services/auth.service";
 
 @Injectable({
@@ -13,9 +13,18 @@ export class LoginauthGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (this.authService.isAuthenticated()) {
-      return this.router.createUrlTree(["/"]);
-    }
-    return true;
+    return this.authService.waitForAuthStateInitialization().pipe(
+      switchMap(() => {
+        return this.authService.isAuthenticated();
+      }),
+      take(1),
+      switchMap((isAuthenticated) => {
+        if (!isAuthenticated) {
+          return of(true);
+        } else {
+          return of(this.router.createUrlTree(["/"]));
+        }
+      })
+    );
   }
 }
