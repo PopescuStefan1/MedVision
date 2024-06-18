@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { Observable, from, map } from "rxjs";
 import { UserProfile } from "../models/user-profile";
+import { doc } from "firebase/firestore";
 
 @Injectable({
   providedIn: "root",

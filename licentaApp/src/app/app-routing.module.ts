@@ -19,7 +19,12 @@ import { AIPhotoCheckComponent } from "./components/ai-photo-check/ai-photo-chec
 
 const routes: Routes = [
   { path: "", title: "Ditama Clinic - Home", component: HomeComponent },
-  { path: "authenticate", title: "Authenticate", component: AuthComponent, canActivate: [LoginauthGuard] },
+  {
+    path: "authenticate",
+    title: "Ditama Clinic - Authenticate",
+    component: AuthComponent,
+    canActivate: [LoginauthGuard],
+  },
   {
     path: "medics",
     title: "Ditama Clinic - Medics",
@@ -60,10 +65,15 @@ const routes: Routes = [
     canActivate: [ProfileGuard],
   },
   { path: "profile", redirectTo: "profile/ " },
-  { path: "contact", component: ContactComponent },
-  { path: "about", component: AboutComponent },
-  { path: "ai-photo-check", component: AIPhotoCheckComponent },
-  { path: "not-authorized", title: "Diatma Clinic - Unauthorized Access", component: NotAuthorizedComponent },
+  { path: "contact", title: "Ditama Clinic - Contact", component: ContactComponent },
+  { path: "about", title: "Ditama Clinic - About", component: AboutComponent },
+  {
+    path: "ai-photo-check",
+    title: "Ditama Clinic - Skin Lesion Analyser",
+    component: AIPhotoCheckComponent,
+    canActivate: [AppointmentsGuard],
+  },
+  { path: "not-authorized", title: "Ditama Clinic - Unauthorized Access", component: NotAuthorizedComponent },
   { path: "**", redirectTo: "" },
 ];
 
