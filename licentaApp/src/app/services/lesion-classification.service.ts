@@ -132,22 +132,30 @@ export class LesionClassificationService {
   private predictionStatusSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   predictionStatus$: Observable<boolean> = this.predictionStatusSubject.asObservable();
 
+  private isProcessingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  isProcessing$: Observable<boolean> = this.isProcessingSubject.asObservable();
+
   constructor() {}
 
   async loadModel() {
-    this.model = await tf.loadGraphModel("/assets/model.json");
+    this.model = await tf.loadGraphModel("/assets/resnet50/model.json");
     this.predictionStatusSubject.next(false);
   }
 
   predict(image: HTMLImageElement): void {
+    this.isProcessingSubject.next(true);
     this.predictionStatusSubject.next(false);
 
     const pred = tf.tidy(() => {
       let img = tf.browser.fromPixels(image);
-      img = tf.image.resizeBilinear(img, [32, 32]); // Resize the image to match model input shape
-      img = img.div(255); // Normalize pixel values between 0 and 1
-      img = img.reshape([1, 32, 32, 3]);
+      img = tf.image.resizeBilinear(img, [224, 224]); // Resize the image to match model input shape
       img = tf.cast(img, "float32");
+
+      // Preprocessing specific to ResNet model
+      const meanValues = tf.tensor([103.939, 116.779, 123.68]);
+      img = img.sub(meanValues); // Subtract mean RGB values
+      img = tf.reverse(img, 2); // Convert RGB to BGR (for models trained on ImageNet)
+      img = img.expandDims(); // Expand dimensions to match model input shape (batch size 1)
 
       const output = this.model.predict(img) as any;
 
@@ -160,6 +168,7 @@ export class LesionClassificationService {
     }
 
     this.predictionStatusSubject.next(true);
+    this.isProcessingSubject.next(false);
   }
 
   predictFromImageUrl(imageUrl: string): void {
