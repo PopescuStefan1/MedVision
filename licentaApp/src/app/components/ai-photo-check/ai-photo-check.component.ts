@@ -16,6 +16,8 @@ export class AIPhotoCheckComponent implements OnInit, OnDestroy {
   predictionMade: boolean = false;
   modelLoaded: boolean = false;
   predictionStatusSubscription: Subscription = new Subscription();
+  isProcessingSubscription: Subscription = new Subscription();
+  isProcessing: boolean = false;
 
   constructor(public dialog: MatDialog, private lesionClassificationService: LesionClassificationService) {}
 
@@ -25,6 +27,12 @@ export class AIPhotoCheckComponent implements OnInit, OnDestroy {
         this.predictionMade = predictionStatus;
       }
     );
+
+    this.isProcessingSubscription = this.lesionClassificationService.isProcessing$.subscribe((isProcessing) => {
+      this.isProcessing = isProcessing;
+      console.log(isProcessing);
+    });
+
     this.lesionClassificationService.loadModel().then(() => {
       this.modelLoaded = true;
     });
