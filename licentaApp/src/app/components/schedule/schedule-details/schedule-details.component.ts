@@ -1,5 +1,5 @@
 import { DatePipe } from "@angular/common";
-import { Component, ElementRef, Inject, OnDestroy, OnInit } from "@angular/core";
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Subscription } from "rxjs";
 import { Appointment } from "src/app/models/appointment";
@@ -20,12 +20,15 @@ export class ScheduleDetailsComponent implements OnInit, OnDestroy {
   predictionStatusSubscription: Subscription = new Subscription();
   predictionMade: boolean = false;
   modelLoaded: boolean = false;
+  isProcessingSubscription: Subscription = new Subscription();
+  isProcessing: boolean = false;
+  buttonClicked: boolean = false;
+  modelLoadedStatusSubscription: Subscription = new Subscription();
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private datePipe: DatePipe,
-    private lesionClassificationService: LesionClassificationService,
-    private elementRef: ElementRef
+    private lesionClassificationService: LesionClassificationService
   ) {}
 
   ngOnInit(): void {
@@ -34,13 +37,25 @@ export class ScheduleDetailsComponent implements OnInit, OnDestroy {
         this.predictionMade = predictionStatus;
       }
     );
-    this.lesionClassificationService.loadModel().then(() => {
-      this.modelLoaded = true;
+
+    this.isProcessingSubscription = this.lesionClassificationService.isProcessing$.subscribe((isProcessing) => {
+      this.isProcessing = isProcessing;
+      console.log(isProcessing);
     });
+
+    this.modelLoadedStatusSubscription = this.lesionClassificationService.modelLoadedStatus$.subscribe(
+      (modelLoadedStatus) => {
+        this.modelLoaded = modelLoadedStatus;
+      }
+    );
   }
 
   ngOnDestroy(): void {
     this.predictionStatusSubscription.unsubscribe();
+    this.isProcessingSubscription.unsubscribe();
+    this.modelLoadedStatusSubscription.unsubscribe();
+
+    this.lesionClassificationService.resetPredictionStatus();
   }
 
   getAppointmentTimesAsString(date: Date) {
@@ -66,8 +81,19 @@ export class ScheduleDetailsComponent implements OnInit, OnDestroy {
   }
 
   onGetAnalysisClick(): void {
-    if (this.data.appointment.imgUrl) {
-      this.lesionClassificationService.predictFromImageUrl(this.data.appointment.imgUrl);
+    this.buttonClicked = true;
+    if (!this.modelLoaded) {
+      this.lesionClassificationService.loadModel().then(() => {
+        if (this.data.appointment.imgUrl) {
+          this.lesionClassificationService.predictFromImageUrl(this.data.appointment.imgUrl);
+          this.modelLoaded = true;
+        }
+      });
+    } else {
+      if (this.data.appointment.imgUrl) {
+        this.lesionClassificationService.predictFromImageUrl(this.data.appointment.imgUrl);
+        this.modelLoaded = true;
+      }
     }
   }
 }

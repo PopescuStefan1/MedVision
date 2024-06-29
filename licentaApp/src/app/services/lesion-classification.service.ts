@@ -129,6 +129,9 @@ export class LesionClassificationService {
   model!: tf.GraphModel;
   predictions: any;
 
+  private modelLoadingStatusSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  modelLoadedStatus$: Observable<boolean> = this.modelLoadingStatusSubject.asObservable();
+
   private predictionStatusSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   predictionStatus$: Observable<boolean> = this.predictionStatusSubject.asObservable();
 
@@ -139,6 +142,7 @@ export class LesionClassificationService {
 
   async loadModel() {
     this.model = await tf.loadGraphModel("/assets/resnet50/model.json");
+    this.modelLoadingStatusSubject.next(true);
     this.predictionStatusSubject.next(false);
   }
 
@@ -146,32 +150,35 @@ export class LesionClassificationService {
     this.isProcessingSubject.next(true);
     this.predictionStatusSubject.next(false);
 
-    const pred = tf.tidy(() => {
-      let img = tf.browser.fromPixels(image);
-      img = tf.image.resizeBilinear(img, [224, 224]); // Resize the image to match model input shape
-      img = tf.cast(img, "float32");
+    setTimeout(() => {
+      const pred = tf.tidy(() => {
+        let img = tf.browser.fromPixels(image);
+        img = tf.image.resizeBilinear(img, [224, 224]); // Resize the image to match model input shape
+        img = tf.cast(img, "float32");
 
-      // Preprocessing specific to ResNet model
-      const meanValues = tf.tensor([103.939, 116.779, 123.68]);
-      img = img.sub(meanValues); // Subtract mean RGB values
-      img = tf.reverse(img, 2); // Convert RGB to BGR (for models trained on ImageNet)
-      img = img.expandDims(); // Expand dimensions to match model input shape (batch size 1)
+        // Preprocessing specific to ResNet model
+        const meanValues = tf.tensor([103.939, 116.779, 123.68]);
+        img = img.sub(meanValues); // Subtract mean RGB values
+        img = tf.reverse(img, 2); // Convert RGB to BGR (for models trained on ImageNet)
+        img = img.expandDims(); // Expand dimensions to match model input shape (batch size 1)
 
-      const output = this.model.predict(img) as any;
+        const output = this.model.predict(img) as any;
 
-      this.predictions = Array.from(output.dataSync());
-    });
+        this.predictions = Array.from(output.dataSync());
+      });
 
-    for (let i = 0; i < this.realResults.length; i++) {
-      console.log(this.realResults[i].name);
-      this.realResults[i].value = this.predictions[i];
-    }
+      for (let i = 0; i < this.realResults.length; i++) {
+        console.log(this.realResults[i].name);
+        this.realResults[i].value = this.predictions[i];
+      }
 
-    this.predictionStatusSubject.next(true);
-    this.isProcessingSubject.next(false);
+      this.predictionStatusSubject.next(true);
+      this.isProcessingSubject.next(false);
+    }, 100);
   }
 
   predictFromImageUrl(imageUrl: string): void {
+    this.isProcessingSubject.next(true);
     this.predictionStatusSubject.next(false);
 
     const img = new Image();
@@ -184,5 +191,9 @@ export class LesionClassificationService {
     };
     img.src = imageUrl;
     img.crossOrigin = "Anonymous";
+  }
+
+  resetPredictionStatus(): void {
+    this.predictionStatusSubject.next(false);
   }
 }

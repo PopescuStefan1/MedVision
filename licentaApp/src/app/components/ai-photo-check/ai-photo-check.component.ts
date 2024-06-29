@@ -15,6 +15,7 @@ export class AIPhotoCheckComponent implements OnInit, OnDestroy {
   imageUrl: string | ArrayBuffer | null = null;
   predictionMade: boolean = false;
   modelLoaded: boolean = false;
+  modelLoadedStatusSubscription: Subscription = new Subscription();
   predictionStatusSubscription: Subscription = new Subscription();
   isProcessingSubscription: Subscription = new Subscription();
   isProcessing: boolean = false;
@@ -33,13 +34,25 @@ export class AIPhotoCheckComponent implements OnInit, OnDestroy {
       console.log(isProcessing);
     });
 
-    this.lesionClassificationService.loadModel().then(() => {
-      this.modelLoaded = true;
-    });
+    this.modelLoadedStatusSubscription = this.lesionClassificationService.modelLoadedStatus$.subscribe(
+      (modelLoadedStatus) => {
+        this.modelLoaded = modelLoadedStatus;
+      }
+    );
+
+    if (!this.modelLoaded) {
+      this.lesionClassificationService.loadModel().then(() => {
+        this.modelLoaded = true;
+      });
+    }
   }
 
   ngOnDestroy(): void {
     this.predictionStatusSubscription.unsubscribe();
+    this.isProcessingSubscription.unsubscribe();
+    this.modelLoadedStatusSubscription.unsubscribe();
+
+    this.lesionClassificationService.resetPredictionStatus();
   }
 
   onFileChange(event: any): void {

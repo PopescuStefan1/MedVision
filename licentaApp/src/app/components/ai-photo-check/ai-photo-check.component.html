@@ -19,8 +19,10 @@
         <h3>Loading model...</h3>
       </div>
     </div>
-    <div class="row mt-3 mb-5">
-      <mat-spinner style="margin: auto"></mat-spinner>
+    <div class="row mt-5 mb-5">
+      <div class="col-6 offset-3">
+        <mat-progress-bar style="margin: auto" mode="indeterminate"></mat-progress-bar>
+      </div>
     </div>
   </ng-container>
 
@@ -37,8 +39,10 @@
   </div>
 
   <ng-container *ngIf="isProcessing">
-    <div class="row mt-3 mb-5">
-      <mat-spinner style="margin: auto"></mat-spinner>
+    <div class="row mt-5 mb-5">
+      <div class="col-6 offset-3">
+        <mat-progress-bar style="margin: auto" mode="indeterminate"></mat-progress-bar>
+      </div>
     </div>
   </ng-container>
 

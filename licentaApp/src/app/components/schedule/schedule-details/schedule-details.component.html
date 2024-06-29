@@ -90,7 +90,15 @@
     </ng-container>
   </ng-container>
 
-  <div *ngIf="data.appointment.imgUrl && modelLoaded && !predictionMade" mat-dialog-actions>
+  <div *ngIf="data.appointment.imgUrl && !predictionMade && !isProcessing && !buttonClicked" mat-dialog-actions>
     <button mat-raised-button color="accent" (click)="onGetAnalysisClick()">Get AI analysis</button>
   </div>
+
+  <ng-container *ngIf="buttonClicked">
+    <ng-container *ngIf="(!modelLoaded || isProcessing) && !predictionMade">
+      <div class="row m-5">
+        <mat-progress-bar style="margin: auto" mode="indeterminate"></mat-progress-bar>
+      </div>
+    </ng-container>
+  </ng-container>
 </div>
