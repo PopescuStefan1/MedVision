@@ -138,7 +138,9 @@ export class LesionClassificationService {
   private isProcessingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isProcessing$: Observable<boolean> = this.isProcessingSubject.asObservable();
 
-  constructor() {}
+  constructor() {
+    tf.setBackend("webgl");
+  }
 
   async loadModel() {
     this.model = await tf.loadGraphModel("/assets/resnet50/model.json");
@@ -152,9 +154,17 @@ export class LesionClassificationService {
 
     setTimeout(() => {
       const pred = tf.tidy(() => {
+        console.log("start of predict");
+        console.time("totalTimer");
+        console.time("startTimer");
+
         let img = tf.browser.fromPixels(image);
         img = tf.image.resizeBilinear(img, [224, 224]); // Resize the image to match model input shape
         img = tf.cast(img, "float32");
+
+        console.timeEnd("startTimer");
+        console.log("after resize & cast");
+        console.time("timer");
 
         // Preprocessing specific to ResNet model
         const meanValues = tf.tensor([103.939, 116.779, 123.68]);
@@ -162,9 +172,21 @@ export class LesionClassificationService {
         img = tf.reverse(img, 2); // Convert RGB to BGR (for models trained on ImageNet)
         img = img.expandDims(); // Expand dimensions to match model input shape (batch size 1)
 
+        console.timeEnd("timer");
+        console.log("after preprocessing");
+        console.time("timer");
+
         const output = this.model.predict(img) as any;
 
+        console.timeEnd("timer");
+        console.log("after predict");
+        console.time("timer");
+
         this.predictions = Array.from(output.dataSync());
+
+        console.timeEnd("timer");
+        console.timeEnd("totalTimer");
+        console.log("end");
       });
 
       for (let i = 0; i < this.realResults.length; i++) {
