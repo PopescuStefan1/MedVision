@@ -3,12 +3,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { AngularFireModule, FIREBASE_OPTIONS } from '@angular/fire/compat';
+import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { environment } from 'src/environments/environment';
-// import './firebase-init';
 
 import { MaterialModule } from 'src/material.module';
 import { AppRoutingModule } from './app-routing.module';
