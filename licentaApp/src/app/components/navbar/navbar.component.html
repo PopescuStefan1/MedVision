@@ -14,20 +14,30 @@
     </ng-container>
     <a mat-button routerLink="about">About</a>
     <span class="spacer"></span>
-    <a mat-button *ngIf="isAuthenticated" routerLink="ai-photo-check">
+    <a mat-button routerLink="ai-photo-check">
       <span>Skin Lesion Analyser</span> <mat-icon>cloud_upload</mat-icon>
     </a>
-    <a mat-button routerLink="contact"><span>Contact</span> <mat-icon>call</mat-icon></a>
-    <a *ngIf="!isAuthenticated" mat-button routerLink="authenticate"><span>Login</span> <mat-icon>login</mat-icon></a>
+    <a mat-button routerLink="contact"
+      ><span>Contact</span> <mat-icon>call</mat-icon></a
+    >
+    <a *ngIf="!isAuthenticated" mat-button routerLink="authenticate"
+      ><span>Login</span> <mat-icon>login</mat-icon></a
+    >
     <ng-container *ngIf="isAuthenticated">
       <ng-container *ngIf="userData$ | async as userData">
-        <span class="user-info">{{ capitalizeFirstLetter(userData.role) }} account</span>
+        <span class="user-info"
+          >{{ capitalizeFirstLetter(userData.role) }} account</span
+        >
         <button mat-icon-button [matMenuTriggerFor]="menu">
           <mat-icon>account_circle</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item disabled>{{ getUserFullName(userData.firstName, userData.lastName) }}</button>
-          <button mat-menu-item [routerLink]="['/profile', userId]">Profile</button>
+          <button mat-menu-item disabled>
+            {{ getUserFullName(userData.firstName, userData.lastName) }}
+          </button>
+          <button mat-menu-item [routerLink]="['/profile', userId]">
+            Profile
+          </button>
           <button mat-menu-item (click)="logout()">Log out</button>
         </mat-menu>
       </ng-container>

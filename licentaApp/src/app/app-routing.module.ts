@@ -18,21 +18,21 @@ import { AboutComponent } from './components/about/about.component';
 import { AIPhotoCheckComponent } from './components/ai-photo-check/ai-photo-check.component';
 
 const routes: Routes = [
-  { path: '', title: 'MedVision - Home', component: HomeComponent },
+  { path: '', title: 'Ditama Clinic - Home', component: HomeComponent },
   {
     path: 'authenticate',
-    title: 'MedVision - Authenticate',
+    title: 'Ditama Clinic - Authenticate',
     component: AuthComponent,
     canActivate: [LoginauthGuard],
   },
   {
     path: 'medics',
-    title: 'MedVision - Medics',
+    title: 'Ditama Clinic - Medics',
     component: MedicsComponent,
   },
   {
     path: 'medic-page/:userId',
-    title: 'MedVision - Set up your medic page',
+    title: 'Ditama Clinic - Set up your medic page',
     component: MedicProfileComponent,
     canActivate: [MedicPageGuard],
   },
@@ -42,44 +42,43 @@ const routes: Routes = [
   },
   {
     path: 'appointments/:city/:specialty/:medicId',
-    title: 'MedVision - Appointments',
+    title: 'Ditama Clinic - Appointments',
     component: AppointmentsComponent,
     canActivate: [AppointmentsGuard],
   },
   {
     path: 'appointments',
-    title: 'MedVision - Appointments',
+    title: 'Ditama Clinic - Appointments',
     component: AppointmentsComponent,
     canActivate: [AppointmentsGuard],
   },
   {
     path: 'schedule',
-    title: 'MedVision - Medic Schedule',
+    title: 'Ditama Clinic - Medic Schedule',
     component: ScheduleComponent,
     canActivate: [ScheduleGuard],
   },
   {
     path: 'profile/:userId',
-    title: 'MedVision - User Profile',
+    title: 'Ditama Clinic - User Profile',
     component: UserProfileComponent,
     canActivate: [ProfileGuard],
   },
   { path: 'profile', redirectTo: 'profile/ ' },
   {
     path: 'contact',
-    title: 'MedVision - Contact',
+    title: 'Ditama Clinic - Contact',
     component: ContactComponent,
   },
-  { path: 'about', title: 'MedVision - About', component: AboutComponent },
+  { path: 'about', title: 'Ditama Clinic - About', component: AboutComponent },
   {
     path: 'ai-photo-check',
-    title: 'MedVision - Skin Lesion Analyser',
+    title: 'Ditama Clinic - Skin Lesion Analyser',
     component: AIPhotoCheckComponent,
-    canActivate: [AppointmentsGuard],
   },
   {
     path: 'not-authorized',
-    title: 'MedVision - Unauthorized Access',
+    title: 'Ditama Clinic - Unauthorized Access',
     component: NotAuthorizedComponent,
   },
   { path: '**', redirectTo: '' },
