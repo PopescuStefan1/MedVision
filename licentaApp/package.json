@@ -6,10 +6,10 @@
   },
   "scripts": {
     "ng": "ng",
-    "start": "cd licentaApp && ng serve",
-    "build": "cd licentaApp && ng build",
-    "watch": "cd licentaApp && ng build --watch --configuration development",
-    "test": "cd licentaApp && ng test"
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {
