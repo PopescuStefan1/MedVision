@@ -1,0 +1,7 @@
+Some users for testing:
+Patient account:
+asdffdsa@a.com - asdffdsa1
+
+Medic accounts:
+bmarin@gmail.com - bmarin1234
+mstanciu@gmail.com - mstanciu1234
