@@ -64,8 +64,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "licentaApp:build:production",
-              "port": 10000
+              "browserTarget": "licentaApp:build:production"
             },
             "development": {
               "browserTarget": "licentaApp:build:development"
