@@ -1,27 +1,54 @@
-# LicentaApp
+# MedVision
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.13.
+This repository contains a modern web application developed as part of a thesis project. The platform streamlines patient management, medical appointments, and provides AI-based skin lesion analysis.
 
-## Development server
+## Overview
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+The project addresses inefficiencies in healthcare systems, offering:
+1. Simplified appointment scheduling for patients and doctors.
+2. An intuitive interface for easy interaction by patients and medical staff.
+3. AI-powered diagnostics for presumptive skin lesion analysis using trained neural network models.
 
-## Code scaffolding
+## Features
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- **Frontend:** Angular, Angular Material, Bootstrap for a responsive and modern UI.
+- **Backend:** Firebase for authentication, cloud storage, and database management.
+- **AI Integration:** Trained models (ResNet50, EfficientNet, VGG19, etc.) for lesion analysis.
+- **Authentication:** Secure login system for different user roles (patients and doctors).
+- **Dynamic Pages:**
+    - Profile and Appointments Management
+    - Doctors List and Details
+    - Skin Lesion Analysis Page with AI Results
+    - Contact and About Sections
 
-## Build
+## Technologies
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- **Frontend:** Angular, RxJS, TypeScript, Angular Material, Bootstrap
+- **Backend:** Firebase (Firestore, Storage, Authentication)
+- **AI Models:** TensorFlow, Keras (ResNet50, InceptionV3, EfficientNet, and others)
 
-## Running unit tests
+## AI Skin Lesion Analyzer
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- Upload images of skin lesions.
+- Receive AI-based presumptive analysis powered by advanced convolutional neural networks.
 
-## Running end-to-end tests
+## Installation
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+1. Clone the repo:
+```
+git clone https://github.com/PopescuStefan1/MedVision.git
+cd MedVision
+```
 
-## Further help
+2. Install dependencies:
+```
+npm install
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+3. Run the project:
+```
+ng serve
+```
+
+## Author
+**Stefan-Tudor Popescu**, 2024
