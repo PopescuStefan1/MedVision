@@ -2,18 +2,29 @@
 
 This repository contains a modern web application developed as part of a thesis project. The platform streamlines patient management, medical appointments, and provides AI-based skin lesion analysis.
 
-![Medics page](https://github.com/user-attachments/assets/083fc280-3b35-4f88-a2a4-68d5842470a1)
+![image](https://github.com/user-attachments/assets/083fc280-3b35-4f88-a2a4-68d5842470a1)
+
 _Medics page_
 
 ![image](https://github.com/user-attachments/assets/12604af0-7e0c-4299-a272-209b82215b3f)
+
 _"Create an Appointment" form_
 
 ![image](https://github.com/user-attachments/assets/83ea602f-7b03-4c1d-a261-0ff10e11bdb1)
+
 _Automatic completion of user data_
 
 ![image](https://github.com/user-attachments/assets/766161e0-d3a6-49e3-ad0f-c283dad600ab)
 
+_View appointments page_
 
+![image](https://github.com/user-attachments/assets/99398c90-7759-41de-92c2-b57f5757ad5b)
+
+_Medic schedule page_
+
+![image](https://github.com/user-attachments/assets/e1d6345d-920d-4716-b844-f5a319d2fc92)
+
+_Skin Lesion Analyser_
 
 ## Overview
 
