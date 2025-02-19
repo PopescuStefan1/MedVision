@@ -1,6 +1,6 @@
 # MedVision
 
-This repository contains a modern web application developed as part of a thesis project. The platform streamlines patient management, medical appointments, and provides AI-based skin lesion analysis.
+This repository contains a modern web application developed as part of my bachelor's thesis project. The platform streamlines patient management, medical appointments, and provides AI-based skin lesion analysis.
 
 ![image](https://github.com/user-attachments/assets/083fc280-3b35-4f88-a2a4-68d5842470a1)
 
