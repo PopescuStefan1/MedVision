@@ -1,24 +1,30 @@
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
-import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from "@angular/forms";
-import { MatDatepickerInputEvent } from "@angular/material/datepicker";
-import { MatSelectChange } from "@angular/material/select";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { ActivatedRoute } from "@angular/router";
-import { Observable, Subscription, map, switchMap } from "rxjs";
-import { Appointment } from "src/app/models/appointment";
-import { AppointmentTime } from "src/app/models/appointment-time";
-import { Medic } from "src/app/models/medic";
-import { UserProfile } from "src/app/models/user-profile";
-import { AppointmentService } from "src/app/services/appointment.service";
-import { UserService } from "src/app/services/user.service";
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatSelectChange } from '@angular/material/select';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute } from '@angular/router';
+import { Observable, Subscription, map, switchMap } from 'rxjs';
+import { Appointment } from 'src/app/models/appointment';
+import { AppointmentTime } from 'src/app/models/appointment-time';
+import { Medic } from 'src/app/models/medic';
+import { UserProfile } from 'src/app/models/user-profile';
+import { AppointmentService } from 'src/app/services/appointment.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: "app-make-appointment",
-  templateUrl: "./make-appointment.component.html",
-  styleUrls: ["./make-appointment.component.css"],
+  selector: 'app-make-appointment',
+  templateUrl: './make-appointment.component.html',
+  styleUrls: ['./make-appointment.component.css'],
 })
 export class MakeAppointmentComponent implements OnInit, OnDestroy {
-  @Input() userId: string = "";
+  @Input() userId: string = '';
   city?: string;
   specialty?: string;
   medicId?: string;
@@ -36,7 +42,7 @@ export class MakeAppointmentComponent implements OnInit, OnDestroy {
   userData?: UserProfile;
   profileSub: Subscription = new Subscription();
 
-  imageUrl: string = "";
+  imageUrl: string = '';
   imageUploaded: boolean = false;
   uploadedFile?: File;
 
@@ -54,20 +60,22 @@ export class MakeAppointmentComponent implements OnInit, OnDestroy {
     this.formLoaded = false;
     this.getRouteParams();
 
-    this.profileSub = this.userService.getUserData(this.userId).subscribe((userData) => {
-      if (userData.firstName) {
-        // If the profile has been filled by the user enable autofill button
-        this.hasProfileInfo = true;
-        this.userData = userData;
-      }
-      this.createAppointmentForm();
+    this.profileSub = this.userService
+      .getUserData(this.userId)
+      .subscribe((userData) => {
+        if (userData.firstName) {
+          // If the profile has been filled by the user enable autofill button
+          this.hasProfileInfo = true;
+          this.userData = userData;
+        }
+        this.createAppointmentForm();
 
-      if (this.city && this.specialty && this.medicId) {
-        this.autoFillWithRouteParams();
-      } else {
-        this.formLoaded = true;
-      }
-    });
+        if (this.city && this.specialty && this.medicId) {
+          this.autoFillWithRouteParams();
+        } else {
+          this.formLoaded = true;
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -76,9 +84,9 @@ export class MakeAppointmentComponent implements OnInit, OnDestroy {
 
   private getRouteParams() {
     this.route.queryParams.subscribe((params) => {
-      this.city = params["city"];
-      this.specialty = params["specialty"];
-      this.medicId = params["medicId"];
+      this.city = params['city'];
+      this.specialty = params['specialty'];
+      this.medicId = params['medicId'];
     });
   }
 
@@ -86,18 +94,23 @@ export class MakeAppointmentComponent implements OnInit, OnDestroy {
     this.cities$
       .pipe(
         switchMap(() => {
-          this.availableSpecialties$ = this.appointmentService.getSpecialtiesForCity(this.city!);
+          this.availableSpecialties$ =
+            this.appointmentService.getSpecialtiesForCity(this.city!);
           return this.availableSpecialties$;
         }),
         switchMap(() => {
-          this.availableMedics$ = this.appointmentService.getMedicsForCityAndSpecialty(this.city!, this.specialty!);
+          this.availableMedics$ =
+            this.appointmentService.getMedicsForCityAndSpecialty(
+              this.city!,
+              this.specialty!
+            );
           return this.availableMedics$;
         })
       )
       .subscribe(() => {
-        this.appointmentForm.get("city")?.setValue(this.city);
-        this.appointmentForm.get("specialty")?.setValue(this.specialty);
-        this.appointmentForm.get("medic")?.setValue(this.medicId);
+        this.appointmentForm.get('city')?.setValue(this.city);
+        this.appointmentForm.get('specialty')?.setValue(this.specialty);
+        this.appointmentForm.get('medic')?.setValue(this.medicId);
 
         this.formLoaded = true;
       });
@@ -105,20 +118,23 @@ export class MakeAppointmentComponent implements OnInit, OnDestroy {
 
   private createAppointmentForm() {
     this.appointmentForm = this.formBuilder.group({
-      city: ["", [Validators.required]],
-      specialty: ["", [Validators.required]],
-      medic: ["", [Validators.required]],
+      city: ['', [Validators.required]],
+      specialty: ['', [Validators.required]],
+      medic: ['', [Validators.required]],
       datetime: this.formBuilder.group({
-        date: ["", [Validators.required]],
-        time: ["", [Validators.required]],
+        date: ['', [Validators.required]],
+        time: ['', [Validators.required]],
       }),
-      firstName: ["", [Validators.required]],
-      lastName: ["", [Validators.required]],
-      age: ["", [Validators.required]],
-      sex: ["", [Validators.required]],
-      telephone: ["", [Validators.required, Validators.pattern("^[23467](\\d){8}$")]],
-      email: ["", [Validators.required, Validators.email]],
-      comment: [""],
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      age: ['', [Validators.required]],
+      sex: ['', [Validators.required]],
+      telephone: [
+        '',
+        [Validators.required, Validators.pattern('^[23467](\\d){8}$')],
+      ],
+      email: ['', [Validators.required, Validators.email]],
+      comment: [''],
     });
 
     this.initialFormValue = this.appointmentForm.value;
@@ -127,14 +143,18 @@ export class MakeAppointmentComponent implements OnInit, OnDestroy {
   onCityChange(selection: MatSelectChange) {
     const selectedCity: string = selection.value;
 
-    this.availableSpecialties$ = this.appointmentService.getSpecialtiesForCity(selectedCity);
+    this.availableSpecialties$ =
+      this.appointmentService.getSpecialtiesForCity(selectedCity);
 
     // Update specialty validators after changing city
     this.availableSpecialties$.subscribe((specialties) => {
-      const specialtyControl = this.appointmentForm.get("specialty");
+      const specialtyControl = this.appointmentForm.get('specialty');
 
-      specialtyControl?.setValue("");
-      specialtyControl?.setValidators([Validators.required, this.optionsValidator(specialties)]);
+      specialtyControl?.setValue('');
+      specialtyControl?.setValidators([
+        Validators.required,
+        this.optionsValidator(specialties),
+      ]);
       specialtyControl?.updateValueAndValidity();
     });
 
@@ -143,17 +163,24 @@ export class MakeAppointmentComponent implements OnInit, OnDestroy {
   }
 
   onSpecialtyChange(selection: MatSelectChange) {
-    const selectedCity: string = this.appointmentForm.get("city")?.value;
+    const selectedCity: string = this.appointmentForm.get('city')?.value;
     const selectedSpecialty: string = selection.value;
 
-    this.availableMedics$ = this.appointmentService.getMedicsForCityAndSpecialty(selectedCity, selectedSpecialty);
+    this.availableMedics$ =
+      this.appointmentService.getMedicsForCityAndSpecialty(
+        selectedCity,
+        selectedSpecialty
+      );
 
     // Update medic validators after changing specialty
     this.availableMedics$.subscribe((medics) => {
       const medicIds = medics.map((medic) => medic.id);
 
-      const medicControl = this.appointmentForm.get("medic");
-      medicControl?.setValidators([Validators.required, this.optionsValidator(medicIds)]);
+      const medicControl = this.appointmentForm.get('medic');
+      medicControl?.setValidators([
+        Validators.required,
+        this.optionsValidator(medicIds),
+      ]);
       medicControl?.updateValueAndValidity();
     });
   }
@@ -180,26 +207,31 @@ export class MakeAppointmentComponent implements OnInit, OnDestroy {
         }
       }
 
-      const medicId = this.appointmentForm.get("medic")?.value;
-      this.availableTimes$ = this.appointmentService.getMedicAppointmentBookedTimes(medicId, selectedDate).pipe(
-        map((bookedTimes) => {
-          allTimes.forEach((time) => {
-            bookedTimes.forEach((bookedTime) => {
-              if (time.time.toISOString() === bookedTime.toISOString()) {
-                time.disabled = true;
-              }
+      const medicId = this.appointmentForm.get('medic')?.value;
+      this.availableTimes$ = this.appointmentService
+        .getMedicAppointmentBookedTimes(medicId, selectedDate)
+        .pipe(
+          map((bookedTimes) => {
+            allTimes.forEach((time) => {
+              bookedTimes.forEach((bookedTime) => {
+                if (time.time.toISOString() === bookedTime.toISOString()) {
+                  time.disabled = true;
+                }
+              });
             });
-          });
 
-          return allTimes;
-        })
-      );
+            return allTimes;
+          })
+        );
 
       // Update time validators after changing date
       this.availableTimes$.subscribe((times: AppointmentTime[]) => {
         const timeSlots = times.map((time) => time.time);
-        const timeControl = this.appointmentForm.get("dateTime")?.get("time");
-        timeControl?.setValidators([Validators.required, this.optionsValidator(timeSlots)]);
+        const timeControl = this.appointmentForm.get('dateTime')?.get('time');
+        timeControl?.setValidators([
+          Validators.required,
+          this.optionsValidator(timeSlots),
+        ]);
         timeControl?.updateValueAndValidity();
       });
     }
@@ -257,10 +289,9 @@ export class MakeAppointmentComponent implements OnInit, OnDestroy {
       if (this.imageUploaded && this.uploadedFile) {
         this.appointmentService
           // Upload image
-          .uploadImage(this.uploadedFile, "appointment-images")
+          .uploadImage(this.uploadedFile, 'appointment-images')
           .pipe(
             switchMap((url) => {
-              console.log("After upload image");
               // After upload, add the img url to the appointment
               appointment.imgUrl = url;
 
@@ -270,10 +301,8 @@ export class MakeAppointmentComponent implements OnInit, OnDestroy {
           )
           .subscribe({
             next: () => {
-              console.log("After add appointment");
-
               this.appointmentForm.reset();
-              this.openSnackBar("Successfully created your appointment.");
+              this.openSnackBar('Successfully created your appointment.');
             },
             error: (error) => {
               this.openSnackBar(`An error occured ${error}`);
@@ -286,7 +315,7 @@ export class MakeAppointmentComponent implements OnInit, OnDestroy {
         this.appointmentService.addApointment(appointment).subscribe({
           next: () => {
             this.appointmentForm.reset();
-            this.openSnackBar("Successfully created your appointment.");
+            this.openSnackBar('Successfully created your appointment.');
           },
           error: (error) => {
             this.openSnackBar(`An error occured ${error}`);
@@ -323,26 +352,27 @@ export class MakeAppointmentComponent implements OnInit, OnDestroy {
         this.imageUrl = reader.result as string;
         this.imageUploaded = true;
         this.uploadedFile = file;
-        console.log(this.imageUrl, this.imageUploaded, this.uploadedFile);
       };
     }
   }
 
   removeImage(): void {
-    this.imageUrl = "";
+    this.imageUrl = '';
     this.imageUploaded = false;
   }
 
   onAutofillClick(): void {
-    this.appointmentForm.get("firstName")?.setValue(this.userData?.firstName);
-    this.appointmentForm.get("lastName")?.setValue(this.userData?.lastName);
-    this.appointmentForm.get("email")?.setValue(this.userData?.email);
+    this.appointmentForm.get('firstName')?.setValue(this.userData?.firstName);
+    this.appointmentForm.get('lastName')?.setValue(this.userData?.lastName);
+    this.appointmentForm.get('email')?.setValue(this.userData?.email);
 
-    const sexValue = this.userData?.sex![0].toUpperCase().concat(this.userData?.sex!.slice(1));
-    this.appointmentForm.get("sex")?.setValue(sexValue);
+    const sexValue = this.userData
+      ?.sex![0].toUpperCase()
+      .concat(this.userData?.sex!.slice(1));
+    this.appointmentForm.get('sex')?.setValue(sexValue);
 
     const age = this.calculateAge(this.userData?.dateOfBirth!);
-    this.appointmentForm.get("age")?.setValue(age);
+    this.appointmentForm.get('age')?.setValue(age);
   }
 
   private calculateAge(birthDate: Date): number {
@@ -355,7 +385,8 @@ export class MakeAppointmentComponent implements OnInit, OnDestroy {
     // Check if the birthday has occurred this year
     if (
       currentDate.getMonth() < birthDate.getMonth() ||
-      (currentDate.getMonth() === birthDate.getMonth() && currentDate.getDate() < birthDate.getDate())
+      (currentDate.getMonth() === birthDate.getMonth() &&
+        currentDate.getDate() < birthDate.getDate())
     ) {
       age--;
     }

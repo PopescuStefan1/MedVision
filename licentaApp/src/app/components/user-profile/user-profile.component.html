@@ -32,11 +32,22 @@
     </mat-form-field>
   </div>
 
+  <div class="row" style="display: none">
+    <mat-form-field appearance="outline">
+      <input matInput type="text" formControlName="role" />
+    </mat-form-field>
+  </div>
+
   <div class="row">
     <mat-form-field appearance="outline" class="col-md-6 col-12">
       <mat-label>First Name</mat-label>
       <input matInput type="text" formControlName="firstName" />
-      <mat-error *ngIf="profileForm.get('firstName')?.hasError('required') && profileForm.get('firstName')?.touched">
+      <mat-error
+        *ngIf="
+          profileForm.get('firstName')?.hasError('required') &&
+          profileForm.get('firstName')?.touched
+        "
+      >
         Please input your name
       </mat-error>
     </mat-form-field>
@@ -44,7 +55,12 @@
     <mat-form-field appearance="outline" class="col-md-6 col-12">
       <mat-label>Last Name</mat-label>
       <input matInput type="text" formControlName="lastName" />
-      <mat-error *ngIf="profileForm.get('lastName')?.hasError('required') && profileForm.get('lastName')?.touched">
+      <mat-error
+        *ngIf="
+          profileForm.get('lastName')?.hasError('required') &&
+          profileForm.get('lastName')?.touched
+        "
+      >
         Please input your name
       </mat-error>
     </mat-form-field>
@@ -57,19 +73,33 @@
         <mat-option value="male">Male</mat-option>
         <mat-option value="female">Female</mat-option>
       </mat-select>
-      <mat-error *ngIf="profileForm.get('sex')?.hasError('required') && profileForm.get('lastName')?.touched">
+      <mat-error
+        *ngIf="
+          profileForm.get('sex')?.hasError('required') &&
+          profileForm.get('lastName')?.touched
+        "
+      >
         Please select your sex
       </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="col-md-4 col-sm-6 col-12">
       <mat-label>Date of Birth</mat-label>
-      <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" formControlName="dateOfBirth" />
+      <input
+        matInput
+        [min]="minDate"
+        [max]="maxDate"
+        [matDatepicker]="picker"
+        formControlName="dateOfBirth"
+      />
       <mat-hint>DD/MM/YYYY</mat-hint>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker startView="multi-year"></mat-datepicker>
       <mat-error
-        *ngIf="profileForm.get('dateOfBirth')?.hasError('required') && profileForm.get('dateOfBirth')?.touched"
+        *ngIf="
+          profileForm.get('dateOfBirth')?.hasError('required') &&
+          profileForm.get('dateOfBirth')?.touched
+        "
       >
         Date of Birth is required
       </mat-error>
@@ -79,7 +109,10 @@
       <mat-label>Nationality</mat-label>
       <input matInput type="text" formControlName="nationality" />
       <mat-error
-        *ngIf="profileForm.get('nationality')?.hasError('required') && profileForm.get('nationality')?.touched"
+        *ngIf="
+          profileForm.get('nationality')?.hasError('required') &&
+          profileForm.get('nationality')?.touched
+        "
       >
         Please input your nationality
       </mat-error>
@@ -92,7 +125,10 @@
         <mat-label>Street</mat-label>
         <input matInput type="text" formControlName="street" />
         <mat-error
-          *ngIf="profileForm.get('address.street')?.hasError('required') && profileForm.get('address.street')?.touched"
+          *ngIf="
+            profileForm.get('address.street')?.hasError('required') &&
+            profileForm.get('address.street')?.touched
+          "
         >
           Street is required.
         </mat-error>
@@ -103,7 +139,8 @@
         <input matInput type="text" formControlName="country" />
         <mat-error
           *ngIf="
-            profileForm.get('address.country')?.hasError('required') && profileForm.get('address.country')?.touched
+            profileForm.get('address.country')?.hasError('required') &&
+            profileForm.get('address.country')?.touched
           "
         >
           Country is required.
@@ -116,7 +153,10 @@
         <mat-label>State</mat-label>
         <input matInput type="text" formControlName="state" />
         <mat-error
-          *ngIf="profileForm.get('address.state')?.hasError('required') && profileForm.get('address.state')?.touched"
+          *ngIf="
+            profileForm.get('address.state')?.hasError('required') &&
+            profileForm.get('address.state')?.touched
+          "
         >
           State is required.
         </mat-error>
@@ -126,14 +166,23 @@
         <mat-label>City</mat-label>
         <input matInput type="text" formControlName="city" />
         <mat-error
-          *ngIf="profileForm.get('address.city')?.hasError('required') && profileForm.get('address.city')?.touched"
+          *ngIf="
+            profileForm.get('address.city')?.hasError('required') &&
+            profileForm.get('address.city')?.touched
+          "
         >
           City is required.
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline" class="col-md-4 col-12">
         <mat-label>Postal Code</mat-label>
-        <input matInput #postalCode type="text" formControlName="postalCode" maxlength="6" />
+        <input
+          matInput
+          #postalCode
+          type="text"
+          formControlName="postalCode"
+          maxlength="6"
+        />
         <mat-hint align="end">{{ postalCode.value.length || 0 }}/6</mat-hint>
         <mat-error
           *ngIf="
@@ -148,7 +197,9 @@
   </div>
 
   <div class="row mt-3">
-    <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-sm-10 offset-sm-1 col-12">
+    <div
+      class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-sm-10 offset-sm-1 col-12"
+    >
       <button
         class="p-1 w-100"
         type="submit"
