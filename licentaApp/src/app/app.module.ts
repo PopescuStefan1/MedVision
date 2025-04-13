@@ -45,6 +45,7 @@ import {
   ReCaptchaV3Provider,
 } from '@angular/fire/app-check';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { SanitizeHtmlPipe } from './pipes/sanitize-html.pipe';
 
 @NgModule({
   declarations: [
@@ -70,6 +71,7 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
     FileDragNDropDirectiveDirective,
     DescriptionDialogComponent,
     HelpDialogComponent,
+    SanitizeHtmlPipe,
   ],
   imports: [
     BrowserModule,

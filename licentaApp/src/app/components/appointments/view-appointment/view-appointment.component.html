@@ -25,11 +25,17 @@
                 <p><strong>City:</strong> {{ appointment.city }}</p>
               </div>
               <div class="row">
-                <p><strong>Appointment time:</strong> {{ appointment.datetime | date : "medium" }}</p>
+                <p>
+                  <strong>Appointment time:</strong>
+                  {{ appointment.datetime | date : "medium" }}
+                </p>
               </div>
               <ng-container *ngIf="getMedicById(appointment.medicId) as medic">
                 <div class="row">
-                  <p><strong>Medic:</strong> {{ medic.shortTitle }} {{ medic.firstName }} {{ medic.lastName }}</p>
+                  <p>
+                    <strong>Medic:</strong> {{ medic.shortTitle }}
+                    {{ medic.firstName }} {{ medic.lastName }}
+                  </p>
                 </div>
                 <div class="row">
                   <p><strong>Specialty:</strong> {{ medic.specialty }}</p>
@@ -41,16 +47,32 @@
                 <h4>Patient Info</h4>
               </div>
               <div class="row">
-                <p><strong>Patient Name:</strong> {{ appointment.firstName }} {{ appointment.lastName }}</p>
+                <p>
+                  <strong>Patient Name:</strong>
+                  {{ appointment.firstName }}
+                  <!-- <span
+                    [innerHtml]="' ' + appointment.firstName | sanitizeHtml"
+                  ></span> -->
+                  {{ appointment.lastName }}
+                </p>
               </div>
               <div class="row">
                 <p><strong>Email:</strong> {{ appointment.email }}</p>
               </div>
               <div class="row">
-                <p><strong>Phone Number:</strong> +40{{ appointment.telephone }}</p>
+                <p>
+                  <strong>Phone Number:</strong> +40{{ appointment.telephone }}
+                </p>
               </div>
               <div class="row">
-                <p><strong>Reason:</strong> {{ appointment.comment ? appointment.comment : "No reason given" }}</p>
+                <p>
+                  <strong>Reason:</strong>
+                  {{
+                    appointment.comment
+                      ? appointment.comment
+                      : "No reason given"
+                  }}
+                </p>
               </div>
             </div>
           </div>
@@ -60,7 +82,11 @@
             </div>
             <div class="row">
               <div class="col-6">
-                <img [src]="appointment.imgUrl" alt="Appointment Image" class="w-100" />
+                <img
+                  [src]="appointment.imgUrl"
+                  alt="Appointment Image"
+                  class="w-100"
+                />
               </div>
             </div>
           </ng-container>
@@ -97,11 +123,17 @@
                 <p><strong>City:</strong> {{ appointment.city }}</p>
               </div>
               <div class="row">
-                <p><strong>Appointment time:</strong> {{ appointment.datetime | date : "medium" }}</p>
+                <p>
+                  <strong>Appointment time:</strong>
+                  {{ appointment.datetime | date : "medium" }}
+                </p>
               </div>
               <ng-container *ngIf="getMedicById(appointment.medicId) as medic">
                 <div class="row">
-                  <p><strong>Medic:</strong> {{ medic.shortTitle }} {{ medic.firstName }} {{ medic.lastName }}</p>
+                  <p>
+                    <strong>Medic:</strong> {{ medic.shortTitle }}
+                    {{ medic.firstName }} {{ medic.lastName }}
+                  </p>
                 </div>
                 <div class="row">
                   <p><strong>Specialty:</strong> {{ medic.specialty }}</p>
@@ -113,16 +145,28 @@
                 <h4>Patient Info</h4>
               </div>
               <div class="row">
-                <p><strong>Patient Name:</strong> {{ appointment.firstName }} {{ appointment.lastName }}</p>
+                <p>
+                  <strong>Patient Name:</strong> {{ appointment.firstName }}
+                  {{ appointment.lastName }}
+                </p>
               </div>
               <div class="row">
                 <p><strong>Email:</strong> {{ appointment.email }}</p>
               </div>
               <div class="row">
-                <p><strong>Phone Number:</strong> +40{{ appointment.telephone }}</p>
+                <p>
+                  <strong>Phone Number:</strong> +40{{ appointment.telephone }}
+                </p>
               </div>
               <div class="row">
-                <p><strong>Reason:</strong> {{ appointment.comment ? appointment.comment : "No reason given" }}</p>
+                <p>
+                  <strong>Reason:</strong>
+                  {{
+                    appointment.comment
+                      ? appointment.comment
+                      : "No reason given"
+                  }}
+                </p>
               </div>
             </div>
           </div>
@@ -132,7 +176,11 @@
             </div>
             <div class="row">
               <div class="col-6">
-                <img [src]="appointment.imgUrl" alt="Appointment Image" class="w-100" />
+                <img
+                  [src]="appointment.imgUrl"
+                  alt="Appointment Image"
+                  class="w-100"
+                />
               </div>
             </div>
           </ng-container>

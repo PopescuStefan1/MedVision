@@ -9,6 +9,7 @@ export interface Medic {
   photoUrl?: string;
   email: string;
   phoneNumber: string;
+  homePhoneNumber?: string;
   userId: string;
   isVisible: boolean;
 }

@@ -1,29 +1,61 @@
-import { Injectable } from "@angular/core";
-import { AngularFirestore } from "@angular/fire/compat/firestore";
-import { Observable, from, map } from "rxjs";
-import { UserProfile } from "../models/user-profile";
-import { doc } from "firebase/firestore";
+import { Injectable } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Observable, from, map, switchMap, tap } from 'rxjs';
+import { UserProfile } from '../models/user-profile';
+import { doc } from 'firebase/firestore';
+import { MedicService } from './medic.service';
+import { Medic } from '../models/medic';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class UserService {
-  constructor(private firestore: AngularFirestore) {}
+  constructor(
+    private firestore: AngularFirestore,
+    private medicService: MedicService
+  ) {}
 
   getUserData(docId: string): Observable<UserProfile> {
-    const userDocRef = this.firestore.collection("users").doc(docId);
+    const userDocRef = this.firestore.collection('users').doc(docId);
 
-    return userDocRef.valueChanges().pipe(map((data) => (data ? this.convertTimestampsToDates(data) : data)));
+    return userDocRef
+      .valueChanges()
+      .pipe(map((data) => (data ? this.convertTimestampsToDates(data) : data)));
   }
 
   updateUserData(userId: string, userData: any): Observable<void> {
-    const userDocRef = this.firestore.collection("users").doc(userId);
+    const userDocRef = this.firestore.collection('users').doc(userId);
 
-    return from(userDocRef.update(userData));
+    if (userData.role.toLowerCase() === 'medic') {
+      return this.medicService.getMedicByUserId(userId).pipe(
+        tap((medic) => {
+          if (medic === null) {
+            const medicProfile: Medic = {
+              userId: userId,
+              email: '',
+              firstName: '',
+              lastName: '',
+              city: '',
+              isVisible: false,
+              phoneNumber: '',
+              shortTitle: '',
+              specialty: '',
+              title: '',
+            };
+
+            const collectionRef = this.firestore.collection('medics');
+            from(collectionRef.add(medicProfile));
+          }
+        }),
+        switchMap(() => from(userDocRef.update(userData)))
+      );
+    } else {
+      return from(userDocRef.update(userData));
+    }
   }
 
   private convertTimestampsToDates(data: any): any {
-    if (data.hasOwnProperty("dateOfBirth")) {
+    if (data.hasOwnProperty('dateOfBirth')) {
       data.dateOfBirth = data.dateOfBirth.toDate();
     }
 

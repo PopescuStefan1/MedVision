@@ -1,14 +1,14 @@
-import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
-import { UserService } from "src/app/services/user.service";
-import { MyErrorStateMatcher } from "../auth/auth.component";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
+import { MyErrorStateMatcher } from '../auth/auth.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-  selector: "app-user-profile",
-  templateUrl: "./user-profile.component.html",
-  styleUrls: ["./user-profile.component.css"],
+  selector: 'app-user-profile',
+  templateUrl: './user-profile.component.html',
+  styleUrls: ['./user-profile.component.css'],
 })
 export class UserProfileComponent implements OnInit {
   userId: string;
@@ -29,7 +29,7 @@ export class UserProfileComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private router: Router
   ) {
-    this.userId = this.route.snapshot.paramMap.get("userId") || "";
+    this.userId = this.route.snapshot.paramMap.get('userId') || '';
     this.minDate = new Date(1900, 0, 1);
     this.maxDate = new Date();
   }
@@ -40,7 +40,7 @@ export class UserProfileComponent implements OnInit {
       this.createUserForm(userData);
       this.subscribeToFormChanges();
 
-      this.isMedicUser = userData.role === "medic";
+      this.isMedicUser = userData.role === 'medic';
 
       if (userData.firstName) {
         // If the profile has been filled by the user enable the medic button
@@ -52,18 +52,22 @@ export class UserProfileComponent implements OnInit {
 
   createUserForm(userData: any) {
     this.profileForm = this.formBuilder.group({
-      email: [{ value: userData?.email, disabled: true } || ""],
-      firstName: [userData?.firstName || "", [Validators.required]],
-      lastName: [userData?.lastName || "", [Validators.required]],
-      sex: [userData?.sex || "", [Validators.required]],
-      dateOfBirth: [userData?.dateOfBirth || "", [Validators.required]],
-      nationality: [userData?.nationality || "", [Validators.required]],
+      email: [{ value: userData?.email, disabled: true } || ''],
+      role: [userData?.role || '', [Validators.required]],
+      firstName: [userData?.firstName || '', [Validators.required]],
+      lastName: [userData?.lastName || '', [Validators.required]],
+      sex: [userData?.sex || '', [Validators.required]],
+      dateOfBirth: [userData?.dateOfBirth || '', [Validators.required]],
+      nationality: [userData?.nationality || '', [Validators.required]],
       address: this.formBuilder.group({
-        street: [userData?.address?.street || "", [Validators.required]],
-        country: [userData?.address?.country || "", [Validators.required]],
-        state: [userData?.address?.state || "", [Validators.required]],
-        city: [userData?.address?.city || "", [Validators.required]],
-        postalCode: [userData?.address?.postalCode || "", [Validators.required, Validators.minLength(6)]],
+        street: [userData?.address?.street || '', [Validators.required]],
+        country: [userData?.address?.country || '', [Validators.required]],
+        state: [userData?.address?.state || '', [Validators.required]],
+        city: [userData?.address?.city || '', [Validators.required]],
+        postalCode: [
+          userData?.address?.postalCode || '',
+          [Validators.required, Validators.minLength(6)],
+        ],
       }),
     });
 
@@ -92,7 +96,7 @@ export class UserProfileComponent implements OnInit {
 
       this.userService.updateUserData(this.userId, updatedUserData).subscribe({
         next: () => {
-          this.openSnackBar("Successfully updated personal information.");
+          this.openSnackBar('Successfully updated personal information.');
           this.isProfileFilled = true;
         },
         error: (error) => {
@@ -103,6 +107,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   onMedicPageButtonClick(): void {
-    this.router.navigate(["medic-page", this.userId]);
+    this.router.navigate(['medic-page', this.userId]);
   }
 }

@@ -1,24 +1,44 @@
-import { Injectable } from "@angular/core";
-import { AngularFirestore, AngularFirestoreDocument } from "@angular/fire/compat/firestore";
-import { Timestamp } from "@angular/fire/firestore";
-import { Observable, Subject, catchError, from, map, switchMap, take, tap, throwError } from "rxjs";
-import { Medic } from "../models/medic";
-import { Appointment } from "../models/appointment";
-import { FirebaseAppointment } from "../models/firebase-appointment";
-import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from "@angular/fire/compat/storage";
+import { Injectable } from '@angular/core';
+import {
+  AngularFirestore,
+  AngularFirestoreDocument,
+} from '@angular/fire/compat/firestore';
+import { Timestamp } from '@angular/fire/firestore';
+import {
+  Observable,
+  Subject,
+  catchError,
+  from,
+  map,
+  switchMap,
+  take,
+  tap,
+  throwError,
+} from 'rxjs';
+import { Medic } from '../models/medic';
+import { Appointment } from '../models/appointment';
+import { FirebaseAppointment } from '../models/firebase-appointment';
+import {
+  AngularFireStorage,
+  AngularFireStorageReference,
+  AngularFireUploadTask,
+} from '@angular/fire/compat/storage';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class AppointmentService {
   private addAppointmentSubject = new Subject<void>();
   public addAppointment$ = this.addAppointmentSubject.asObservable();
 
-  constructor(private firestore: AngularFirestore, private storage: AngularFireStorage) {}
+  constructor(
+    private firestore: AngularFirestore,
+    private storage: AngularFireStorage
+  ) {}
 
   getDistinctCities(): Observable<string[]> {
     return this.firestore
-      .collection("medics", (ref) => ref.where("isVisible", "==", true))
+      .collection('medics', (ref) => ref.where('isVisible', '==', true))
       .get()
       .pipe(
         map((querySnapshot) => {
@@ -40,7 +60,9 @@ export class AppointmentService {
 
   getSpecialtiesForCity(selectedCity: string) {
     return this.firestore
-      .collection("medics", (ref) => ref.where("isVisible", "==", true).where("city", "==", selectedCity))
+      .collection('medics', (ref) =>
+        ref.where('isVisible', '==', true).where('city', '==', selectedCity)
+      )
       .get()
       .pipe(
         map((querySnapshot) => {
@@ -60,27 +82,43 @@ export class AppointmentService {
       );
   }
 
-  getMedicsForCityAndSpecialty(selectedCity: string, selectedSpecialty: string) {
+  getMedicsForCityAndSpecialty(
+    selectedCity: string,
+    selectedSpecialty: string
+  ) {
     return this.firestore
-      .collection<Medic>("medics", (ref) =>
-        ref.where("isVisible", "==", true).where("city", "==", selectedCity).where("specialty", "==", selectedSpecialty)
+      .collection<Medic>('medics', (ref) =>
+        ref
+          .where('isVisible', '==', true)
+          .where('city', '==', selectedCity)
+          .where('specialty', '==', selectedSpecialty)
       )
-      .valueChanges({ idField: "id" });
+      .valueChanges({ idField: 'id' });
   }
 
   getMedicAppointments(selectedMedic: Medic) {
-    return this.firestore.collection<Appointment>("appointments", (ref) =>
-      ref.where("medicId", "==", selectedMedic.id)
+    return this.firestore.collection<Appointment>('appointments', (ref) =>
+      ref.where('medicId', '==', selectedMedic.id)
     );
   }
 
-  getMedicAppointmentBookedTimes(selectedMedicId: string, date: Date): Observable<Set<Date>> {
-    const startOfDay = Timestamp.fromDate(new Date(date.getFullYear(), date.getMonth(), date.getDate()));
-    const endOfDay = Timestamp.fromDate(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1));
+  getMedicAppointmentBookedTimes(
+    selectedMedicId: string,
+    date: Date
+  ): Observable<Set<Date>> {
+    const startOfDay = Timestamp.fromDate(
+      new Date(date.getFullYear(), date.getMonth(), date.getDate())
+    );
+    const endOfDay = Timestamp.fromDate(
+      new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1)
+    );
 
     return this.firestore
-      .collection("appointments", (ref) =>
-        ref.where("medicId", "==", selectedMedicId).where("datetime", ">=", startOfDay).where("datetime", "<", endOfDay)
+      .collection('appointments', (ref) =>
+        ref
+          .where('medicId', '==', selectedMedicId)
+          .where('datetime', '>=', startOfDay)
+          .where('datetime', '<', endOfDay)
       )
       .get()
       .pipe(
@@ -104,20 +142,28 @@ export class AppointmentService {
       );
   }
 
-  getMedicWeekAppointments(selectedMedicId: string, startDate: Date, endDate: Date): Observable<Appointment[]> {
+  getMedicWeekAppointments(
+    selectedMedicId: string,
+    startDate: Date,
+    endDate: Date
+  ): Observable<Appointment[]> {
     const startOfFirstDay: Timestamp = Timestamp.fromDate(
-      new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate())
+      new Date(
+        startDate.getFullYear(),
+        startDate.getMonth(),
+        startDate.getDate()
+      )
     );
     const endOfLastDay: Timestamp = Timestamp.fromDate(
       new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() + 1)
     );
 
     return this.firestore
-      .collection<FirebaseAppointment>("appointments", (ref) =>
+      .collection<FirebaseAppointment>('appointments', (ref) =>
         ref
-          .where("medicId", "==", selectedMedicId)
-          .where("datetime", ">=", startOfFirstDay)
-          .where("datetime", "<", endOfLastDay)
+          .where('medicId', '==', selectedMedicId)
+          .where('datetime', '>=', startOfFirstDay)
+          .where('datetime', '<', endOfLastDay)
       )
       .get()
       .pipe(
@@ -147,7 +193,7 @@ export class AppointmentService {
       datetime: Timestamp.fromDate(appointmentData.datetime),
     };
 
-    const collectionRef = this.firestore.collection("appointments");
+    const collectionRef = this.firestore.collection('appointments');
     return from(collectionRef.add(firebaseAppointmentData)).pipe(
       // Emit a signal when the appointment is added
       tap(() => this.addAppointmentSubject.next())
@@ -156,7 +202,9 @@ export class AppointmentService {
 
   getAppointmentsByUserId(userId: string) {
     return this.firestore
-      .collection<FirebaseAppointment>("appointments", (ref) => ref.where("userId", "==", userId).orderBy("datetime"))
+      .collection<FirebaseAppointment>('appointments', (ref) =>
+        ref.where('userId', '==', userId).orderBy('datetime')
+      )
       .get()
       .pipe(
         map((querySnapshot) => {
@@ -180,14 +228,17 @@ export class AppointmentService {
   }
 
   uploadImage(file: File, path: string): Observable<string> {
-    const storageRef: AngularFireStorageReference = this.storage.ref(`${path}/${new Date().getTime()}${file.name}`);
+    const storageRef: AngularFireStorageReference = this.storage.ref(
+      `${path}/${new Date().getTime()}${file.name}`
+    );
     const task: AngularFireUploadTask = storageRef.put(file);
+
 
     return from(task).pipe(
       switchMap(() => {
         return storageRef.getDownloadURL().pipe(
           catchError((error) => {
-            console.error("Error getting download URL:", error);
+            console.error('Error getting download URL:', error);
             return throwError(() => error);
           })
         );

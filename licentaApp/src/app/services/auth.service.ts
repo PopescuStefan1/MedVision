@@ -1,10 +1,19 @@
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, catchError, finalize, from, map, tap, throwError } from "rxjs";
-import { User } from "../models/user.model";
-import { AngularFirestore } from "@angular/fire/compat/firestore";
-import { UserProfile } from "../models/user-profile";
-import { AngularFireAuth } from "@angular/fire/compat/auth";
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import {
+  BehaviorSubject,
+  Observable,
+  catchError,
+  finalize,
+  from,
+  map,
+  tap,
+  throwError,
+} from 'rxjs';
+import { User } from '../models/user.model';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { UserProfile } from '../models/user-profile';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 export interface AuthResponseData {
   kind: string;
@@ -17,14 +26,18 @@ export interface AuthResponseData {
 }
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class AuthService {
   private _user = new BehaviorSubject<User | null>(null);
   private tokenExpirationTimer: any;
   private authStateInitialized = false;
 
-  constructor(private http: HttpClient, private firestore: AngularFirestore, private afAuth: AngularFireAuth) {
+  constructor(
+    private http: HttpClient,
+    private firestore: AngularFirestore,
+    private afAuth: AngularFireAuth
+  ) {
     this.initAuthListener();
   }
 
@@ -43,7 +56,10 @@ export class AuthService {
           const loadedUser = new User(user.email!, user.uid, tokenResult.token);
           this._user.next(loadedUser);
 
-          this.setAutoLogout(new Date(tokenResult.expirationTime).getTime() - new Date().getTime());
+          this.setAutoLogout(
+            new Date(tokenResult.expirationTime).getTime() -
+              new Date().getTime()
+          );
 
           this.authStateInitialized = true;
         });
@@ -56,13 +72,15 @@ export class AuthService {
   }
 
   signup(email: string, password: string): Observable<any> {
-    return from(this.afAuth.createUserWithEmailAndPassword(email, password)).pipe(
+    return from(
+      this.afAuth.createUserWithEmailAndPassword(email, password)
+    ).pipe(
       catchError(this.handleError),
       tap((credential) => {
         const { email, uid } = credential.user!;
         const userData: UserProfile = {
           email: email!,
-          role: "patient", // Set the user role here
+          role: 'patient', // Set the user role here
         };
         this.addUserToFirestore(uid, userData).subscribe();
       })
@@ -70,21 +88,23 @@ export class AuthService {
   }
 
   private addUserToFirestore(userId: string, userData: any) {
-    const userDocRef = this.firestore.collection("users").doc(userId);
+    const userDocRef = this.firestore.collection('users').doc(userId);
 
     return from(userDocRef.set(userData)).pipe(
       catchError((error) => {
-        console.error("Error adding document:", error);
+        console.error('Error adding document:', error);
         throw error;
       }),
       finalize(() => {
-        console.log("Document added successfully!");
+        console.log('Document added successfully!');
       })
     );
   }
 
   login(email: string, password: string): Observable<any> {
-    return from(this.afAuth.signInWithEmailAndPassword(email, password)).pipe(catchError(this.handleError));
+    return from(this.afAuth.signInWithEmailAndPassword(email, password)).pipe(
+      catchError(this.handleError)
+    );
   }
 
   logout(): void {
@@ -105,11 +125,16 @@ export class AuthService {
     }
   }
 
-  private async handleAuthentication(email: string, userId: string, token: string, expiresIn: number) {
+  private async handleAuthentication(
+    email: string,
+    userId: string,
+    token: string,
+    expiresIn: number
+  ) {
     const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
     const user = new User(email, userId, token, expirationDate);
 
-    localStorage.setItem("userData", JSON.stringify(user));
+    localStorage.setItem('userData', JSON.stringify(user));
   }
 
   private handleError(errorResponse: HttpErrorResponse) {
@@ -119,14 +144,15 @@ export class AuthService {
       return throwError(() => err);
     }
     switch (errorResponse.error.error.message) {
-      case "EMAIL_EXISTS":
-        errorMessage += "The email address is already in use by another account.";
+      case 'EMAIL_EXISTS':
+        errorMessage +=
+          'The email address is already in use by another account.';
         break;
-      case "INVALID_LOGIN_CREDENTIALS":
-        errorMessage += "Invalid login credentials";
+      case 'INVALID_LOGIN_CREDENTIALS':
+        errorMessage += 'Invalid login credentials';
         break;
       default:
-        errorMessage += "Unknown error.";
+        errorMessage += 'Unknown error.';
         break;
     }
 

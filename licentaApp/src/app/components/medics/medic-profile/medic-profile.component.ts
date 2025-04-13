@@ -1,14 +1,14 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
-import { Subscription, combineLatest, switchMap, tap } from "rxjs";
-import { Medic } from "src/app/models/medic";
-import { UserProfile } from "src/app/models/user-profile";
-import { MedicService } from "src/app/services/medic.service";
-import { UserService } from "src/app/services/user.service";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription, combineLatest, switchMap, tap } from 'rxjs';
+import { Medic } from 'src/app/models/medic';
+import { UserProfile } from 'src/app/models/user-profile';
+import { MedicService } from 'src/app/services/medic.service';
+import { UserService } from 'src/app/services/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { cityNames } from "src/app/city_data/cityData";
+import { cityNames } from 'src/app/city_data/cityData';
 
 interface MedicDetail {
   firstName?: string;
@@ -19,9 +19,9 @@ interface MedicDetail {
 }
 
 @Component({
-  selector: "app-medic-profile",
-  templateUrl: "./medic-profile.component.html",
-  styleUrls: ["./medic-profile.component.css"],
+  selector: 'app-medic-profile',
+  templateUrl: './medic-profile.component.html',
+  styleUrls: ['./medic-profile.component.css'],
 })
 export class MedicProfileComponent implements OnInit, OnDestroy {
   userId: string;
@@ -34,7 +34,7 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
   firstCreation: boolean = false;
   isCurrentlyVisible: boolean = false;
   uploadedFile?: File;
-  imageUrl: string = "";
+  imageUrl: string = '';
   imageChanged: boolean = false;
   medicDetail: MedicDetail = {};
 
@@ -45,12 +45,12 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
     private medicService: MedicService,
     private _snackBar: MatSnackBar
   ) {
-    this.userId = this.route.snapshot.paramMap.get("userId") || "";
+    this.userId = this.route.snapshot.paramMap.get('userId') || '';
   }
 
   ngOnInit(): void {
     this.isLoaded = false;
-    this.cityNames = cityNames.sort((a, b) => a.localeCompare(b, "ro"));
+    this.cityNames = cityNames.sort((a, b) => a.localeCompare(b, 'ro'));
 
     this.subscription = combineLatest([
       this.userService.getUserData(this.userId),
@@ -64,9 +64,9 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
       this.medicDetail = {
         firstName: userData.firstName,
         lastName: userData.lastName,
-        specialty: medicData ? medicData.specialty : "",
-        title: medicData ? medicData.title : "",
-        shortTitle: medicData ? medicData.shortTitle : "",
+        specialty: medicData ? medicData.specialty : '',
+        title: medicData ? medicData.title : '',
+        shortTitle: medicData ? medicData.shortTitle : '',
       };
 
       if (medicData) {
@@ -92,25 +92,31 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  private createMedicPageForm(userData: UserProfile, medicData: Medic | null): void {
+  private createMedicPageForm(
+    userData: UserProfile,
+    medicData: Medic | null
+  ): void {
     this.medicPageForm = this.formBuilder.group({
       lastName: [{ value: userData.lastName, disabled: true }],
       firstName: [{ value: userData.firstName, disabled: true }],
-      specialty: [medicData?.specialty || "", [Validators.required]],
-      title: [medicData?.title || "", [Validators.required]],
-      shortTitle: [medicData?.shortTitle || "", [Validators.required]],
-      email: [medicData?.email || "", [Validators.required, Validators.email]],
-      city: [medicData?.city || "", [Validators.required]],
-      telephone: [medicData?.phoneNumber || "", [Validators.required, Validators.pattern("^[23467](\\d){8}$")]],
+      specialty: [medicData?.specialty || '', [Validators.required]],
+      title: [medicData?.title || '', [Validators.required]],
+      shortTitle: [medicData?.shortTitle || '', [Validators.required]],
+      email: [medicData?.email || '', [Validators.required, Validators.email]],
+      city: [medicData?.city || '', [Validators.required]],
+      telephone: [
+        medicData?.phoneNumber || '',
+        [Validators.required, Validators.pattern('^[23467](\\d){8}$')],
+      ],
     });
 
     this.initialFormValue = this.medicPageForm.value;
   }
 
   onMedicDetailsChange(): void {
-    this.medicDetail.specialty = this.medicPageForm.get("specialty")?.value;
-    this.medicDetail.title = this.medicPageForm.get("title")?.value;
-    this.medicDetail.shortTitle = this.medicPageForm.get("shortTitle")?.value;
+    this.medicDetail.specialty = this.medicPageForm.get('specialty')?.value;
+    this.medicDetail.title = this.medicPageForm.get('title')?.value;
+    this.medicDetail.shortTitle = this.medicPageForm.get('shortTitle')?.value;
   }
 
   private isEqual(obj1: any, obj2: any): boolean {
@@ -119,14 +125,14 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
 
   onSubmit(): void {
     const medic: Medic = {
-      firstName: this.medicPageForm.get("firstName")?.value,
-      lastName: this.medicPageForm.get("lastName")?.value,
-      email: this.medicPageForm.get("email")?.value,
-      specialty: this.medicPageForm.get("specialty")?.value,
-      title: this.medicPageForm.get("title")?.value,
-      shortTitle: this.medicPageForm.get("shortTitle")?.value,
-      city: this.medicPageForm.get("city")?.value,
-      phoneNumber: this.medicPageForm.get("telephone")?.value,
+      firstName: this.medicPageForm.get('firstName')?.value,
+      lastName: this.medicPageForm.get('lastName')?.value,
+      email: this.medicPageForm.get('email')?.value,
+      specialty: this.medicPageForm.get('specialty')?.value,
+      title: this.medicPageForm.get('title')?.value,
+      shortTitle: this.medicPageForm.get('shortTitle')?.value,
+      city: this.medicPageForm.get('city')?.value,
+      phoneNumber: this.medicPageForm.get('telephone')?.value,
       isVisible: false,
       userId: this.userId,
       photoUrl: this.imageUrl,
@@ -142,7 +148,7 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
         .pipe(
           tap(() => {
             this.openEditSnackbar(
-              "Successfully set up your medic page. If you want your page to appear in the medics list, make sure to set your page to visible!"
+              'Successfully set up your medic page. If you want your page to appear in the medics list, make sure to set your page to visible!'
             );
             this.handleImageUpload();
           })
@@ -154,7 +160,7 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
         .pipe(
           tap(() => {
             this.openEditSnackbar(
-              "Successfully edited your medic page. If you want your page to appear in the medics list, make sure to set your page to visible!"
+              'Successfully edited your medic page. If you want your page to appear in the medics list, make sure to set your page to visible!'
             );
             this.handleImageUpload();
           })
@@ -164,13 +170,11 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
   }
 
   private handleImageUpload(): void {
-    console.log(this.imageChanged, this.uploadedFile);
     if (this.imageChanged && this.uploadedFile) {
       this.medicService
-        .uploadImage(this.userId, this.uploadedFile, "medic-images")
+        .uploadImage(this.userId, this.uploadedFile, 'medic-images')
         .pipe(
           switchMap((downloadURL) => {
-            console.log("Setting medic image");
             return this.medicService.setMedicImageUrl(this.userId, downloadURL);
           })
         )
@@ -189,11 +193,13 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
   }
 
   toggleMedicVisibility(): void {
-    this.medicService.updateMedicVisibility(this.userId, !this.isCurrentlyVisible).subscribe(() => {
-      this.isCurrentlyVisible
-        ? this.openVisibilitySnackbar("Your page is now visible")
-        : this.openVisibilitySnackbar("Your page is now hidden");
-    });
+    this.medicService
+      .updateMedicVisibility(this.userId, !this.isCurrentlyVisible)
+      .subscribe(() => {
+        this.isCurrentlyVisible
+          ? this.openVisibilitySnackbar('Your page is now visible')
+          : this.openVisibilitySnackbar('Your page is now hidden');
+      });
   }
 
   private openEditSnackbar(message: string): void {
@@ -203,13 +209,15 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
   }
 
   private openVisibilitySnackbar(message: string): void {
-    const snackBarRef = this._snackBar.open(message, "Undo", {
+    const snackBarRef = this._snackBar.open(message, 'Undo', {
       duration: 5000,
-      verticalPosition: "top",
+      verticalPosition: 'top',
     });
 
     snackBarRef.onAction().subscribe(() => {
-      this.medicService.updateMedicVisibility(this.userId, !this.isCurrentlyVisible).subscribe();
+      this.medicService
+        .updateMedicVisibility(this.userId, !this.isCurrentlyVisible)
+        .subscribe();
     });
   }
 
