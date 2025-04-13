@@ -28,8 +28,15 @@ export class ViewAppointmentComponent implements OnInit {
   }
 
   getAppointmentsForUser(): void {
-    this.appointments$ = this.appointmentService.getAppointmentsByUserId(
-      this.userId
+    // this.appointments$ = this.appointmentService.getAppointmentsByUserId(
+    //   this.userId
+    // );
+
+    this.appointments$ = this.appointmentService.getAppointments();
+
+    this.appointments$ = this.appointments$.pipe(
+      map((appointments) => 
+      appointments.filter((appointment) => appointment.userId === this.userId))
     );
 
     this.pastAppointments$ = this.appointments$.pipe(

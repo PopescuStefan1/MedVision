@@ -227,6 +227,33 @@ export class AppointmentService {
       );
   }
 
+  getAppointments() {
+    return this.firestore
+      .collection<FirebaseAppointment>('appointments', (ref) =>
+        ref.orderBy('datetime')
+      )
+      .get()
+      .pipe(
+        map((querySnapshot) => {
+          const appointments: Appointment[] = [];
+
+          querySnapshot.forEach((doc) => {
+            const firebaseAppointmentData = doc.data() as FirebaseAppointment;
+
+            // Convert timestamp to Date and FirebaseAppointment to Appointment
+            const appointmentData: Appointment = {
+              ...firebaseAppointmentData,
+              datetime: firebaseAppointmentData.datetime.toDate(),
+            };
+
+            appointments.push(appointmentData);
+          });
+
+          return appointments;
+        })
+      );
+  }
+
   uploadImage(file: File, path: string): Observable<string> {
     const storageRef: AngularFireStorageReference = this.storage.ref(
       `${path}/${new Date().getTime()}${file.name}`
