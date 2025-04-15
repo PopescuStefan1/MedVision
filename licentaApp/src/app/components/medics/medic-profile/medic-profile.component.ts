@@ -124,6 +124,37 @@ export class MedicProfileComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
+    const lowerInput = this.medicPageForm.get('title')?.value.toLowerCase();
+    const blacklist = [
+      '<script',
+      '<img',
+      '<svg',
+      '<iframe',
+      'onerror',
+      'onload',
+      'onmouseover',
+      'onclick',
+      'onfocus',
+      'srcdoc',
+      'javascript:',
+      'data:text/html',
+      'expression(',
+      'style=',
+      'eval(',
+      'document.',
+      'window.',
+      'alert(',
+      'prompt(',
+      'confirm(',
+    ];
+
+    for (const pattern of blacklist) {
+      if (lowerInput.includes(pattern)) {
+        this.openEditSnackbar('XSS pattern detected.');
+        return;
+      }
+    }
+
     const medic: Medic = {
       firstName: this.medicPageForm.get('firstName')?.value,
       lastName: this.medicPageForm.get('lastName')?.value,
