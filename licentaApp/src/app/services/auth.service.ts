@@ -14,6 +14,7 @@ import { User } from '../models/user.model';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { UserProfile } from '../models/user-profile';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { UserService } from './user.service';
 
 export interface AuthResponseData {
   kind: string;
@@ -36,7 +37,8 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private firestore: AngularFirestore,
-    private afAuth: AngularFireAuth
+    private afAuth: AngularFireAuth,
+    private userService: UserService
   ) {
     this.initAuthListener();
   }
@@ -80,7 +82,7 @@ export class AuthService {
         const { email, uid } = credential.user!;
         const userData: UserProfile = {
           email: email!,
-          role: 'patient', // Set the user role here
+          role: encodeURI(this.userService.getUserRole('patient')), // Set the user role here
         };
         this.addUserToFirestore(uid, userData).subscribe();
       })

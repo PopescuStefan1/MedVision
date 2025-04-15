@@ -40,7 +40,8 @@ export class UserProfileComponent implements OnInit {
       this.createUserForm(userData);
       this.subscribeToFormChanges();
 
-      this.isMedicUser = userData.role === 'medic';
+      this.isMedicUser =
+        this.userService.getUserRole(userData.role) === 'medic';
 
       if (userData.firstName) {
         // If the profile has been filled by the user enable the medic button

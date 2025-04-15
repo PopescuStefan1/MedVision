@@ -11,7 +11,7 @@
   </div>
   <ng-container
     *ngIf="
-      !isFetching && !error && isAuthenticated && userData?.role === 'medic'
+      !isFetching && !error && isAuthenticated && getUserRole() === 'medic'
     "
   >
     <div class="row text-center">

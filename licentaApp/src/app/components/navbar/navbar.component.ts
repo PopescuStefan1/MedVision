@@ -56,4 +56,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
       ? `${lastName} ${firstName}`
       : 'Add your name in your profile';
   }
+
+  getUserRole(userData: any): string {
+    return this.userService.getUserRole(userData?.role);
+  }
 }
