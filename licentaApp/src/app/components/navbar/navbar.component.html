@@ -20,9 +20,17 @@
     <a mat-button routerLink="contact"
       ><span>Contact</span> <mat-icon>call</mat-icon></a
     >
-    <a *ngIf="!isAuthenticated" mat-button routerLink="authenticate"
-      ><span>Login</span> <mat-icon>login</mat-icon></a
+    <a
+      *ngIf="!isAuthenticated"
+      mat-button
+      [routerLink]="['/authenticate']"
+      [queryParams]="{
+        obsrdr: encodeRedirectUrl(redirectUrl)
+      }"
     >
+      <span>Login</span> <mat-icon>login</mat-icon>
+    </a>
+
     <ng-container *ngIf="isAuthenticated">
       <ng-container *ngIf="userData$ | async as userData">
         <span class="user-info"

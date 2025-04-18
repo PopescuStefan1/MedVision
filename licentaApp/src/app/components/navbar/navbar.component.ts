@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { UserProfile } from 'src/app/models/user-profile';
@@ -15,11 +16,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
   userId: string | null = null;
   private userSub: Subscription = new Subscription();
   userData$: Observable<UserProfile> = new Observable();
+  redirectUrl = this.document.location.origin;
 
   constructor(
     private authService: AuthService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    @Inject(DOCUMENT) private document: Document
   ) {}
 
   ngOnInit(): void {
@@ -59,5 +62,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   getUserRole(userData: any): string {
     return this.userService.getUserRole(userData?.role);
+  }
+
+  encodeRedirectUrl(url: string): string {
+    return btoa(url);
   }
 }
