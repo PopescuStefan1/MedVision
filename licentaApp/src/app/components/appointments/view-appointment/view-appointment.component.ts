@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Observable, filter, map, switchMap } from 'rxjs';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Observable, forkJoin, from, map, of, switchMap } from 'rxjs';
 import { Appointment } from 'src/app/models/appointment';
 import { Medic } from 'src/app/models/medic';
 import { AppointmentService } from 'src/app/services/appointment.service';
@@ -19,7 +20,9 @@ export class ViewAppointmentComponent implements OnInit {
 
   constructor(
     private appointmentService: AppointmentService,
-    private medicService: MedicService
+    private medicService: MedicService,
+    private sanitizer: DomSanitizer,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -35,8 +38,9 @@ export class ViewAppointmentComponent implements OnInit {
     this.appointments$ = this.appointmentService.getAppointments();
 
     this.appointments$ = this.appointments$.pipe(
-      map((appointments) => 
-      appointments.filter((appointment) => appointment.userId === this.userId))
+      map((appointments) =>
+        appointments.filter((appointment) => appointment.userId === this.userId)
+      )
     );
 
     this.pastAppointments$ = this.appointments$.pipe(
@@ -46,10 +50,25 @@ export class ViewAppointmentComponent implements OnInit {
           .sort((a, b) => b.datetime.getTime() - a.datetime.getTime())
       )
     );
+
     this.futureAppointments$ = this.appointments$.pipe(
-      map((appointments) =>
-        appointments.filter((appointment) => appointment.datetime >= new Date())
-      )
+      map((appts) => appts.filter((a) => a.datetime >= new Date())),
+      switchMap((appts) => {
+        const enriched = appts.map((appt) => {
+          if (appt.imgUrl?.includes('.svg')) {
+            return from(fetch(appt.imgUrl).then((res) => res.text())).pipe(
+              map((svg) => ({
+                ...appt,
+                svgHtmlContent: this.sanitizer.bypassSecurityTrustHtml(
+                  svg
+                ) as SafeHtml,
+              }))
+            );
+          }
+          return of(appt);
+        });
+        return forkJoin(enriched);
+      })
     );
   }
 

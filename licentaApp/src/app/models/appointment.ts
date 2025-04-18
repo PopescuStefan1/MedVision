@@ -1,3 +1,5 @@
+import { SafeHtml } from '@angular/platform-browser';
+
 export interface Appointment {
   medicId: string;
   userId: string;
@@ -6,9 +8,10 @@ export interface Appointment {
   firstName: string;
   lastName: string;
   age: number;
-  sex: "Male" | "Female" | "Other";
+  sex: 'Male' | 'Female' | 'Other';
   telephone: string;
   email: string;
   comment?: string;
   imgUrl?: string;
+  svgHtmlContent?: SafeHtml;
 }
