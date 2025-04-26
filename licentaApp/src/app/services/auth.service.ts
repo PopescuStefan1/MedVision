@@ -111,7 +111,7 @@ export class AuthService {
       // 3️⃣ mint session cookie on the backend
       switchMap((idToken) =>
         this.http.post(
-          'http://localhost:3000/sessionLogin',
+          'https://localhost:3000/sessionLogin',
           { idToken },
           { withCredentials: true }
         )
@@ -156,7 +156,7 @@ export class AuthService {
       // 2️⃣ send the ID token to backend to mint a session cookie
       switchMap((idToken) =>
         this.http.post(
-          'http://localhost:3000/sessionLogin',
+          'https://localhost:3000/sessionLogin',
           { idToken },
           { withCredentials: true }
         )
@@ -166,8 +166,20 @@ export class AuthService {
 
   logout(): void {
     from(this.afAuth.signOut()).subscribe(() => {
-      this._user.next(null);
-      this.clearAutoLogout();
+      this.http
+        .post('https://localhost:3000/logout', {}, { withCredentials: true })
+        .subscribe({
+          next: () => {
+            this._user.next(null);
+            this.clearAutoLogout();
+          },
+          error: (error) => {
+            console.error('Failed to clear session cookie:', error);
+            // Still clear local state even if backend call fails
+            this._user.next(null);
+            this.clearAutoLogout();
+          },
+        });
     });
   }
 
@@ -221,7 +233,7 @@ export class AuthService {
 
   deleteAccount(): Observable<any> {
     return this.http.post(
-      'http://localhost:3000/deleteAccount',
+      'https://localhost:3000/deleteAccount',
       {},
       { withCredentials: true }
     );
