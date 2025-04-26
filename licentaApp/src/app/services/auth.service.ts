@@ -1,4 +1,3 @@
-// auth.service.ts
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
@@ -76,20 +75,15 @@ export class AuthService {
     ).pipe(
       catchError(this.handleError),
 
-      // 1️⃣ after account creation, write profile to Firestore and wait for it
       switchMap((credential) => {
         const { email: userEmail, uid } = credential.user!;
         const userData: UserProfile = {
           email: userEmail ?? '',
-          role: this.userService.getUserRole('patient'), // your existing logic
+          role: this.userService.getUserRole('patient'),
         };
-        return this.addUserToFirestore(uid, userData).pipe(
-          // once Firestore write completes, pass the original credential along
-          mapTo(credential)
-        );
+        return this.addUserToFirestore(uid, userData).pipe(mapTo(credential));
       }),
 
-      // 2️⃣ fetch ID token & update local user state
       switchMap((credential) =>
         from(credential.user!.getIdTokenResult()).pipe(
           tap((tokenResult) => {
@@ -108,7 +102,6 @@ export class AuthService {
         )
       ),
 
-      // 3️⃣ mint session cookie on the backend
       switchMap((idToken) =>
         this.http.post(
           'https://localhost:3000/sessionLogin',
@@ -134,7 +127,6 @@ export class AuthService {
     return from(this.afAuth.signInWithEmailAndPassword(email, password)).pipe(
       catchError(this.handleError),
 
-      // 1️⃣ fetch the ID token, update user state & auto-logout
       switchMap((cred) =>
         from(cred.user!.getIdTokenResult()).pipe(
           tap((tokenResult) => {
@@ -153,7 +145,6 @@ export class AuthService {
         )
       ),
 
-      // 2️⃣ send the ID token to backend to mint a session cookie
       switchMap((idToken) =>
         this.http.post(
           'https://localhost:3000/sessionLogin',
@@ -174,8 +165,6 @@ export class AuthService {
             this.clearAutoLogout();
           },
           error: (error) => {
-            console.error('Failed to clear session cookie:', error);
-            // Still clear local state even if backend call fails
             this._user.next(null);
             this.clearAutoLogout();
           },

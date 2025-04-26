@@ -88,7 +88,6 @@ export class AuthComponent implements OnInit {
     event.preventDefault();
     this.isLoginMode = !this.isLoginMode;
 
-    // Rebuild form so repeatPass validator is applied/removed
     this.authForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: [
