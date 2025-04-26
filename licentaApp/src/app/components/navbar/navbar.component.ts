@@ -33,6 +33,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.userData$ = this.userService.getUserData(this.userId);
       }
     });
+
+    this.userData$.subscribe((ud) => console.log(ud));
   }
 
   ngOnDestroy(): void {

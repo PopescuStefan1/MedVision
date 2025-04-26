@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { MyErrorStateMatcher } from '../auth/auth.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -26,6 +27,7 @@ export class UserProfileComponent implements OnInit {
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private userService: UserService,
+    private authService: AuthService,
     private _snackBar: MatSnackBar,
     private router: Router
   ) {
@@ -109,5 +111,19 @@ export class UserProfileComponent implements OnInit {
 
   onMedicPageButtonClick(): void {
     this.router.navigate(['medic-page', this.userId]);
+  }
+
+  onDeleteAccount() {
+    this.authService.deleteAccount().subscribe({
+      next: () => {
+        this.openSnackBar('Account deleted');
+        this.authService.logout();
+        this.router.navigate(['/']);
+      },
+      error: (err) => {
+        console.error(err);
+        this.openSnackBar('Delete failed');
+      },
+    });
   }
 }

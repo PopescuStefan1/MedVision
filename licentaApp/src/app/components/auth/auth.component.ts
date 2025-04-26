@@ -12,9 +12,9 @@ import {
 } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { AuthResponseData, AuthService } from 'src/app/services/auth.service';
 import { DOCUMENT } from '@angular/common';
+import { Observable } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
@@ -38,12 +38,12 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class AuthComponent implements OnInit {
   authForm: FormGroup;
   matcher = new MyErrorStateMatcher();
-  hidePass: boolean = true;
-  hideRepeatPass: boolean = true;
-  isLoginMode: boolean = true;
-  isLoading: boolean = false;
-  error: string = '';
-  redirectUrl: string = '';
+  hidePass = true;
+  hideRepeatPass = true;
+  isLoginMode = true;
+  isLoading = false;
+  error = '';
+  redirectUrl = '';
 
   constructor(
     private fb: FormBuilder,
@@ -75,24 +75,20 @@ export class AuthComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       const encryptedRedirectUrl = params['obsrdr'] || '';
       if (encryptedRedirectUrl) {
-        this.redirectUrl = this.decodeRedirectUrl(encryptedRedirectUrl);
+        try {
+          this.redirectUrl = atob(encryptedRedirectUrl);
+        } catch {
+          this.redirectUrl = '';
+        }
       }
     });
-  }
-
-  decodeRedirectUrl(encodedUrl: string): string {
-    try {
-      const decoded = atob(encodedUrl);
-      return decoded;
-    } catch (error) {
-      return '';
-    }
   }
 
   toggleLoginMode(event: Event) {
     event.preventDefault();
     this.isLoginMode = !this.isLoginMode;
 
+    // Rebuild form so repeatPass validator is applied/removed
     this.authForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: [
@@ -113,48 +109,39 @@ export class AuthComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.authForm.valid) {
-      this.isLoading = true;
-      const email = this.authForm.get('email')?.value;
-      const password = this.authForm!.get('password')?.value;
-
-      let authObs: Observable<AuthResponseData>;
-
-      if (this.isLoginMode) {
-        authObs = this.login(email, password);
-      } else {
-        authObs = this.signup(email, password);
-      }
-
-      authObs.subscribe({
-        next: () => {
-          this.isLoading = false;
-
-          const redirectUrl = this.redirectUrl || '';
-
-          if (redirectUrl && this.isValidUrl(redirectUrl)) {
-            this.document.location.href = redirectUrl;
-            return;
-          } else {
-            return this.router.navigate([redirectUrl]);
-          }
-        },
-        error: (errorMessage) => {
-          this.error = errorMessage;
-
-          this.isLoading = false;
-          this.authForm.reset();
-        },
-      });
+    if (!this.authForm.valid) {
+      return;
     }
-  }
+    this.isLoading = true;
+    this.error = '';
 
-  login(email: string, password: string) {
-    return this.authService.login(email, password);
-  }
+    const email = this.authForm.get('email')!.value;
+    const password = this.authForm.get('password')!.value;
 
-  signup(email: string, password: string) {
-    return this.authService.signup(email, password);
+    let authObs: Observable<any>;
+    if (this.isLoginMode) {
+      authObs = this.authService.login(email, password);
+    } else {
+      authObs = this.authService.signup(email, password);
+    }
+
+    authObs.subscribe({
+      next: () => {
+        this.isLoading = false;
+
+        const redirect = this.redirectUrl || '';
+        if (redirect && this.isValidUrl(redirect)) {
+          this.document.location.href = redirect;
+        } else {
+          this.router.navigate([redirect]);
+        }
+      },
+      error: (errMsg: string) => {
+        this.error = errMsg;
+        this.isLoading = false;
+        this.authForm.reset();
+      },
+    });
   }
 
   onEnterPressed(event: Event) {
@@ -164,26 +151,22 @@ export class AuthComponent implements OnInit {
 
   matchPasswordValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const password = this.authForm.get('password')?.value;
-      const repeatPass = control.value;
-
-      if (!repeatPass) {
+      const pwd = this.authForm.get('password')!.value;
+      const rpt = control.value;
+      if (!rpt) {
         return null;
       }
-
-      const isValid = password === repeatPass;
-
-      return isValid ? null : { mismatch: true };
+      return pwd === rpt ? null : { mismatch: true };
     };
+  }
+
+  private isValidUrl(url: string): boolean {
+    return /^https?:\/\//.test(url);
   }
 
   updatePasswordsValidators() {
     if (!this.isLoginMode) {
       this.authForm.get('repeatPass')?.updateValueAndValidity();
     }
-  }
-
-  private isValidUrl(url: string): boolean {
-    return /^https?:\/\//.test(url);
   }
 }
